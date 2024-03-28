@@ -12090,12 +12090,14 @@ body {
 
 .date-day {
   display: inline;
-  font-size: 3rem;
+  font-size: 2rem;
   font-weight: 100;
+  position:relative;
 }/*# sourceMappingURL=style.css.map */
 
 .events {
   text-align: center;
+  
 }
 tr{
   display: none;
