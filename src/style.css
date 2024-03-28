@@ -12093,3 +12093,10 @@ body {
   font-size: 3rem;
   font-weight: 100;
 }/*# sourceMappingURL=style.css.map */
+
+.events {
+  text-align: center;
+}
+tr{
+  display: none;
+}

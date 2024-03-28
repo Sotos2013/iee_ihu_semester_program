@@ -3,22 +3,26 @@
     <head><title>ΠΡΟΓΡΑΜΜΑ ΕΞΑΜΗΝΟΥ</title>
         <link rel="stylesheet" href="style.css"></head>
         <script> src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" </script>
+        <script src="script.js"></script>
         <body>
-          <div class="calendar">
+            <div class="container">
+                <h1 id="semester">Πρόγραμμα Εαρινού Εξαμήνου 2023 - 2024</h1>
+            </div>
+          <div class="calendar" id="program">
               <div class="timeline">
                   <div class="spacer"></div>
                   <div class="time-marker"></div>
                   <div class="time-marker">9:00-11:00</div>
+                  <br>
                   <div class="time-marker"></div>
                   <div class="time-marker">11:00-13:00</div>
+                  <br>
                   <div class="time-marker"></div>
                   <div class="time-marker">14:00-16:00</div>
+                  <br>
                   <div class="time-marker"></div>
                   <div class="time-marker">16:00-18:00</div>
-                  <div class="time-marker"></div>
-                  <div class="time-marker">18:00-20:00</div>
-                  <div class="time-marker"></div>
-                  <div class="time-marker"></div>
+                  <br>
               </div>
               <div class="days">
                   <div class="day mon">
@@ -29,13 +33,13 @@
                       <div class="events">
                         <tr class="time-marker">
                           <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Δευτέρας -->
-                          <td class="function1104a_steps"  data-step="1104a">Ηλεκτρονική Φυσική A1</td><br>
-                          <td class="function1202a_steps"  data-step="1202a">Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος A2</td>
-                          <td class="function1302_steps"  data-step="1302">Μαθηματικά ΙΙI</td><br>
-                          <td class="function1505_steps"  data-step="1505">Αλληλεπίδραση Ανθρώπου-Μηχανής</td>
-                          <td class="function1702_steps" data-step="1702">Ηλεκτρονικά Ισχύος</td><br>
-                          <td class="function1104b_steps" data-step="1104b">Ηλεκτρονική Φυσική A2</td>
-                        </tr>
+                          <p class="function1104a_steps"  data-step="1104a">Ηλεκτρονική Φυσική A1</p>
+                          <p class="function1202a_steps"  data-step="1202a">Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος A2</p>
+                          <p class="function1302_steps"  data-step="1302">Μαθηματικά ΙΙI</p>
+                          <p class="function1505_steps"  data-step="1505">Αλληλεπίδραση Ανθρώπου-Μηχανής</p>
+                          <p class="function1702_steps" data-step="1702">Ηλεκτρονικά Ισχύος</p>
+                          <p class="function1104b_steps" data-step="1104b">Ηλεκτρονική Φυσική A2</p><br>
+                        </tr><br>
                       </div>
                   </div>
                   <div class="day tues">
@@ -45,14 +49,7 @@
                       </div>
                       <div class="events">
                           <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τρίτης -->
-                          <tr class="time-marker">
-                            <td class="function1104a_steps"  data-step="1104a">Ηλεκτρονική Φυσική A1</td><br>
-                            <td class="function1202a_steps"  data-step="1202a">Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος A2</td>
-                            <td class="function1302_steps"  data-step="1302">Μαθηματικά ΙΙI</td><br>
-                            <td class="function1505_steps"  data-step="1505">Αλληλεπίδραση Ανθρώπου-Μηχανής</td>
-                            <td class="function1702_steps" data-step="1702">Ηλεκτρονικά Ισχύος</td><br>
-                            <td class="function1104b_steps" data-step="1104b">Ηλεκτρονική Φυσική A2</td>
-                          </tr>
+                          </tr><br>
                       </div>
                   </div>
                   <div class="day wed">
@@ -62,14 +59,6 @@
                       </div>
                       <div class="events">
                           <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τετάρτης -->
-                          <tr class="time-marker">
-                            <td class="function1104a_steps"  data-step="1104a">Ηλεκτρονική Φυσική A1</td><br>
-                            <td class="function1202a_steps"  data-step="1202a">Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος A2</td>
-                            <td class="function1302_steps"  data-step="1302">Μαθηματικά ΙΙI</td><br>
-                            <td class="function1505_steps"  data-step="1505">Αλληλεπίδραση Ανθρώπου-Μηχανής</td>
-                            <td class="function1702_steps" data-step="1702">Ηλεκτρονικά Ισχύος</td><br>
-                            <td class="function1104b_steps" data-step="1104b">Ηλεκτρονική Φυσική A2</td>
-                          </tr>
                       </div>
                   </div>
                   <div class="day thurs">
@@ -92,5 +81,11 @@
                   </div>
               </div>
           </div>
+          <div class="container">
+            <div class="buttons">
+                <input class="button" style="border: none" type="button" value="Εξαγωγή" onclick="generatePDF()">
+            </div>
+        </div>
+        
       </body>
 </html>
