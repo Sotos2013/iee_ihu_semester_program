@@ -131,3 +131,123 @@ function academic() {
     semesterElement.textContent = 'Πρόγραμμα ' + semester + ' Εξαμήνου ' + previousAcademicYear;
 }
 
+function displayCoursesBySemester() {
+    // 1. Hide the existing program/calendar container
+    const programContainer = document.getElementById('program');
+    programContainer.style.display = 'none';
+
+    // 2. Show the container for the list of courses
+    const courseListContainer = document.getElementById('courseList');
+    courseListContainer.style.display = 'block';
+
+    // 3. Generate and display the list of courses checkboxes
+    generateCourseCheckboxes();
+}
+
+
+function generateCourseCheckboxes() {
+    // Clear any existing content in the courseListContainer
+    const courseListContainer = document.getElementById('courseList');
+    courseListContainer.innerHTML = '';
+
+    // Get the current date
+    const currentDate = new Date();
+    //currentDate.setMonth(1); test if winter semester works or not :(
+    const currentMonth = currentDate.getMonth(); // Months are zero-indexed
+
+    // Determine the semester based on the month
+    let semester;
+    if ((currentMonth + 1) % 2 === 0) {
+        semester = 'Χειμερινό Εξάμηνο'; // Odd months (1, 3, 5, 7) are spring semester
+    } else {
+        semester = 'Εαρινό Εξάμηνο'; // Even months (2, 4, 6, 8) are winter semester
+    }
+
+    // Create and append the semester title
+    const semesterTitle = document.createElement('h2');
+    
+
+    // Determine the courses based on the semester
+    let courses;
+    if (semester === 'Χειμερινό Εξάμηνο') {
+        courses = ['Winter Course X', 'Winter Course Y', 'Winter Course Z'];
+        // Create columns to display semester titles
+        const numColumns = 7; // Adjust the number of columns as needed
+        const columnWidth = 100 / numColumns; // Calculate column width in percentage
+        for (let i = 1; i <= numColumns; i++) {
+            // Create a column div
+            const columnDiv = document.createElement('div');
+            columnDiv.classList.add('column');
+            columnDiv.style.width = `${columnWidth}%`;
+
+            // Determine the semester title based on the column index
+            const semesterTitle = i ;
+            if(semesterTitle % 2 === 1 ){
+            const semesterTitleText = `Εξάμηνο ${semesterTitle}`;
+
+            // Create and append the semester title
+            const titleElement = document.createElement('h3');
+            titleElement.textContent = semesterTitleText;
+            columnDiv.appendChild(titleElement);
+
+            // Create checkboxes for the courses
+            courses.forEach(course => {
+                const listItem = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.setAttribute('type', 'checkbox');
+                checkbox.setAttribute('id', course); // Set unique ID for each checkbox
+                const label = document.createElement('label');
+                label.setAttribute('for', course); // Match label with checkbox ID
+                label.textContent = course; // Set label text to course name
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                columnDiv.appendChild(listItem);
+            });
+
+            // Append the column to the course list container
+            courseListContainer.appendChild(columnDiv);
+        }}
+    } else {
+    courses = ['Spring Course A', 'Spring Course B', 'Spring Course C'];
+    // Create columns to display semester titles
+    const numColumns = 4; // Adjust the number of columns as needed
+    const columnWidth = 100 / numColumns; // Calculate column width in percentage
+    for (let i = 1; i <= numColumns; i++) {
+        // Create a column div
+        const columnDiv = document.createElement('div');
+        columnDiv.classList.add('column');
+        columnDiv.style.width = `${columnWidth}%`;
+
+        // Determine the semester title based on the column index
+        const semesterTitle = i * 2;
+        const semesterTitleText = `Εξάμηνο ${semesterTitle}`;
+
+        // Create and append the semester title
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = semesterTitleText;
+        columnDiv.appendChild(titleElement);
+
+        // Create checkboxes for the courses
+        courses.forEach(course => {
+            const listItem = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.setAttribute('type', 'checkbox');
+            checkbox.setAttribute('id', course); // Set unique ID for each checkbox
+            const label = document.createElement('label');
+            label.setAttribute('for', course); // Match label with checkbox ID
+            label.textContent = course; // Set label text to course name
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            columnDiv.appendChild(listItem);
+        });
+
+        // Append the column to the course list container
+        courseListContainer.appendChild(columnDiv);
+    }
+}
+
+   
+
+    
+
+}
