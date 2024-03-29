@@ -11969,19 +11969,18 @@ textarea.form-control-lg {
   --numDays: 5;
   --numHours: 10;
   --timeHeight: 60px;
-  --calBgColor: #3987b4;
+  --calBgColor: #1c5686d2;
   --eventBorderColor: #f2d3d8;
-  --eventColor1: #ffd6d1;
-  --eventColor2: #fafaa3;
-  --eventColor3: #e2f8ff;
-  --eventColor4: #d1ffe6;
+  --eventColor1: #8494ac;
+  --eventColor2: #bfc5d2;
+  
 }
 
 .calendar {
   display: grid;
   gap: 10px;
   grid-template-columns: auto 1fr;
-  margin: 2rem;
+  margin: 5rem;
 }
 
 .timeline {
@@ -12001,47 +12000,56 @@ textarea.form-control-lg {
   grid-template-rows: repeat(var(--numHours), var(--timeHeight));
   border-radius: 5px;
   background: var(--calBgColor);
+  position:relative;
 }
 
-.start-10 {
-  grid-row-start: 2;
+.start-9{
+  grid-row-start: 1;
 }
 
-.start-12 {
-  grid-row-start: 4;
+.start-11 {
+  grid-row-start: 3;
 }
 
-.start-1 {
+.start-14 {
   grid-row-start: 5;
 }
 
-.start-2 {
-  grid-row-start: 6;
+.start-16 {
+  grid-row-start: 7;
 }
 
-.end-12 {
-  grid-row-end: 4;
+.start-18 {
+  grid-row-start: 9;
 }
 
-.end-1 {
+.end-11 {
+  grid-row-end: 3;
+}
+
+.end-13 {
   grid-row-end: 5;
 }
 
-.end-3 {
+.end-16 {
   grid-row-end: 7;
 }
 
-.end-4 {
-  grid-row-end: 8;
-}
-
-.end-5 {
+.end-18 {
   grid-row-end: 9;
 }
 
+.end-20 {
+  grid-row-end: 11;
+}
+
 .title {
-  font-weight: 600;
+  font-weight: 100;
+  margin-top: 1px;
   margin-bottom: 0.25rem;
+  font-weight:bold;
+  color:#191e28;
+  
 }
 
 .event {
@@ -12049,7 +12057,7 @@ textarea.form-control-lg {
   border-radius: 5px;
   padding: 0.5rem;
   margin: 0 0.5rem;
-  background: white;
+  background: #d6dae2;
 }
 
 .space,
@@ -12061,21 +12069,15 @@ body {
   font-family: system-ui, sans-serif;
 }
 
-.corp-fi {
+.box1 {
   background: var(--eventColor1);
 }
 
-.ent-law {
+.box2 {
   background: var(--eventColor2);
 }
 
-.writing {
-  background: var(--eventColor3);
-}
 
-.securities {
-  background: var(--eventColor4);
-}
 
 .date {
   display: flex;
