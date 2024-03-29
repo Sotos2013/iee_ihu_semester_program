@@ -328,3 +328,4 @@ function generateCourseCheckboxes() {
         courseListContainer.appendChild(columnDiv);
     }
 }
+//σχολιο 
