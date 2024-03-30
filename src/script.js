@@ -142,9 +142,59 @@ function displayCoursesBySemester() {
 
     // 3. Generate and display the list of courses checkboxes
     generateCourseCheckboxes();
+
+    // 4. Hide buttons with values "Εξαγωγή" and "Επιλογή μαθημάτων"
+    const buttonsToHide = document.querySelectorAll('.buttons input');
+    buttonsToHide.forEach(button => {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων') {
+            button.style.display = 'none';
+        }
+    });
+
+    // 5. Create a new button
+    const newButton = document.createElement('input');
+    newButton.setAttribute('type', 'button');
+    newButton.setAttribute('value', 'Δημιουργία');
+    newButton.setAttribute('id', 'newButton');
+    newButton.classList.add('button', 'btn', 'btn-primary');
+    newButton.addEventListener('click', function () {
+        showCalendar();
+    });
+
+    // 6. Append the new button to a container (assuming there's a container with id 'buttonsContainer')
+    const buttonContainer = document.getElementById('buttonsContainer');
+    // Replace existing button if it exists
+    const existingButton = document.getElementById('newButton');
+    if (existingButton) {
+        buttonContainer.replaceChild(newButton, existingButton);
+    } else {
+        buttonContainer.appendChild(newButton);
+    }
 }
 
 
+
+function showCalendar() {
+    const programContainer = document.getElementById('program');
+    const courseListContainer = document.getElementById('courseList');
+    const timeline = document.getElementById('timeline');
+    courseListContainer.style.display = 'none';
+    programContainer.style.display = 'block';
+    const newButton = document.getElementById('newButton');
+    
+    if (newButton) {
+        newButton.style.display = 'none';
+    }
+
+    const buttonsToHide = document.querySelectorAll('.buttons input');
+    buttonsToHide.forEach(button => {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων') {
+            button.style.display = 'block';
+             
+        }
+    });
+
+}
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
     const courseListContainer = document.getElementById('courseList');
@@ -327,5 +377,20 @@ function generateCourseCheckboxes() {
         // Append the column to the course list container
         courseListContainer.appendChild(columnDiv);
     }
+    // Add an event listener to all checkboxes
+document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        const selectedCoursesContainer = document.getElementById('selectedCourses');
+        if (this.checked) {
+            // If checkbox is checked, add its label text (course title) to the selected courses container
+            const labelText = this.nextElementSibling.textContent; // Get the label text
+            selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
+        } else {
+            // If checkbox is unchecked, remove its label text from the selected courses container
+            const labelText = this.nextElementSibling.textContent;
+            selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', '');
+        }
+    });
+});
 }
 //σχολιο 

@@ -19,10 +19,10 @@
             academic();
         </script>
     </div>
-    <div class="container-fluid">
-        <div class="row">
+    <div class="container-fluid" >
+        <div class="row"id="program">
             <div class="col">
-                <div class="calendar" id="program">
+                <div class="calendar">
                     <div class="timeline">
                         <div class="spacer"></div>
                         <div class="time-marker">9:00-11:00</div>
@@ -45,7 +45,7 @@
                             </div>
                             <div class="events">
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Δευτερας -->
-
+                                <p id="selectedCourses" class="selected-courses"></p>
                                
 
                             </div>
@@ -100,10 +100,9 @@
         <div class="row">
             <div class="col">
 
-                <div class="buttons">
+                <div class="buttons" id="buttonsContainer">
                     <input class="button btn btn-primary" type="button" value="Εξαγωγή" onclick="generatePDF()">
-                    <input class="button btn btn-primary" type="button" value="Επιλογή μαθημάτων"
-                        onclick="displayCoursesBySemester()">
+                    <input class="button btn btn-primary" type="button" value="Επιλογή μαθημάτων" onclick="displayCoursesBySemester()">
                 </div>
             </div>
         </div>
