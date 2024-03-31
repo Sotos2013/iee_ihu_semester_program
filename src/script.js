@@ -181,7 +181,7 @@ function showCalendar() {
     courseListContainer.style.display = 'none';
     programContainer.style.display = 'block';
     const newButton = document.getElementById('newButton');
-    
+
     if (newButton) {
         newButton.style.display = 'none';
     }
@@ -190,11 +190,12 @@ function showCalendar() {
     buttonsToHide.forEach(button => {
         if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων') {
             button.style.display = 'block';
-             
+
         }
     });
 
 }
+
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
     const courseListContainer = document.getElementById('courseList');
@@ -226,113 +227,121 @@ function generateCourseCheckboxes() {
     if (semester === 'Χειμερινό Εξάμηνο') {
         courses = [
             [
-                '1101-Θ. Μαθηματικά Ι',
-                '1102-Θ. Δομημένος Προγραμματισμός',
-                '1103-Θ. Εισαγωγή στην Επιστήμη των Υπολογιστών',
-                '1104-Θ. Ηλεκτρονική Φυσική',
-                '1105-Θ. Κυκλώματα Συνεχούς Ρεύματος'
-            ],
-            [
-                '1301-Θ. Θεωρία Πιθανοτήτων και Στατιστική',
-                '1302-Θ. Μαθηματικά ΙΙΙ',
-                '1303-Θ. Επεξεργασία Σήματος',
-                '1305-Θ. Δομές Δεδομένων και Ανάλυση Αλγορίθμων',
-                '1405-Θ. Γλώσσες και Τεχνολογίες Ιστού'
-            ],
-            [
-                '1501-Θ. Ασύρματες Επικοινωνίες',
-                '1502-Θ. Μικροελεγκτές',
-                '1503-Θ. Σχεδίαση Λειτουργικών Συστημάτων',
-                '1504-Θ. Ηλεκτρονικές Διατάξεις',
-                '1505-Θ. Αλληλεπίδραση Ανθρώπου-Μηχανής'
-            ],
-            [
-                '1701-Θ. Δίκτυα Υπολογιστών',
-                '1702-Θ. Ηλεκτρονικά Ισχύος',
-                '1711-Θ. Συστήματα Αυτομάτου Ελέγχου',
-                '1712-Θ. Αισθητήρια και Επεξεργασία Μετρήσεων',
-                '1713-Θ. Προγραμματιζόμενοι Λογικοί Ελεγκτές',
-                '1714-Θ. Σχεδίαση Επαναπροσδιοριζόμενων Ψηφιακών Συστημάτων (FPGA)',
-                '1741-Θ. Εισαγωγή στην Αναλυτική των Δεδομένων',
-                '1742-Θ. Μηχανική Λογισμικού',
-                '1743-Θ. Τεχνολογία Βάσεων Δεδομένων',
-                '1744-Θ. Προηγμένες Αρχιτεκτονικές Υπολογιστών και Προγραμματισμός Παράλληλων Συστημάτων',
-                '1771-Θ. Τεχνολογίες Ήχου και Εικόνας',
-                '1998-Θ. Ελεύθερη Επιλογή Α'
-            ],
-            [
-                '1911-Θ. Εφαρμογές Ενσωματωμένων Συστημάτων',
-                '1912-Θ. Ρομποτική',
-                '1913-Θ. ΑΠΕ και Ευφυή Ηλεκτρικά Δίκτυα',
-                '1914-Θ. Απτικές Διεπαφές',
-                '1915-Θ. Βιοϊατρική Τεχνολογία',
-                '1916-Θ. Συστήματα Μετρήσεων Υποβοηθούμενων από Η/Υ',
-                '1971-Θ. Ασφάλεια Δικτύων και Επικοινωνιών',
-                '1972-Θ. Δικτύωση Καθορισμένη από Λογισμικό',
-                '1973-Θ. Ειδικά Θέματα Δικτύων (CCNA) 2',
-                '1974-Θ. Δορυφορικές Επικοινωνίες',
-                '1975-Θ. Τεχνολογία Πολυμέσων',
-                '1941-Θ. Ανάπτυξη Διαδικτυακών Συστημάτων και Εφαρμογών',
-                '1942-Θ. Επιχειρησιακή Έρευνα',
-                '1943-Θ. Ανάκτηση Πληροφοριών – Μηχανές Αναζήτησης',
-                '1944-Θ. Διαχείριση Συστήματος και Υπηρεσιών DBMS',
-                '1945-Θ. Ευφυή Συστήματα',
-                '1946-Θ. Προηγμένα Θέματα Τεχνητής Νοημοσύνης',
-                '1947-Θ. Προηγμένη Μηχανική Μάθηση',
-                '1949-Θ. Κατανεμημένα Συστήματα',
-                '1950-Θ. Σημασιολογικός Ιστός',
-                '1969-Θ. Γραφικά Υπολογιστών'
+                { name: '1101-Θ Μαθηματικά Ι', day: '', time: '' },
+                { name: '1102-Θ Δομημένος Προγραμματισμός', day: '', time: '' },
+                { name: '1103-Θ Εισαγωγή στην Επιστήμη των Υπολογιστών', day: '', time: '' },
+                { name: '1104-Θ Ηλεκτρονική Φυσική', day: '', time: '' },
+                { name: '1105-Θ Κυκλώματα Συνεχούς Ρεύματος', day: '', time: '' }
             ]
+            ,
+            [
+                { name: '1301-Θ Θεωρία Πιθανοτήτων και Στατιστική', day: '', time: '' },
+                { name: '1302-Θ Μαθηματικά ΙΙΙ', day: '', time: '' },
+                { name: '1303-Θ Επεξεργασία Σήματος', day: '', time: '' },
+                { name: '1305-Θ Δομές Δεδομένων και Ανάλυση Αλγορίθμων', day: '', time: '' },
+                { name: '1405-Θ Γλώσσες και Τεχνολογίες Ιστού', day: '', time: '' }
+            ]
+            ,
+            [
+                { name: '1501-Θ Ασύρματες Επικοινωνίες', day: '', time: '' },
+                { name: '1502-Θ Μικροελεγκτές', day: '', time: '' },
+                { name: '1503-Θ Σχεδίαση Λειτουργικών Συστημάτων', day: '', time: '' },
+                { name: '1504-Θ Ηλεκτρονικές Διατάξεις', day: '', time: '' },
+                { name: '1505-Θ Αλληλεπίδραση Ανθρώπου-Μηχανής', day: '', time: '' }
+            ]
+            ,
+            [
+                { name: '1701-Θ Δίκτυα Υπολογιστών', day: '', time: '' },
+                { name: '1702-Θ Ηλεκτρονικά Ισχύος', day: '', time: '' },
+                { name: '1711-Θ Συστήματα Αυτομάτου Ελέγχου', day: '', time: '' },
+                { name: '1712-Θ Αισθητήρια και Επεξεργασία Μετρήσεων', day: '', time: '' },
+                { name: '1713-Θ Προγραμματιζόμενοι Λογικοί Ελεγκτές', day: '', time: '' },
+                { name: '1714-Θ Σχεδίαση Επαναπροσδιοριζόμενων Ψηφιακών Συστημάτων (FPGA)', day: '', time: '' },
+                { name: '1741-Θ Εισαγωγή στην Αναλυτική των Δεδομένων', day: '', time: '' },
+                { name: '1742-Θ Μηχανική Λογισμικού', day: '', time: '' },
+                { name: '1743-Θ Τεχνολογία Βάσεων Δεδομένων', day: '', time: '' },
+                { name: '1744-Θ Προηγμένες Αρχιτεκτονικές Υπολογιστών και Προγραμματισμός Παράλληλων Συστημάτων', day: '', time: '' },
+                { name: '1771-Θ Τεχνολογίες Ήχου και Εικόνας', day: '', time: '' },
+                { name: '1998-Θ Ελεύθερη Επιλογή Α\'', day: '', time: '' }
+            ]
+            ,
+            [
+                { name: '1911-Θ Εφαρμογές Ενσωματωμένων Συστημάτων', day: '', time: '' },
+                { name: '1912-Θ Ρομποτική', day: '', time: '' },
+                { name: '1913-Θ ΑΠΕ και Ευφυή Ηλεκτρικά Δίκτυα', day: '', time: '' },
+                { name: '1914-Θ Απτικές Διεπαφές', day: '', time: '' },
+                { name: '1915-Θ Βιοϊατρική Τεχνολογία', day: '', time: '' },
+                { name: '1916-Θ Συστήματα Μετρήσεων Υποβοηθούμενων από Η/Υ', day: '', time: '' },
+                { name: '1971-Θ Ασφάλεια Δικτύων και Επικοινωνιών', day: '', time: '' },
+                { name: '1972-Θ Δικτύωση Καθορισμένη από Λογισμικό', day: '', time: '' },
+                { name: '1973-Θ Ειδικά Θέματα Δικτύων (CCNA) 2', day: '', time: '' },
+                { name: '1974-Θ Δορυφορικές Επικοινωνίες', day: '', time: '' },
+                { name: '1975-Θ Τεχνολογία Πολυμέσων', day: '', time: '' },
+                { name: '1941-Θ Ανάπτυξη Διαδικτυακών Συστημάτων και Εφαρμογών', day: '', time: '' },
+                { name: '1942-Θ Επιχειρησιακή Έρευνα', day: '', time: '' },
+                { name: '1943-Θ Ανάκτηση Πληροφοριών – Μηχανές Αναζήτησης', day: '', time: '' },
+                { name: '1944-Θ Διαχείριση Συστήματος και Υπηρεσιών DBMS', day: '', time: '' },
+                { name: '1945-Θ Ευφυή Συστήματα', day: '', time: '' },
+                { name: '1946-Θ Προηγμένα Θέματα Τεχνητής Νοημοσύνης', day: '', time: '' },
+                { name: '1947-Θ Προηγμένη Μηχανική Μάθηση', day: '', time: '' },
+                { name: '1949-Θ Κατανεμημένα Συστήματα', day: '', time: '' },
+                { name: '1950-Θ Σημασιολογικός Ιστός', day: '', time: '' },
+                { name: '1969-Θ Γραφικά Υπολογιστών', day: '', time: '' }
+            ]
+
         ];
 
 
     } else {
         courses = [
             [
-                '1201-Θ Μαθηματικά ΙΙ',
-                '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
-                '1203-Θ Τεχνική Συγγραφή, Παρουσίαση και Ορολογία Ξένης Γλώσσας',
-                '1204-Θ Σχεδίαση Ψηφιακών Συστημάτων',
-                '1205-Θ Αντικειμενοστρεφής Προγραμματισμός'
+                { name: '1201-Θ Μαθηματικά ΙΙ', day: '', time: '' },
+                { name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος', day: '', time: '' },
+                { name: '1203-Θ Τεχνική Συγγραφή, Παρουσίαση και Ορολογία Ξένης Γλώσσας', day: '', time: '' },
+                { name: '1204-Θ Σχεδίαση Ψηφιακών Συστημάτων', day: '', time: '' },
+                { name: '1205-Θ Αντικειμενοστρεφής Προγραμματισμός', day: '', time: '' }
             ],
 
             [
-                '1304-Θ Οργάνωση και Αρχιτεκτονική Υπολογιστικών Συστημάτων',
-                '1401-Θ Συστήματα Διαχείρισης Βάσεων Δεδομένων',
-                '1402-Θ Τηλεπικοινωνιακά Συστήματα',
-                '1403-Θ Εισαγωγή στα Λειτουργικά Συστήματα',
-                '1404-Θ Ηλεκτρονικά Κυκλώματα'
-            ],
+                { name: '1304-Θ Οργάνωση και Αρχιτεκτονική Υπολογιστικών Συστημάτων', day: '', time: '' },
+                { name: '1401-Θ Συστήματα Διαχείρισης Βάσεων Δεδομένων', day: '', time: '' },
+                { name: '1402-Θ Τηλεπικοινωνιακά Συστήματα', day: '', time: '' },
+                { name: '1403-Θ Εισαγωγή στα Λειτουργικά Συστήματα', day: '', time: '' },
+                { name: '1404-Θ Ηλεκτρονικά Κυκλώματα', day: '', time: '' }
+            ]
+            ,
             [
-                '1601-Θ Τεχνητή Νοημοσύνη',
-                '1602-Θ Ενσωματωμένα Συστήματα',
-                '1611-Θ Σύνθεση Ηλεκτρονικών Κυκλωμάτων',
-                '1612-Θ Κβαντική Υπολογιστική',
-                '1613-Θ Μεθοδολογίες Σχεδιασμού Μικροηλεκτρονικών Κυκλωμάτων',
-                '1671-Θ Μικροκυματική Τεχνολογία και Τηλεπισκόπηση',
-                '1672-Θ Οπτοηλεκτρονική και Οπτικές Επικοινωνίες',
-                '1673-Θ Συστήματα Μέσων Μαζικής Επικοινωνίας',
-                '1641-Θ Αριθμητικές Μέθοδοι',
-                '1642-Θ Προηγμένα Θέματα Αλληλεπίδρασης (Προγραμματισμός Κινητών Συσκευών)',
-                '1643-Θ Διοίκηση Έργων'
-            ],
+                { name: '1601-Θ Τεχνητή Νοημοσύνη', day: '', time: '' },
+                { name: '1602-Θ Ενσωματωμένα Συστήματα', day: '', time: '' },
+                { name: '1611-Θ Σύνθεση Ηλεκτρονικών Κυκλωμάτων', day: '', time: '' },
+                { name: '1612-Θ Κβαντική Υπολογιστική', day: '', time: '' },
+                { name: '1613-Θ Μεθοδολογίες Σχεδιασμού Μικροηλεκτρονικών Κυκλωμάτων', day: '', time: '' },
+                { name: '1671-Θ Μικροκυματική Τεχνολογία και Τηλεπισκόπηση', day: '', time: '' },
+                { name: '1672-Θ Οπτοηλεκτρονική και Οπτικές Επικοινωνίες', day: '', time: '' },
+                { name: '1673-Θ Συστήματα Μέσων Μαζικής Επικοινωνίας', day: '', time: '' },
+                { name: '1641-Θ Αριθμητικές Μέθοδοι', day: '', time: '' },
+                { name: '1642-Θ Προηγμένα Θέματα Αλληλεπίδρασης (Προγραμματισμός Κινητών Συσκευών)', day: '', time: '' },
+                { name: '1643-Θ Διοίκηση Έργων', day: '', time: '' }
+            ]
+            ,
 
             [
-                '1801-Θ Ασφάλεια Πληροφοριακών Συστημάτων',
-                '1802-Θ Αρχές και Μέθοδοι Μηχανικής Μάθησης',
-                '1803-Θ Διαδίκτυο των Πραγμάτων',
-                '1811-Θ Εφαρμογές Συστημάτων Αυτομάτου Ελέγχου',
-                '1812-Θ Μετατροπείς Ισχύος',
-                '1839-Θ Ηλεκτροκίνηση και Ευφυή Δίκτυα',
-                '1871-Θ Ασύρματα Δίκτυα',
-                '1872-Θ Ειδικά Θέματα Δικτύων (CCNA) 1',
-                '1873-Θ Προηγμένα Θέματα Δικτύων',
-                '1874-Θ Συστήματα Κινητών Επικοινωνιών',
-                '1898-Θ Ελεύθερη Επιλογή Β',
-                '1841-Θ Οργάνωση Δεδομένων και Εξόρυξη Πληροφορίας',
-                '1842-Θ Διαδικτυακές Υπηρεσίες Προστιθέμενης Αξίας',
-                '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων'
-            ],
+                { name: '1801-Θ Ασφάλεια Πληροφοριακών Συστημάτων', day: 'Monday', time: '9:00-11:00' },
+                { name: '1802-Θ Αρχές και Μέθοδοι Μηχανικής Μάθησης', day: '', time: '' },
+                { name: '1803-Θ Διαδίκτυο των Πραγμάτων', day: '', time: '' },
+                { name: '1811-Θ Εφαρμογές Συστημάτων Αυτομάτου Ελέγχου', day: '', time: '' },
+                { name: '1812-Θ Μετατροπείς Ισχύος', day: '', time: '' },
+                { name: '1839-Θ Ηλεκτροκίνηση και Ευφυή Δίκτυα', day: '', time: '' },
+                { name: '1871-Θ Ασύρματα Δίκτυα', day: '', time: '' },
+                { name: '1872-Θ Ειδικά Θέματα Δικτύων (CCNA) 1', day: '', time: '' },
+                { name: '1873-Θ Προηγμένα Θέματα Δικτύων', day: '', time: '' },
+                { name: '1874-Θ Συστήματα Κινητών Επικοινωνιών', day: '', time: '' },
+                { name: '1898-Θ Ελεύθερη Επιλογή Β', day: '', time: '' },
+                { name: '1841-Θ Οργάνωση Δεδομένων και Εξόρυξη Πληροφορίας', day: '', time: '' },
+                { name: '1842-Θ Διαδικτυακές Υπηρεσίες Προστιθέμενης Αξίας', day: '', time: '' },
+                { name: '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων', day: '', time: '' }
+            ]
+
         ];
     }
 
@@ -365,10 +374,10 @@ function generateCourseCheckboxes() {
             const listItem = document.createElement('li');
             const checkbox = document.createElement('input');
             checkbox.setAttribute('type', 'checkbox');
-            checkbox.setAttribute('id', course); // Set unique ID for each checkbox
+            checkbox.setAttribute('id', course.name); // Set unique ID for each checkbox
             const label = document.createElement('label');
-            label.setAttribute('for', course); // Match label with checkbox ID
-            label.textContent = course; // Set label text to course name
+            label.setAttribute('for', course.name); // Match label with checkbox ID
+            label.textContent = course.name; // Set label text to course name
             listItem.appendChild(checkbox);
             listItem.appendChild(label);
             columnDiv.appendChild(listItem);
@@ -377,20 +386,53 @@ function generateCourseCheckboxes() {
         // Append the column to the course list container
         courseListContainer.appendChild(columnDiv);
     }
-    // Add an event listener to all checkboxes
+
+
+  
+}
+// Add an event listener to all checkboxes
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function() {
+    checkbox.addEventListener('change', function () {
         const selectedCoursesContainer = document.getElementById('selectedCourses');
+        const courseId = this.id; // Get the ID of the checkbox
+        const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
+
+        // Find the corresponding day and time for the selected course
+        const selectedCourse = courses.find(course => course.name === labelText);
+
         if (this.checked) {
-            // If checkbox is checked, add its label text (course title) to the selected courses container
-            const labelText = this.nextElementSibling.textContent; // Get the label text
+            // If checkbox is checked, add the course to the schedule
+            const courseTimeId = `hour${selectedCourse.time.split('-')[0].trim().replace(':', '')}`;
+            const courseDayEventsId = `${selectedCourse.day.toLowerCase()}Events`;
+            const courseTimeMarker = document.getElementById(courseTimeId);
+            const courseDayEvents = document.getElementById(courseDayEventsId);
+
+            if (courseTimeMarker && courseDayEvents) {
+                const courseEvent = document.createElement('div');
+                courseEvent.textContent = labelText;
+                courseDayEvents.appendChild(courseEvent);
+            }
+        } else {
+            // If checkbox is unchecked, remove the course from the schedule
+            // Remove the course from the corresponding day's events
+            const courseDayEventsId = `${selectedCourse.day.toLowerCase()}Events`;
+            const courseDayEvents = document.getElementById(courseDayEventsId);
+            const courseEventToRemove = courseDayEvents.querySelector(`div:contains('${labelText}')`);
+            if (courseEventToRemove) {
+                courseEventToRemove.remove();
+            }
+        }
+
+        // Update the selected courses container
+        if (this.checked) {
             selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
         } else {
-            // If checkbox is unchecked, remove its label text from the selected courses container
-            const labelText = this.nextElementSibling.textContent;
-            selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', '');
+            selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
         }
     });
 });
-}
+
+
+
+
 //σχολιο 

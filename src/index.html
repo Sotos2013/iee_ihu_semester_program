@@ -5,7 +5,7 @@
     <title>ΠΡΟΓΡΑΜΜΑ ΕΞΑΜΗΝΟΥ</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<script> src = "../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" </script>
+<script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="script.js"></script>
 
 <body>
@@ -19,21 +19,21 @@
             academic();
         </script>
     </div>
-    <div class="container-fluid" >
-        <div class="row"id="program">
+    <div class="container-fluid">
+        <div class="row" id="program">
             <div class="col">
                 <div class="calendar">
                     <div class="timeline">
                         <div class="spacer"></div>
-                        <div class="time-marker">9:00-11:00</div>
+                        <div class="time-marker" id="hour9">9:00-11:00</div>
                         <br>
-                        <div class="time-marker">11:00-13:00</div>
+                        <div class="time-marker" id="hour11">11:00-13:00</div>
                         <br>
-                        <div class="time-marker">14:00-16:00</div>
+                        <div class="time-marker" id="hour14">14:00-16:00</div>
                         <br>
-                        <div class="time-marker">16:00-18:00</div>
+                        <div class="time-marker" id="hour16">16:00-18:00</div>
                         <br>
-                        <div class="time-marker">18:00-20:00</div>
+                        <div class="time-marker" id="hour18">18:00-20:00</div>
                         <br>
                     </div>
                     <div class="days">
@@ -43,11 +43,8 @@
                                 <p class="date-num"></p>
                                 <p class="date-day">ΔΕΥΤΕΡΑ</p>
                             </div>
-                            <div class="events">
+                            <div class="events" id="mondayEvents"> <!-- Unique ID for Monday's events -->
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Δευτερας -->
-                                <p id="selectedCourses" class="selected-courses"></p>
-                               
-
                             </div>
                         </div>
                         <div class="day tues">
@@ -55,11 +52,8 @@
                                 <p class="date-num"></p>
                                 <p class="date-day">ΤΡΙΤΗ</p>
                             </div>
-                            <div class="events">
+                            <div class="events" id="tuesdayEvents"> <!-- Unique ID for Tuesday's events -->
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τρίτης -->
-                                
-
-
                             </div>
                         </div>
                         <div class="day wed">
@@ -67,7 +61,7 @@
                                 <p class="date-num"></p>
                                 <p class="date-day">ΤΕΤΑΡΤΗ</p>
                             </div>
-                            <div class="events">
+                            <div class="events" id="wednesdayEvents"> <!-- Unique ID for Wednesday's events -->
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τετάρτης -->
                             </div>
                         </div>
@@ -76,7 +70,7 @@
                                 <p class="date-num"></p>
                                 <p class="date-day">ΠΕΜΠΤΗ</p>
                             </div>
-                            <div class="events">
+                            <div class="events" id="thursdayEvents"> <!-- Unique ID for Thursday's events -->
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Πέμπτης -->
                             </div>
                         </div>
@@ -85,7 +79,7 @@
                                 <p class="date-num"></p>
                                 <p class="date-day">ΠΑΡΑΣΚΕΥΗ</p>
                             </div>
-                            <div class="events">
+                            <div class="events" id="fridayEvents"> <!-- Unique ID for Friday's events -->
                                 <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Παρασκευής -->
                             </div>
                         </div>
