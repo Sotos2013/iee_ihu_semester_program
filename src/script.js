@@ -306,7 +306,7 @@ function generateCourseCheckboxes() {
                 {
                     name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
                     occurrences: [
-                        { day: 'Tuesday', time: '9:00-11:00' },
+                        { day: 'Tuesday', time: '9:00-:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 },
@@ -590,9 +590,16 @@ function generateCourseCheckboxes() {
 
     // Add an event listener to all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        const storedState = localStorage.getItem(checkbox.id);
+        if (storedState === 'true') {
+            checkbox.checked = true;
+        }
+
         checkbox.addEventListener('change', function () {
             const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
-    
+            // Store checkbox state in localStorage
+            localStorage.setItem(this.id, this.checked);
+
             // Find the corresponding course by name
             const selectedCourse = courses.find(course => course.name === labelText);
             // Iterate over each day and time slot
@@ -606,50 +613,44 @@ function generateCourseCheckboxes() {
                         const checkbox = document.getElementById(course.name.replace(/\s+/g, ''));
                         return checkbox && checkbox.checked;
                     }));
-    
+
                     // Generate events for selected courses
-                selectedCourses.forEach(course => {
-                    course.occurrences.forEach(occurrence => {
-                        if (occurrence.day.toLowerCase() === day) {
-                            const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
-                            const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
-                            const startClass = 'start-' + startHour.toString().padStart(1, '0');
-                            const endClass = 'end-' + endHour.toString().padStart(2, '0');
-
-                            // Check if the event already exists in the dayEvents container
-                            let existingEvent = null;
-                            Array.from(dayEvents.children).forEach(event => {
-                                if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
-                                    existingEvent = event;
-                                }
-                            });
-
-                            if (existingEvent) {
-                                if (!existingEvent.textContent.includes(course.name)) {
-                                    // Append course name to existing event
-                                    existingEvent.textContent += `, ${course.name}`;
-                                }
-                            } else {
-                                // Create a new event
-                                const courseEvent = document.createElement('div');
-                                courseEvent.textContent = course.name;
+                    selectedCourses.forEach(course => {
+                        course.occurrences.forEach(occurrence => {
+                            if (occurrence.day.toLowerCase() === day) {
                                 const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
                                 const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
-                                const startClass = 'start-' + startHour.toString().padStart(0, '0');
+                                const startClass = 'start-' + startHour.toString().padStart(1, '0');
                                 const endClass = 'end-' + endHour.toString().padStart(2, '0');
-                                courseEvent.classList.add(startClass, endClass, 'box2');
-                                dayEvents.appendChild(courseEvent);
-                                dayEvents.appendChild(document.createElement('br')); // Add line break after each event
+
+                                // Check if the event already exists in the dayEvents container
+                                let existingEvent = null;
+                                Array.from(dayEvents.children).forEach(event => {
+                                    if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
+                                        existingEvent = event;
+                                    }
+                                });
+
+                                if (existingEvent) {
+                                    if (!existingEvent.textContent.includes(course.name)) {
+                                        // Append course name to existing event
+                                        existingEvent.textContent += `, ${course.name}`;
+                                    }
+                                } else {
+                                    // Create a new event
+                                    const courseEvent = document.createElement('div');
+                                    courseEvent.textContent = course.name;
+                                    courseEvent.classList.add(startClass, endClass, 'box2');
+                                    dayEvents.appendChild(courseEvent);
+                                }
                             }
-                        }
+                        });
                     });
-                });
-            }
+                }
             });
-    
+
         });
-    });
-    
+    })
 
 
 
