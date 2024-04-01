@@ -306,7 +306,7 @@ function generateCourseCheckboxes() {
                 {
                     name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
                     occurrences: [
-                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '9:00-11:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 },
@@ -614,7 +614,7 @@ function generateCourseCheckboxes() {
                                 courseEvent.textContent = course.name;
                                 const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
                                 const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
-                                const startClass = 'start-' + startHour.toString().padStart(2, '0');
+                                const startClass = 'start-' + startHour.toString().padStart(0, '0');
                                 const endClass = 'end-' + endHour.toString().padStart(2, '0');
                                 courseEvent.classList.add(startClass, endClass, 'box2');
                                 dayEvents.appendChild(courseEvent);
