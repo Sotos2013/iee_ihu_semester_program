@@ -174,6 +174,7 @@ function displayCoursesBySemester() {
 
 
 
+
 function showCalendar() {
     const programContainer = document.getElementById('program');
     const courseListContainer = document.getElementById('courseList');
@@ -541,7 +542,7 @@ function generateCourseCheckboxes() {
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 }
-                
+
             ]
 
         ];
@@ -549,95 +550,84 @@ function generateCourseCheckboxes() {
 
     // Loop to create columns and checkboxes
     // Loop through each semester column
-for (let i = 1; i <= numColumns; i++) {
-    // Create a column div
-    const columnDiv = document.createElement('div');
-    columnDiv.classList.add('column');
-    columnDiv.style.width = `${columnWidth}%`;
+    for (let i = 1; i <= numColumns; i++) {
+        // Create a column div
+        const columnDiv = document.createElement('div');
+        columnDiv.classList.add('column');
+        columnDiv.style.width = `${columnWidth}%`;
 
-    // Determine the semester title based on the column index
-    const semesterTitleIndex = (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) ?
-        (i * 2) - 1 :
-        i * 2;
-    const semesterTitleText = `Εξάμηνο ${semesterTitleIndex}`;
+        // Determine the semester title based on the column index
+        const semesterTitleIndex = (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) ?
+            (i * 2) - 1 :
+            i * 2;
+        const semesterTitleText = `Εξάμηνο ${semesterTitleIndex}`;
 
-    // Create and append the semester title
-    const titleElement = document.createElement('h3');
-    titleElement.textContent = semesterTitleText;
-    columnDiv.appendChild(titleElement);
+        // Create and append the semester title
+        const titleElement = document.createElement('h3');
+        titleElement.textContent = semesterTitleText;
+        columnDiv.appendChild(titleElement);
 
-    // Get the courses for the current semester and column
-    const semesterCourses = courses[i - 1] || []; // Subtract 1 to adjust for zero-based indexing
+        // Get the courses for the current semester and column
+        const semesterCourses = courses[i - 1] || []; // Subtract 1 to adjust for zero-based indexing
 
-    // Iterate over courses and create checkboxes and labels
-    semesterCourses.forEach(course => {
-        const listItem = document.createElement('li');
-        const checkbox = document.createElement('input');
-        checkbox.setAttribute('type', 'checkbox');
-        checkbox.setAttribute('id', course.name.replace(/\s+/g, '')); // Set unique ID for each checkbox
-        const label = document.createElement('label');
-        label.setAttribute('for', course.name.replace(/\s+/g, '')); // Match label with checkbox ID
-        label.textContent = course.name; // Set label text to course name
-        listItem.appendChild(checkbox);
-        listItem.appendChild(label);
-        columnDiv.appendChild(listItem);
-    });
+        // Iterate over courses and create checkboxes and labels
+        semesterCourses.forEach(course => {
+            const listItem = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.setAttribute('type', 'checkbox');
+            checkbox.setAttribute('id', course.name.replace(/\s+/g, '')); // Set unique ID for each checkbox
+            const label = document.createElement('label');
+            label.setAttribute('for', course.name.replace(/\s+/g, '')); // Match label with checkbox ID
+            label.textContent = course.name; // Set label text to course name
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            columnDiv.appendChild(listItem);
+        });
 
-    // Append the column to the course list container
-    courseListContainer.appendChild(columnDiv);
-}
+        // Append the column to the course list container
+        courseListContainer.appendChild(columnDiv);
+    }
 
-// Add an event listener to all checkboxes
-// Add an event listener to all checkboxes
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-        const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
+    // Add an event listener to all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
-        // Find the corresponding day and time for the selected course
-        const selectedCourse = courses.flat().find(course => course.id === labelText);
- // Use flat() to flatten the nested arrays
+            // Find the corresponding course by name
+            const selectedCourse = courses.find(course => course.name === labelText);
+            // Iterate over each day and time slot
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            days.forEach(day => {
+                const dayEvents = document.getElementById(day + 'Events');
+                if (dayEvents) {
+                    // Filter selected courses
+                    const selectedCourses = courses.flatMap(semester => semester.filter(course => {
+                        const checkbox = document.getElementById(course.name.replace(/\s+/g, ''));
+                        return checkbox && checkbox.checked;
+                    }));
 
-        if (selectedCourse) {
-            if (this.checked) {
-                // If checkbox is checked, add the course to the schedule
-                const courseTime = selectedCourse.occurrences.time;
-                if (selectedCourse && selectedCourse.occurrences.day) {
-                    const courseDay = selectedCourse.occurrences.day.toLowerCase();
-
-                    // Find the corresponding day's events container
-                    const courseDayEvents = document.getElementById(courseDay + 'Events');
-
-                    if (courseTime && courseDayEvents) {
-                        const courseEvent = document.createElement('div');
-                        const startHour = parseInt(selectedCourse.occurrences.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
-                        const endHour = parseInt(selectedCourse.occurrences.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
-                        const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
-                        const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
-                        courseEvent.textContent = labelText;
-                        courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
-                        courseDayEvents.appendChild(courseEvent);
-                    }
+                    // Generate events for selected courses
+                    selectedCourses.forEach(course => {
+                        course.occurrences.forEach(occurrence => {
+                            if (occurrence.day.toLowerCase() === day) {
+                                const courseEvent = document.createElement('div');
+                                courseEvent.textContent = course.name;
+                                const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
+                                const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
+                                const startClass = 'start-' + startHour.toString().padStart(2, '0');
+                                const endClass = 'end-' + endHour.toString().padStart(2, '0');
+                                courseEvent.classList.add(startClass, endClass, 'box2');
+                                dayEvents.appendChild(courseEvent);
+                            }
+                        });
+                    });
                 }
-                else{
-                    console.error('Η ημέρα του μαθήματος δεν ορίζεται σωστά.');
-                } 
-            }
-            else {
-                // If checkbox is unchecked, remove the course from the schedule
-                // Find the corresponding day's events container
-                const courseDayEvents = document.getElementById(selectedCourse.occurrences.day.toLowerCase() + 'Events');
+            });
 
-                // Find and remove the corresponding event element
-                if (courseDayEvents) {
-                    const courseEventToRemove = courseDayEvents.querySelector('div:contains("' + labelText + '")');
-                    if (courseEventToRemove) {
-                        courseEventToRemove.remove();
-                    }
-                }
-            }
-        }
-    });
-});
+        });
+    })
+
+
 
 }
 
