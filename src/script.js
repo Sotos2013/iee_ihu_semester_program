@@ -534,11 +534,14 @@ function generateCourseCheckboxes() {
                     ]
                 },
                 {
-                    name: '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων', occurrences: [
+                    id: 1948,
+                    name: '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων',
+                    occurrences: [
                         { day: 'Tuesday', time: '10:00-12:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 }
+                
             ]
 
         ];
@@ -591,14 +594,15 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
         // Find the corresponding day and time for the selected course
-        const selectedCourse = courses.flat().find(course => course.name === labelText); // Use flat() to flatten the nested arrays
+        const selectedCourse = courses.flat().find(course => course.id === labelText);
+ // Use flat() to flatten the nested arrays
 
         if (selectedCourse) {
             if (this.checked) {
                 // If checkbox is checked, add the course to the schedule
                 const courseTime = selectedCourse.occurrences.time;
                 if (selectedCourse && selectedCourse.occurrences.day) {
-                    const courseDay = selectedCourse.occurrences.day;
+                    const courseDay = selectedCourse.occurrences.day.toLowerCase();
 
                     // Find the corresponding day's events container
                     const courseDayEvents = document.getElementById(courseDay + 'Events');
