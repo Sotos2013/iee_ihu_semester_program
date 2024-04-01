@@ -299,14 +299,14 @@ function generateCourseCheckboxes() {
                 {
                     name: '1201-Θ Μαθηματικά ΙΙ',
                     occurrences: [
-                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '9:00-11:00' },
                         { day: 'Thursday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
                     occurrences: [
-                        { day: 'Tuesday', time: '9:00-11:00' },
+                        { day: 'Tuesday', time: '9:00-:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 },
@@ -600,6 +600,7 @@ function generateCourseCheckboxes() {
             days.forEach(day => {
                 const dayEvents = document.getElementById(day + 'Events');
                 if (dayEvents) {
+                    // Clear existing events for the current day
                     // Filter selected courses
                     const selectedCourses = courses.flatMap(semester => semester.filter(course => {
                         const checkbox = document.getElementById(course.name.replace(/\s+/g, ''));
@@ -607,21 +608,38 @@ function generateCourseCheckboxes() {
                     }));
 
                     // Generate events for selected courses
-                    selectedCourses.forEach(course => {
-                        course.occurrences.forEach(occurrence => {
-                            if (occurrence.day.toLowerCase() === day) {
+                selectedCourses.forEach(course => {
+                    course.occurrences.forEach(occurrence => {
+                        if (occurrence.day.toLowerCase() === day) {
+                            const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
+                            const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
+                            const startClass = 'start-' + startHour.toString().padStart(1, '0');
+                            const endClass = 'end-' + endHour.toString().padStart(2, '0');
+
+                            // Check if the event already exists in the dayEvents container
+                            let existingEvent = null;
+                            Array.from(dayEvents.children).forEach(event => {
+                                if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
+                                    existingEvent = event;
+                                }
+                            });
+
+                            if (existingEvent) {
+                                if (!existingEvent.textContent.includes(course.name)) {
+                                    // Append course name to existing event
+                                    existingEvent.textContent += `, ${course.name}`;
+                                }
+                            } else {
+                                // Create a new event
                                 const courseEvent = document.createElement('div');
                                 courseEvent.textContent = course.name;
-                                const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
-                                const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
-                                const startClass = 'start-' + startHour.toString().padStart(0, '0');
-                                const endClass = 'end-' + endHour.toString().padStart(2, '0');
                                 courseEvent.classList.add(startClass, endClass, 'box2');
                                 dayEvents.appendChild(courseEvent);
                             }
-                        });
+                        }
                     });
-                }
+                });
+            }
             });
 
         });
