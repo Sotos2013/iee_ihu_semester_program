@@ -170,6 +170,8 @@ function displayCoursesBySemester() {
     } else {
         buttonContainer.appendChild(newButton);
     }
+
+    createClearCheckboxButton()
 }
 
 
@@ -656,5 +658,30 @@ function generateCourseCheckboxes() {
 
 }
 
+function clearCheckboxState() {
+    // Clear localStorage
+    localStorage.clear();
 
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+}
+function createClearCheckboxButton() {
+    // Create the new button
+    const clearButton = document.createElement('input');
+    clearButton.setAttribute('type', 'button');
+    clearButton.setAttribute('value', 'Clear Checkbox State');
+    clearButton.setAttribute('id', 'clearButton');
+    clearButton.classList.add('button', 'btn', 'btn-primary');
+
+    // Add click event listener to clear checkbox state
+    clearButton.addEventListener('click', function () {
+        clearCheckboxState();
+    });
+
+    // Append the new button to the container
+    const buttonContainer = document.getElementById('buttonsContainer');
+    buttonContainer.appendChild(clearButton);
+}
 //σχολιο 
