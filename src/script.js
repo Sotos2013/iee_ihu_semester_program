@@ -66,11 +66,11 @@ function generatePDF() {
     var tableContent = document.getElementById('program').innerHTML;
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
 
-    /*var style = "<style>";
+    var style = "<style>";
     style += "table {width: 100%;font: 17px Calibri;}";
     style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
     style += "padding: 2px 3px;}";
-    style += "</style>";*/
+    style += "</style>";
 
     var linkcss = "<link rel='stylesheet' href='style.css'>";
 
@@ -160,18 +160,32 @@ function displayCoursesBySemester() {
     newButton.addEventListener('click', function () {
         showCalendar();
     });
-
+    // Create the new button
+    const clearButton = document.createElement('input');
+    clearButton.setAttribute('type', 'button');
+    clearButton.setAttribute('value', 'Clear Checkbox State');
+    clearButton.setAttribute('id', 'clearButton');
+    clearButton.classList.add('button', 'btn', 'btn-primary');
+    clearButton.addEventListener('click', function () {
+        clearCheckboxState();
+    });
     // 6. Append the new button to a container (assuming there's a container with id 'buttonsContainer')
     const buttonContainer = document.getElementById('buttonsContainer');
     // Replace existing button if it exists
     const existingButton = document.getElementById('newButton');
+    const existButtonClear = document.getElementById('clearButton');
     if (existingButton) {
         buttonContainer.replaceChild(newButton, existingButton);
     } else {
         buttonContainer.appendChild(newButton);
     }
+    if (existButtonClear) {
+        buttonContainer.replaceChild(clearButton, existingButton);
+    } else {
+        buttonContainer.appendChild(clearButton);
+    }
 
-    createClearCheckboxButton()
+    //createClearCheckboxButton();
 }
 
 
@@ -180,13 +194,13 @@ function displayCoursesBySemester() {
 function showCalendar() {
     const programContainer = document.getElementById('program');
     const courseListContainer = document.getElementById('courseList');
-    const timeline = document.getElementById('timeline');
     courseListContainer.style.display = 'none';
     programContainer.style.display = 'block';
     const newButton = document.getElementById('newButton');
 
     if (newButton) {
         newButton.style.display = 'none';
+
     }
 
     const buttonsToHide = document.querySelectorAll('.buttons input');
@@ -315,14 +329,14 @@ function generateCourseCheckboxes() {
                 {
                     name: '1203-Θ Τεχνική Συγγραφή, Παρουσίαση και Ορολογία Ξένης Γλώσσας',
                     occurrences: [
-                        { day: 'Wednesday', time: '10:00-12:00' },
-                        { day: 'Saturday', time: '14:00-16:00' }
+                        { day: 'Wednesday', time: '9:00-11:00' },
+                        { day: 'Thursday', time: '16:00-18:00' }
                     ]
                 },
                 {
                     name: '1204-Θ Σχεδίαση Ψηφιακών Συστημάτων',
                     occurrences: [
-                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' },
                         { day: 'Monday', time: '14:00-16:00' }
                     ]
                 },
@@ -661,27 +675,17 @@ function generateCourseCheckboxes() {
 function clearCheckboxState() {
     // Clear localStorage
     localStorage.clear();
-
+    
     // Uncheck all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = false;
     });
-}
-function createClearCheckboxButton() {
-    // Create the new button
-    const clearButton = document.createElement('input');
-    clearButton.setAttribute('type', 'button');
-    clearButton.setAttribute('value', 'Clear Checkbox State');
-    clearButton.setAttribute('id', 'clearButton');
-    clearButton.classList.add('button', 'btn', 'btn-primary');
-
-    // Add click event listener to clear checkbox state
-    clearButton.addEventListener('click', function () {
-        clearCheckboxState();
+    
+    // Remove all dynamically created divs
+    const dayEventsContainers = document.querySelectorAll('.mondayEvents');
+    dayEventsContainers.forEach(container => {
+        container.innerHTML = '';
     });
-
-    // Append the new button to the container
-    const buttonContainer = document.getElementById('buttonsContainer');
-    buttonContainer.appendChild(clearButton);
 }
+
 //σχολιο 
