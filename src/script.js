@@ -410,16 +410,13 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
                 const courseDayEvents = document.getElementById(courseDay + 'Events');
                 
                 if (courseTime && courseDayEvents) {
-                    // Extract start and end times from courseTime
-                    const [startTime, endTime] = courseTime.split('-').map(time => time.trim());
-
-                    // Create a new event element
                     const courseEvent = document.createElement('div');
+                    const startHour = parseInt(selectedCourse.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
+                    const endHour = parseInt(selectedCourse.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
+                    const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
+                    const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
                     courseEvent.textContent = labelText;
-                    // Set classes for positioning based on start and end times
-                    courseEvent.classList.add('start-' + startTime.replace(':', ''), 'end-' + endTime.replace(':', ''));
-                    
-                    // Append the event to the corresponding day's events container
+                    courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
                     courseDayEvents.appendChild(courseEvent);
                 }
             } else {
