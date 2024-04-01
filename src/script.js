@@ -523,8 +523,8 @@ function generateCourseCheckboxes() {
                 },
                 {
                     name: '1841-Θ Οργάνωση Δεδομένων και Εξόρυξη Πληροφορίας', occurrences: [
-                        { day: 'Saturday', time: '10:00-12:00' },
-                        { day: 'Wednesday', time: '14:00-16:00' }
+                        { day: 'monday', time: '10:00-12:00' },
+                        { day: 'wednesday', time: '14:00-16:00' }
                     ]
                 },
                 {
@@ -585,9 +585,9 @@ for (let i = 1; i <= numColumns; i++) {
 }
 
 // Add an event listener to all checkboxes
+// Add an event listener to all checkboxes
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function () {
-        const courseId = this.id; // Get the ID of the checkbox
         const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
         // Find the corresponding day and time for the selected course
@@ -596,26 +596,32 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         if (selectedCourse) {
             if (this.checked) {
                 // If checkbox is checked, add the course to the schedule
-                const courseTime = selectedCourse.time;
-                const courseDay = selectedCourse.day.toLowerCase();
+                const courseTime = selectedCourse.occurrences.time;
+                if (selectedCourse && selectedCourse.occurrences.day) {
+                    const courseDay = selectedCourse.occurrences.day;
 
-                // Find the corresponding day's events container
-                const courseDayEvents = document.getElementById(courseDay + 'Events');
+                    // Find the corresponding day's events container
+                    const courseDayEvents = document.getElementById(courseDay + 'Events');
 
-                if (courseTime && courseDayEvents) {
-                    const courseEvent = document.createElement('div');
-                    const startHour = parseInt(selectedCourse.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
-                    const endHour = parseInt(selectedCourse.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
-                    const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
-                    const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
-                    courseEvent.textContent = labelText;
-                    courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
-                    courseDayEvents.appendChild(courseEvent);
+                    if (courseTime && courseDayEvents) {
+                        const courseEvent = document.createElement('div');
+                        const startHour = parseInt(selectedCourse.occurrences.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
+                        const endHour = parseInt(selectedCourse.occurrences.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
+                        const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
+                        const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
+                        courseEvent.textContent = labelText;
+                        courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
+                        courseDayEvents.appendChild(courseEvent);
+                    }
                 }
-            } else {
+                else{
+                    console.error('Η ημέρα του μαθήματος δεν ορίζεται σωστά.');
+                } 
+            }
+            else {
                 // If checkbox is unchecked, remove the course from the schedule
                 // Find the corresponding day's events container
-                const courseDayEvents = document.getElementById(selectedCourse.day.toLowerCase() + 'Events');
+                const courseDayEvents = document.getElementById(selectedCourse.occurrences.day.toLowerCase() + 'Events');
 
                 // Find and remove the corresponding event element
                 if (courseDayEvents) {
