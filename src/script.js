@@ -63,24 +63,25 @@ function handleNavToggles() {
 handleNavToggles();
 
 function generatePDF() {
-    var tableContent = document.getElementById('program').innerHTML;
+    var tableContent = document.getElementById('allDays').innerHTML;
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
+    var hours = document.getElementById('hours');
 
     var style = "<style>";
+    style += "@media print {";
     style += "table {width: 100%;font: 17px Calibri;}";
     style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
     style += "padding: 2px 3px;}";
     style += "</style>";
 
-    var linkcss = "<link rel='stylesheet' href='style.css'>";
-
     var newWindow = window.open('', '', 'height=700,width=700');
 
     newWindow.document.write('<html><head>');
-    newWindow.document.write(linkcss);
-    newWindow.document.write(semesterContent);
+    newWindow.document.write('<center>');
+    newWindow.document.write(style);
     newWindow.document.write('</head>');
     newWindow.document.write('<body>');
+    newWindow.document.write(semesterContent);
     newWindow.document.write(tableContent);
     newWindow.document.write('</body></html>');
 
@@ -88,6 +89,8 @@ function generatePDF() {
 
     newWindow.print();
 }
+
+
 
 function myFunction(element) {
     const step = element.dataset.step;
@@ -322,7 +325,7 @@ function generateCourseCheckboxes() {
                 {
                     name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
                     occurrences: [
-                        { day: 'Tuesday', time: '9:00-:00' },
+                        { day: 'Tuesday', time: '9:00-11:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 },
@@ -343,7 +346,7 @@ function generateCourseCheckboxes() {
                 {
                     name: '1205-Θ Αντικειμενοστρεφής Προγραμματισμός',
                     occurrences: [
-                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '11:00-13:00' },
                         { day: 'Tuesday', time: '14:00-16:00' }
                     ]
                 }
@@ -354,35 +357,35 @@ function generateCourseCheckboxes() {
                 {
                     name: '1304-Θ Οργάνωση και Αρχιτεκτονική Υπολογιστικών Συστημάτων',
                     occurrences: [
-                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '11:00-13:00' },
                         { day: 'Thursday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1401-Θ Συστήματα Διαχείρισης Βάσεων Δεδομένων',
                     occurrences: [
-                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '18:00-20:00' },
                         { day: 'Friday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1402-Θ Τηλεπικοινωνιακά Συστήματα',
                     occurrences: [
-                        { day: 'Wednesday', time: '10:00-12:00' },
+                        { day: 'Wednesday', time: '11:00-13:00' },
                         { day: 'Saturday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1403-Θ Εισαγωγή στα Λειτουργικά Συστήματα',
                     occurrences: [
-                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '11:00-13:00' },
                         { day: 'Monday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1404-Θ Ηλεκτρονικά Κυκλώματα',
                     occurrences: [
-                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '9:00-11:00' },
                         { day: 'Tuesday', time: '14:00-16:00' }
                     ]
                 }
@@ -393,14 +396,14 @@ function generateCourseCheckboxes() {
                 {
                     name: '1601-Θ Τεχνητή Νοημοσύνη',
                     occurrences: [
-                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '11:00-13:00' },
                         { day: 'Wednesday', time: '14:00-16:00' }
                     ]
                 },
                 {
                     name: '1602-Θ Ενσωματωμένα Συστήματα',
                     occurrences: [
-                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '14:00-16:00' },
                         { day: 'Thursday', time: '14:00-16:00' }
                     ]
                 },
@@ -610,12 +613,12 @@ function generateCourseCheckboxes() {
         if (storedState === 'true') {
             checkbox.checked = true;
         }
-
+    
         checkbox.addEventListener('change', function () {
             const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
             // Store checkbox state in localStorage
             localStorage.setItem(this.id, this.checked);
-
+    
             // Find the corresponding course by name
             const selectedCourse = courses.find(course => course.name === labelText);
             // Iterate over each day and time slot
@@ -624,21 +627,22 @@ function generateCourseCheckboxes() {
                 const dayEvents = document.getElementById(day + 'Events');
                 if (dayEvents) {
                     // Clear existing events for the current day
+                    dayEvents.innerHTML = '';
                     // Filter selected courses
                     const selectedCourses = courses.flatMap(semester => semester.filter(course => {
                         const checkbox = document.getElementById(course.name.replace(/\s+/g, ''));
                         return checkbox && checkbox.checked;
                     }));
-
+    
                     // Generate events for selected courses
                     selectedCourses.forEach(course => {
                         course.occurrences.forEach(occurrence => {
                             if (occurrence.day.toLowerCase() === day) {
                                 const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
                                 const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
-                                const startClass = 'start-' + startHour.toString().padStart(1, '0');
+                                const startClass = 'start-' + startHour.toString().padStart(2, '0');
                                 const endClass = 'end-' + endHour.toString().padStart(2, '0');
-
+    
                                 // Check if the event already exists in the dayEvents container
                                 let existingEvent = null;
                                 Array.from(dayEvents.children).forEach(event => {
@@ -646,7 +650,7 @@ function generateCourseCheckboxes() {
                                         existingEvent = event;
                                     }
                                 });
-
+    
                                 if (existingEvent) {
                                     if (!existingEvent.textContent.includes(course.name)) {
                                         // Append course name to existing event
@@ -655,7 +659,7 @@ function generateCourseCheckboxes() {
                                 } else {
                                     // Create a new event
                                     const courseEvent = document.createElement('div');
-                                    courseEvent.textContent = course.name;
+                                    courseEvent.textContent = occurrence.time + ' ' + course.name;
                                     courseEvent.classList.add(startClass, endClass, 'box2');
                                     dayEvents.appendChild(courseEvent);
                                 }
@@ -664,9 +668,10 @@ function generateCourseCheckboxes() {
                     });
                 }
             });
-
+    
         });
-    })
+    });
+    
 
 
 
@@ -681,11 +686,15 @@ function clearCheckboxState() {
         checkbox.checked = false;
     });
     
-    // Remove all dynamically created divs
-    const dayEventsContainers = document.querySelectorAll('.mondayEvents');
-    dayEventsContainers.forEach(container => {
-        container.innerHTML = '';
+    // Remove all dynamically created divs and clear day events containers
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    days.forEach(day => {
+        const dayEventsContainers = document.querySelectorAll(`.${day}Events`);
+        dayEventsContainers.forEach(container => {
+            container.innerHTML = '';
+        });
     });
 }
+
 
 //σχολιο 
