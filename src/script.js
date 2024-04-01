@@ -295,51 +295,250 @@ function generateCourseCheckboxes() {
     } else {
         courses = [
             [
-                { name: '1201-Θ Μαθηματικά ΙΙ', day: '', time: '' },
-                { name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος', day: '', time: '' },
-                { name: '1203-Θ Τεχνική Συγγραφή, Παρουσίαση και Ορολογία Ξένης Γλώσσας', day: '', time: '' },
-                { name: '1204-Θ Σχεδίαση Ψηφιακών Συστημάτων', day: '', time: '' },
-                { name: '1205-Θ Αντικειμενοστρεφής Προγραμματισμός', day: '', time: '' }
-            ],
+                {
+                    name: '1201-Θ Μαθηματικά ΙΙ',
+                    occurrences: [
+                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1202-Θ Μετρήσεις και Κυκλώματα Εναλλασσόμενου Ρεύματος',
+                    occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1203-Θ Τεχνική Συγγραφή, Παρουσίαση και Ορολογία Ξένης Γλώσσας',
+                    occurrences: [
+                        { day: 'Wednesday', time: '10:00-12:00' },
+                        { day: 'Saturday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1204-Θ Σχεδίαση Ψηφιακών Συστημάτων',
+                    occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1205-Θ Αντικειμενοστρεφής Προγραμματισμός',
+                    occurrences: [
+                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '14:00-16:00' }
+                    ]
+                }
+            ]
+            ,
 
             [
-                { name: '1304-Θ Οργάνωση και Αρχιτεκτονική Υπολογιστικών Συστημάτων', day: '', time: '' },
-                { name: '1401-Θ Συστήματα Διαχείρισης Βάσεων Δεδομένων', day: '', time: '' },
-                { name: '1402-Θ Τηλεπικοινωνιακά Συστήματα', day: '', time: '' },
-                { name: '1403-Θ Εισαγωγή στα Λειτουργικά Συστήματα', day: '', time: '' },
-                { name: '1404-Θ Ηλεκτρονικά Κυκλώματα', day: '', time: '' }
+                {
+                    name: '1304-Θ Οργάνωση και Αρχιτεκτονική Υπολογιστικών Συστημάτων',
+                    occurrences: [
+                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1401-Θ Συστήματα Διαχείρισης Βάσεων Δεδομένων',
+                    occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1402-Θ Τηλεπικοινωνιακά Συστήματα',
+                    occurrences: [
+                        { day: 'Wednesday', time: '10:00-12:00' },
+                        { day: 'Saturday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1403-Θ Εισαγωγή στα Λειτουργικά Συστήματα',
+                    occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1404-Θ Ηλεκτρονικά Κυκλώματα',
+                    occurrences: [
+                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '14:00-16:00' }
+                    ]
+                }
+
             ]
             ,
             [
-                { name: '1601-Θ Τεχνητή Νοημοσύνη', day: '', time: '' },
-                { name: '1602-Θ Ενσωματωμένα Συστήματα', day: '', time: '' },
-                { name: '1611-Θ Σύνθεση Ηλεκτρονικών Κυκλωμάτων', day: '', time: '' },
-                { name: '1612-Θ Κβαντική Υπολογιστική', day: '', time: '' },
-                { name: '1613-Θ Μεθοδολογίες Σχεδιασμού Μικροηλεκτρονικών Κυκλωμάτων', day: '', time: '' },
-                { name: '1671-Θ Μικροκυματική Τεχνολογία και Τηλεπισκόπηση', day: '', time: '' },
-                { name: '1672-Θ Οπτοηλεκτρονική και Οπτικές Επικοινωνίες', day: '', time: '' },
-                { name: '1673-Θ Συστήματα Μέσων Μαζικής Επικοινωνίας', day: '', time: '' },
-                { name: '1641-Θ Αριθμητικές Μέθοδοι', day: '', time: '' },
-                { name: '1642-Θ Προηγμένα Θέματα Αλληλεπίδρασης (Προγραμματισμός Κινητών Συσκευών)', day: '', time: '' },
-                { name: '1643-Θ Διοίκηση Έργων', day: '', time: '' }
+                {
+                    name: '1601-Θ Τεχνητή Νοημοσύνη',
+                    occurrences: [
+                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Wednesday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1602-Θ Ενσωματωμένα Συστήματα',
+                    occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1611-Θ Σύνθεση Ηλεκτρονικών Κυκλωμάτων',
+                    occurrences: [
+                        { day: 'Wednesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1612-Θ Κβαντική Υπολογιστική',
+                    occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Saturday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1613-Θ Μεθοδολογίες Σχεδιασμού Μικροηλεκτρονικών Κυκλωμάτων',
+                    occurrences: [
+                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1671-Θ Μικροκυματική Τεχνολογία και Τηλεπισκόπηση',
+                    occurrences: [
+                        { day: 'Saturday', time: '10:00-12:00' },
+                        { day: 'Wednesday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1672-Θ Οπτοηλεκτρονική και Οπτικές Επικοινωνίες',
+                    occurrences: [
+                        { day: 'Monday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1673-Θ Συστήματα Μέσων Μαζικής Επικοινωνίας',
+                    occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1641-Θ Αριθμητικές Μέθοδοι',
+                    occurrences: [
+                        { day: 'Wednesday', time: '10:00-12:00' },
+                        { day: 'Saturday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1642-Θ Προηγμένα Θέματα Αλληλεπίδρασης (Προγραμματισμός Κινητών Συσκευών)',
+                    occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1643-Θ Διοίκηση Έργων',
+                    occurrences: [
+                        { day: 'Friday', time: '10:00-12:00' },
+                        { day: 'Tuesday', time: '14:00-16:00' }
+                    ]
+                }
+
             ]
             ,
 
             [
-                { name: '1801-Θ Ασφάλεια Πληροφοριακών Συστημάτων', day: 'Monday', time: '9:00-11:00' },
-                { name: '1802-Θ Αρχές και Μέθοδοι Μηχανικής Μάθησης', day: '', time: '' },
-                { name: '1803-Θ Διαδίκτυο των Πραγμάτων', day: '', time: '' },
-                { name: '1811-Θ Εφαρμογές Συστημάτων Αυτομάτου Ελέγχου', day: '', time: '' },
-                { name: '1812-Θ Μετατροπείς Ισχύος', day: '', time: '' },
-                { name: '1839-Θ Ηλεκτροκίνηση και Ευφυή Δίκτυα', day: '', time: '' },
-                { name: '1871-Θ Ασύρματα Δίκτυα', day: '', time: '' },
-                { name: '1872-Θ Ειδικά Θέματα Δικτύων (CCNA) 1', day: '', time: '' },
-                { name: '1873-Θ Προηγμένα Θέματα Δικτύων', day: '', time: '' },
-                { name: '1874-Θ Συστήματα Κινητών Επικοινωνιών', day: '', time: '' },
-                { name: '1898-Θ Ελεύθερη Επιλογή Β', day: '', time: '' },
-                { name: '1841-Θ Οργάνωση Δεδομένων και Εξόρυξη Πληροφορίας', day: '', time: '' },
-                { name: '1842-Θ Διαδικτυακές Υπηρεσίες Προστιθέμενης Αξίας', day: '', time: '' },
-                { name: '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων', day: '', time: '' }
+                {
+                    name: '1801-Θ Ασφάλεια Πληροφοριακών Συστημάτων', occurrences: [
+                        { day: 'Monday', time: '9:00-11:00' },
+                        { day: 'Wednesday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1802-Θ Αρχές και Μέθοδοι Μηχανικής Μάθησης', occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Thursday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1803-Θ Διαδίκτυο των Πραγμάτων', occurrences: [
+                        { day: 'Wednesday', time: '9:00-11:00' },
+                        { day: 'Friday', time: '13:00-15:00' }
+                    ]
+                },
+                {
+                    name: '1811-Θ Εφαρμογές Συστημάτων Αυτομάτου Ελέγχου', occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Saturday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1812-Θ Μετατροπείς Ισχύος', occurrences: [
+                        { day: 'Friday', time: '9:00-11:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1839-Θ Ηλεκτροκίνηση και Ευφυή Δίκτυα', occurrences: [
+                        { day: 'Saturday', time: '10:00-12:00' },
+                        { day: 'Wednesday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1871-Θ Ασύρματα Δίκτυα', occurrences: [
+                        { day: 'Monday', time: '9:00-11:00' },
+                        { day: 'Thursday', time: '13:00-15:00' }
+                    ]
+                },
+                {
+                    name: '1872-Θ Ειδικά Θέματα Δικτύων (CCNA) 1', occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1873-Θ Προηγμένα Θέματα Δικτύων', occurrences: [
+                        { day: 'Wednesday', time: '9:00-11:00' },
+                        { day: 'Saturday', time: '13:00-15:00' }
+                    ]
+                },
+                {
+                    name: '1874-Θ Συστήματα Κινητών Επικοινωνιών', occurrences: [
+                        { day: 'Thursday', time: '10:00-12:00' },
+                        { day: 'Monday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1898-Θ Ελεύθερη Επιλογή Β', occurrences: [
+                        { day: 'Friday', time: '9:00-11:00' },
+                        { day: 'Tuesday', time: '13:00-15:00' }
+                    ]
+                },
+                {
+                    name: '1841-Θ Οργάνωση Δεδομένων και Εξόρυξη Πληροφορίας', occurrences: [
+                        { day: 'Saturday', time: '10:00-12:00' },
+                        { day: 'Wednesday', time: '14:00-16:00' }
+                    ]
+                },
+                {
+                    name: '1842-Θ Διαδικτυακές Υπηρεσίες Προστιθέμενης Αξίας', occurrences: [
+                        { day: 'Monday', time: '9:00-11:00' },
+                        { day: 'Thursday', time: '13:00-15:00' }
+                    ]
+                },
+                {
+                    name: '1948-Θ Ανάπτυξη Ολοκληρωμένων Πληροφοριακών Συστημάτων', occurrences: [
+                        { day: 'Tuesday', time: '10:00-12:00' },
+                        { day: 'Friday', time: '14:00-16:00' }
+                    ]
+                }
             ]
 
         ];
@@ -353,12 +552,9 @@ function generateCourseCheckboxes() {
         columnDiv.style.width = `${columnWidth}%`;
 
         // Determine the semester title based on the column index
-        let semesterTitleIndex;
-        if (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) {
-            semesterTitleIndex = (i * 2) - 1;
-        } else {
-            semesterTitleIndex = i * 2;
-        }
+        const semesterTitleIndex = (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) ?
+            (i * 2) - 1 :
+            i * 2;
         const semesterTitleText = `Εξάμηνο ${semesterTitleIndex}`;
 
         // Create and append the semester title
@@ -369,18 +565,34 @@ function generateCourseCheckboxes() {
         // Get the courses for the current semester and column
         const semesterCourses = courses[i - 1] || []; // Subtract 1 to adjust for zero-based indexing
 
-        // Create checkboxes for the courses
+        // Create checkboxes and schedule events for each occurrence of the courses
+        // Create checkboxes and schedule events for each occurrence of the courses
         semesterCourses.forEach(course => {
-            const listItem = document.createElement('li');
-            const checkbox = document.createElement('input');
-            checkbox.setAttribute('type', 'checkbox');
-            checkbox.setAttribute('id', course.name); // Set unique ID for each checkbox
-            const label = document.createElement('label');
-            label.setAttribute('for', course.name); // Match label with checkbox ID
-            label.textContent = course.name; // Set label text to course name
-            listItem.appendChild(checkbox);
-            listItem.appendChild(label);
-            columnDiv.appendChild(listItem);
+            course.occurrences.forEach(occurrence => {
+                const listItem = document.createElement('li');
+                const checkbox = document.createElement('input');
+                checkbox.setAttribute('type', 'checkbox');
+                checkbox.setAttribute('id', course.name.replace(/\s+/g, '')); // Set unique ID for each checkbox
+                const label = document.createElement('label');
+                label.setAttribute('for', course.name.replace(/\s+/g, '')); // Match label with checkbox ID
+                label.textContent = course.name; // Set label text to course name
+                listItem.appendChild(checkbox);
+                listItem.appendChild(label);
+                columnDiv.appendChild(listItem);
+
+                // Create schedule events for each occurrence
+                const courseDayEvents = document.getElementById(occurrence.day.toLowerCase() + 'Events');
+                if (courseDayEvents) {
+                    const courseEvent = document.createElement('div');
+                    const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
+                    const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
+                    const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
+                    const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
+                    courseEvent.textContent = course.name;
+                    courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
+                    courseDayEvents.appendChild(courseEvent);
+                }
+            });
         });
 
         // Append the column to the course list container
@@ -388,60 +600,61 @@ function generateCourseCheckboxes() {
     }
 
 
-  
 
-// Add an event listener to all checkboxes
-document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-        const selectedCoursesContainer = document.getElementById('selectedCourses');
-        const courseId = this.id; // Get the ID of the checkbox
-        const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
-        // Find the corresponding day and time for the selected course
-        const selectedCourse = courses.flat().find(course => course.name === labelText); // Use flat() to flatten the nested arrays
 
-        if (selectedCourse) {
-            if (this.checked) {
-                // If checkbox is checked, add the course to the schedule
-                const courseTime = selectedCourse.time;
-                const courseDay = selectedCourse.day.toLowerCase();
-                
-                // Find the corresponding day's events container
-                const courseDayEvents = document.getElementById(courseDay + 'Events');
-                
-                if (courseTime && courseDayEvents) {
-                    const courseEvent = document.createElement('div');
-                    const startHour = parseInt(selectedCourse.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
-                    const endHour = parseInt(selectedCourse.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
-                    const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
-                    const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
-                    courseEvent.textContent = labelText;
-                    courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
-                    courseDayEvents.appendChild(courseEvent);
-                }
-            } else {
-                // If checkbox is unchecked, remove the course from the schedule
-                // Find the corresponding day's events container
-                const courseDayEvents = document.getElementById(selectedCourse.day.toLowerCase() + 'Events');
-                
-                // Find and remove the corresponding event element
-                if (courseDayEvents) {
-                    const courseEventToRemove = courseDayEvents.querySelector('div:contains("' + labelText + '")');
-                    if (courseEventToRemove) {
-                        courseEventToRemove.remove();
+    // Add an event listener to all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            const selectedCoursesContainer = document.getElementById('selectedCourses');
+            const courseId = this.id; // Get the ID of the checkbox
+            const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
+
+            // Find the corresponding day and time for the selected course
+            const selectedCourse = courses.flat().find(course => course.name === labelText); // Use flat() to flatten the nested arrays
+
+            if (selectedCourse) {
+                if (this.checked) {
+                    // If checkbox is checked, add the course to the schedule
+                    const courseTime = selectedCourse.time;
+                    const courseDay = selectedCourse.day.toLowerCase();
+
+                    // Find the corresponding day's events container
+                    const courseDayEvents = document.getElementById(courseDay + 'Events');
+
+                    if (courseTime && courseDayEvents) {
+                        const courseEvent = document.createElement('div');
+                        const startHour = parseInt(selectedCourse.time.split('-')[0].trim().split(':')[0], 10); // Extract start hour and parse as integer
+                        const endHour = parseInt(selectedCourse.time.split('-')[1].trim().split(':')[0], 10); // Extract end hour and parse as integer
+                        const startClass = 'start-' + startHour.toString().replace(/^0+/, ''); // Remove leading zeros from start hour
+                        const endClass = 'end-' + endHour.toString().replace(/^0+/, ''); // Remove leading zeros from end hour
+                        courseEvent.textContent = labelText;
+                        courseEvent.classList.add(startClass, endClass, 'box2'); // Add the classes for start, end, and box
+                        courseDayEvents.appendChild(courseEvent);
+                    }
+                } else {
+                    // If checkbox is unchecked, remove the course from the schedule
+                    // Find the corresponding day's events container
+                    const courseDayEvents = document.getElementById(selectedCourse.day.toLowerCase() + 'Events');
+
+                    // Find and remove the corresponding event element
+                    if (courseDayEvents) {
+                        const courseEventToRemove = courseDayEvents.querySelector('div:contains("' + labelText + '")');
+                        if (courseEventToRemove) {
+                            courseEventToRemove.remove();
+                        }
                     }
                 }
-            }
 
-            // Update the selected courses container
-            if (this.checked) {
-                selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
-            } else {
-                selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
+                // Update the selected courses container
+                if (this.checked) {
+                    selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
+                } else {
+                    selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
+                }
             }
-        }
+        });
     });
-});
 
 }
 
