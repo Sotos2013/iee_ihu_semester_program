@@ -82,13 +82,29 @@ function generatePDF() {
     newWindow.document.write('</head>');
     newWindow.document.write('<body>');
     newWindow.document.write(semesterContent);
+    newWindow.document.write('<table id="printedTable">');
     newWindow.document.write(tableContent);
+    newWindow.document.write('</table>');
     newWindow.document.write('</body></html>');
 
     newWindow.document.close();
 
+    // Sort events by start time before printing
+    var printedTable = newWindow.document.getElementById('printedTable');
+    var rows = printedTable.getElementsByTagName('tr');
+    var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
+    sortedRows.sort(function(a, b) {
+        var timeA = a.cells[0].textContent.split('-')[0].trim();
+        var timeB = b.cells[0].textContent.split('-')[0].trim();
+        return timeA.localeCompare(timeB);
+    });
+    sortedRows.forEach(function(row) {
+        printedTable.appendChild(row);
+    });
+
     newWindow.print();
 }
+
 
 
 
@@ -633,16 +649,23 @@ function generateCourseCheckboxes() {
                         const checkbox = document.getElementById(course.name.replace(/\s+/g, ''));
                         return checkbox && checkbox.checked;
                     }));
-    
+                    // Debugging output
+                console.log('Day:', day);
+                console.log('Selected courses:', selectedCourses);
+                    // Generate events for selected courses
                     // Generate events for selected courses
                     selectedCourses.forEach(course => {
                         course.occurrences.forEach(occurrence => {
+                            // Split the time range to get start and end time
+                            const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
+                            const startHour = parseInt(startTime.split(':')[0], 10);
+                            const endHour = parseInt(endTime.split(':')[0], 10);
+                            
+                            // Check if the occurrence day matches the current day being processed
                             if (occurrence.day.toLowerCase() === day) {
-                                const startHour = parseInt(occurrence.time.split('-')[0].trim().split(':')[0], 10);
-                                const endHour = parseInt(occurrence.time.split('-')[1].trim().split(':')[0], 10);
                                 const startClass = 'start-' + startHour.toString().padStart(2, '0');
                                 const endClass = 'end-' + endHour.toString().padStart(2, '0');
-    
+
                                 // Check if the event already exists in the dayEvents container
                                 let existingEvent = null;
                                 Array.from(dayEvents.children).forEach(event => {
@@ -650,7 +673,7 @@ function generateCourseCheckboxes() {
                                         existingEvent = event;
                                     }
                                 });
-    
+
                                 if (existingEvent) {
                                     if (!existingEvent.textContent.includes(course.name)) {
                                         // Append course name to existing event
@@ -659,13 +682,14 @@ function generateCourseCheckboxes() {
                                 } else {
                                     // Create a new event
                                     const courseEvent = document.createElement('div');
-                                    courseEvent.textContent = occurrence.time + ' ' + course.name;
+                                    courseEvent.textContent = `${startTime}-${endTime} ${course.name}`;
                                     courseEvent.classList.add(startClass, endClass, 'box2');
                                     dayEvents.appendChild(courseEvent);
                                 }
                             }
                         });
                     });
+
                 }
             });
     
