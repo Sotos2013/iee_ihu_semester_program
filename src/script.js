@@ -565,22 +565,21 @@ function generateCourseCheckboxes() {
         // Get the courses for the current semester and column
         const semesterCourses = courses[i - 1] || []; // Subtract 1 to adjust for zero-based indexing
 
-        // Create checkboxes and schedule events for each occurrence of the courses
-        // Create checkboxes and schedule events for each occurrence of the courses
+        // Iterate over courses and create checkboxes and labels
         semesterCourses.forEach(course => {
-            course.occurrences.forEach(occurrence => {
-                const listItem = document.createElement('li');
-                const checkbox = document.createElement('input');
-                checkbox.setAttribute('type', 'checkbox');
-                checkbox.setAttribute('id', course.name.replace(/\s+/g, '')); // Set unique ID for each checkbox
-                const label = document.createElement('label');
-                label.setAttribute('for', course.name.replace(/\s+/g, '')); // Match label with checkbox ID
-                label.textContent = course.name; // Set label text to course name
-                listItem.appendChild(checkbox);
-                listItem.appendChild(label);
-                columnDiv.appendChild(listItem);
+            const listItem = document.createElement('li');
+            const checkbox = document.createElement('input');
+            checkbox.setAttribute('type', 'checkbox');
+            checkbox.setAttribute('id', course.name.replace(/\s+/g, '')); // Set unique ID for each checkbox
+            const label = document.createElement('label');
+            label.setAttribute('for', course.name.replace(/\s+/g, '')); // Match label with checkbox ID
+            label.textContent = course.name; // Set label text to course name
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+            columnDiv.appendChild(listItem);
 
-                // Create schedule events for each occurrence
+            // Create schedule events for each occurrence
+            course.occurrences.forEach(occurrence => {
                 const courseDayEvents = document.getElementById(occurrence.day.toLowerCase() + 'Events');
                 if (courseDayEvents) {
                     const courseEvent = document.createElement('div');
@@ -604,9 +603,12 @@ function generateCourseCheckboxes() {
 
 
     // Add an event listener to all checkboxes
+    // Define the selected courses container outside the event listener
+    const selectedCoursesContainer = document.getElementById('selectedCourses');
+
+    // Add an event listener to all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.addEventListener('change', function () {
-            const selectedCoursesContainer = document.getElementById('selectedCourses');
             const courseId = this.id; // Get the ID of the checkbox
             const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
@@ -646,16 +648,14 @@ function generateCourseCheckboxes() {
                     }
                 }
 
+                // Update the selected courses array
+                const selectedCourses = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.nextElementSibling.textContent);
+
                 // Update the selected courses container
-                if (this.checked) {
-                    selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
-                } else {
-                    selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
-                }
+                selectedCoursesContainer.textContent = selectedCourses.join(', ');
             }
         });
     });
-
 }
 
 
