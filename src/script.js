@@ -389,7 +389,7 @@ function generateCourseCheckboxes() {
 
 
   
-}
+
 // Add an event listener to all checkboxes
 document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
     checkbox.addEventListener('change', function () {
@@ -398,41 +398,55 @@ document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
 
         // Find the corresponding day and time for the selected course
-        const selectedCourse = courses.find(course => course.name === labelText);
+        const selectedCourse = courses.flat().find(course => course.name === labelText); // Use flat() to flatten the nested arrays
 
-        if (this.checked) {
-            // If checkbox is checked, add the course to the schedule
-            const courseTimeId = `hour${selectedCourse.time.split('-')[0].trim().replace(':', '')}`;
-            const courseDayEventsId = `${selectedCourse.day.toLowerCase()}Events`;
-            const courseTimeMarker = document.getElementById(courseTimeId);
-            const courseDayEvents = document.getElementById(courseDayEventsId);
+        if (selectedCourse) {
+            if (this.checked) {
+                // If checkbox is checked, add the course to the schedule
+                const courseTime = selectedCourse.time;
+                const courseDay = selectedCourse.day.toLowerCase();
+                
+                // Find the corresponding day's events container
+                const courseDayEvents = document.getElementById(courseDay + 'Events');
+                
+                if (courseTime && courseDayEvents) {
+                    // Extract start and end times from courseTime
+                    const [startTime, endTime] = courseTime.split('-').map(time => time.trim());
 
-            if (courseTimeMarker && courseDayEvents) {
-                const courseEvent = document.createElement('div');
-                courseEvent.textContent = labelText;
-                courseDayEvents.appendChild(courseEvent);
+                    // Create a new event element
+                    const courseEvent = document.createElement('div');
+                    courseEvent.textContent = labelText;
+                    // Set classes for positioning based on start and end times
+                    courseEvent.classList.add('start-' + startTime.replace(':', ''), 'end-' + endTime.replace(':', ''));
+                    
+                    // Append the event to the corresponding day's events container
+                    courseDayEvents.appendChild(courseEvent);
+                }
+            } else {
+                // If checkbox is unchecked, remove the course from the schedule
+                // Find the corresponding day's events container
+                const courseDayEvents = document.getElementById(selectedCourse.day.toLowerCase() + 'Events');
+                
+                // Find and remove the corresponding event element
+                if (courseDayEvents) {
+                    const courseEventToRemove = courseDayEvents.querySelector('div:contains("' + labelText + '")');
+                    if (courseEventToRemove) {
+                        courseEventToRemove.remove();
+                    }
+                }
             }
-        } else {
-            // If checkbox is unchecked, remove the course from the schedule
-            // Remove the course from the corresponding day's events
-            const courseDayEventsId = `${selectedCourse.day.toLowerCase()}Events`;
-            const courseDayEvents = document.getElementById(courseDayEventsId);
-            const courseEventToRemove = courseDayEvents.querySelector(`div:contains('${labelText}')`);
-            if (courseEventToRemove) {
-                courseEventToRemove.remove();
-            }
-        }
 
-        // Update the selected courses container
-        if (this.checked) {
-            selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
-        } else {
-            selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
+            // Update the selected courses container
+            if (this.checked) {
+                selectedCoursesContainer.textContent += labelText + ', '; // Append the label text to the container
+            } else {
+                selectedCoursesContainer.textContent = selectedCoursesContainer.textContent.replace(labelText + ', ', ''); // Remove the label text from the container
+            }
         }
     });
 });
 
-
+}
 
 
 //σχολιο 
