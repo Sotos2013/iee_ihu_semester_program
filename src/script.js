@@ -663,7 +663,7 @@ function generateCourseCheckboxes() {
                             
                             // Check if the occurrence day matches the current day being processed
                             if (occurrence.day.toLowerCase() === day) {
-                                const startClass = 'start-' + startHour.toString().padStart(2, '0');
+                                const startClass = 'start-' + startHour.toString().padStart(1, '0');
                                 const endClass = 'end-' + endHour.toString().padStart(2, '0');
 
                                 // Check if the event already exists in the dayEvents container
