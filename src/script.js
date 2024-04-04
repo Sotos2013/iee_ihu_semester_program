@@ -1,3 +1,27 @@
+const mysql = require('mysql');
+
+// Σύνδεση με τη βάση δεδομένων
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'courses_db'
+});
+
+// Εκτέλεση του ερωτήματος για την ανάκτηση των δεδομένων
+connection.query('SELECT * FROM courses_table', (error, results, fields) => {
+  if (error) {
+    console.error('Σφάλμα κατά την εκτέλεση του ερωτήματος: ', error);
+    return;
+  }
+
+  // Τώρα μπορείς να χειριστείς τα αποτελέσματα εδώ
+  console.log('Τα αποτελέσματα είναι: ', results);
+});
+
+// Κλείσιμο της σύνδεσης με τη βάση δεδομένων όταν τελειώσει η εργασία
+connection.end();
+
 function handleDropdowns() {
     var dropdownTriggers = document.querySelectorAll('.nav-js .dropdown a');
     var dropdownMenus = document.querySelectorAll('.dropdown-menu');
