@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
     <title>ΠΡΟΓΡΑΜΜΑ ΕΞΑΜΗΝΟΥ</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -9,6 +10,24 @@
 <script src="script.js"></script>
 
 <body>
+    <script>
+        // Δημιουργία ενός XMLHttpRequest αντικειμένου
+        var xhttp = new XMLHttpRequest();
+
+        // Καθορισμός της λειτουργίας που θα εκτελεστεί όταν αλλάξει η κατάσταση του αιτήματος
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                // Εδώ μπορείτε να προσθέσετε οποιοδήποτε κώδικα JavaScript θέλετε να εκτελεστεί μετά την επιτυχή ολοκλήρωση του αιτήματος PHP
+                console.log("PHP script executed successfully!");
+            }
+        };
+
+        // Καθορισμός της HTTP μεθόδου και του URL του PHP script που θέλετε να καλέσετε
+        xhttp.open("GET", "dbconnect.php", true);
+
+        // Αποστολή του αιτήματος
+        xhttp.send();
+    </script>
     <div class="container-fluid">
         <div class="row">
             <div class="col">
