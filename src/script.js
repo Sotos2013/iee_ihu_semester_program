@@ -293,115 +293,48 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
         if (course.occurrences.some(occurrence => new Date(occurrence.day).getMonth() === currentMonth)) {
             checkbox.checked = true;
         }
-    });
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    
+
         checkbox.addEventListener('change', function () {
-            //const labelText = this.nextElementSibling.textContent; // Get the label text (course title)
-            // Store checkbox state in localStorage
-            localStorage.setItem(this.id, this.checked);
-    
-            // Fetch data from data.json
-            fetch('data.json')
-    .then(response => response.json())
-    .then(data => {
-        const selectedCourses = [];
-        // Iterate over each course
-        data.forEach(courseData => {
-            const courseName = courseData.name;
-            const courseOccurrences = [];
-            // Iterate over each occurrence of the course
-            courseData.occurrences.forEach(occurrence => {
-                const day = occurrence.day;
-                const time = occurrence.time;
-                // Store each occurrence in the courseOccurrences array
-                courseOccurrences.push({ day, time });
-            });
-            // Store the course name and its occurrences in the selectedCourses array
-            selectedCourses.push({ name: courseName, occurrences: courseOccurrences });
-        });
-        // Log the selected courses for debugging purposes
-        console.log(selectedCourses);
-    
-        // Iterate over each day and time slot
-        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-        days.forEach(day => {
-            const dayEvents = document.getElementById(day + 'Events');
-            if (dayEvents) {
-                // Clear existing events for the current day
-                dayEvents.innerHTML = '';
-                // Generate events for selected courses
-                selectedCourses.forEach(course => {
-                    course.occurrences.forEach(occurrence => {
-                        // Split the time range to get start and end time
-                        if (occurrence.time) {
-                            const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
-                            const startHour = parseInt(startTime.split(':')[0], 10);
-                            const endHour = parseInt(endTime.split(':')[0], 10);
-    
-                            // Check if the occurrence day matches the current day being processed
-                            if (occurrence.day.toLowerCase() === day.toLowerCase()) {
-                                const startClass = 'start-' + startHour.toString().padStart(2, '0');
-                                const endClass = 'end-' + endHour.toString().padStart(2, '0');
-    
-                                // Check if the event already exists in the dayEvents container
-                                let existingEvent = null;
-                                Array.from(dayEvents.children).forEach(event => {
-                                    if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
-                                        existingEvent = event;
-                                    }
-                                });
-    
-                                if (existingEvent) {
-                                    if (!existingEvent.textContent.includes(course.name)) {
-                                        // Append course name to existing event
-                                        existingEvent.textContent += `, ${course.name}`;
-                                    }
-                                } else {
+            const isChecked = this.checked;
+            const labelText = course.name; // Get the course name
+            localStorage.setItem(labelText, isChecked);
+
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            days.forEach(day => {
+                const dayEvents = document.getElementById(day + 'Events');
+                if (dayEvents) {
+                    // Clear existing events for the current day
+                    dayEvents.innerHTML = '';
+                    // Generate events for selected course
+                    courses.forEach(selectedCourse => {
+                        if (localStorage.getItem(selectedCourse.name) === 'true') {
+                            selectedCourse.occurrences.forEach(occurrence => {
+                                // Split the time range to get start and end time
+                                if (occurrence.day.toLowerCase() === day.toLowerCase()) {
+                                    const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
+                                    const startHour = parseInt(startTime.split(':')[0], 10);
+                                    const endHour = parseInt(endTime.split(':')[0], 10);
+
+                                    const startClass = 'start-' + startHour.toString().padStart(1, '0');
+                                    const endClass = 'end-' + endHour.toString().padStart(2, '0');
+
                                     // Create a new event
                                     const courseEvent = document.createElement('div');
-                                    courseEvent.textContent = `${startTime}-${endTime} ${course.name}`;
+                                    courseEvent.textContent = `${startTime}-${endTime} ${selectedCourse.name}`;
                                     courseEvent.classList.add(startClass, endClass, 'box2');
                                     dayEvents.appendChild(courseEvent);
                                 }
-                            }
+                            });
                         }
                     });
-                });
-            } else {
-                console.log('Το στοιχείο με το id ' + day + 'Events δεν βρέθηκε.');
-            }
+                }
+            });
         });
-    })
-    .catch(error => console.error('Error loading data.json:', error));
-
-        });
-    });
-    
-    
-    
-}
-
-
-function clearCheckboxState() {
-    // Clear localStorage
-    localStorage.clear();
-    
-    // Uncheck all checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-    
-    // Remove all dynamically created divs and clear day events containers
-    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-    days.forEach(day => {
-        const dayEventsContainers = document.querySelectorAll(`.${day}Events`);
-        dayEventsContainers.forEach(container => {
-            container.innerHTML = '';
-        });
+        
+        
     });
 }
+
 
 
 //σχολιο 
