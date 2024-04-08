@@ -239,26 +239,6 @@ function showCalendar() {
     });
 
 }
-
-function generateCourseCheckboxes() {
-    // Clear any existing content in the courseListContainer
-    const courseListContainer = document.getElementById('courseList');
-    courseListContainer.innerHTML = '';
-
-    // Load data from JSON file using fetch
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            // Group courses by semester
-            const coursesBySemester = groupCoursesBySemester(data);
-            // Generate checkboxes for each semester
-            Object.keys(coursesBySemester).forEach(semester => {
-                generateCheckBoxes(coursesBySemester[semester], courseListContainer, semester);
-            });
-        })
-        .catch(error => console.error('Error loading JSON file:', error));
-}
-
 function groupCoursesBySemester(data) {
     const coursesBySemester = {};
     data.forEach(course => {
@@ -270,6 +250,44 @@ function groupCoursesBySemester(data) {
     });
     return coursesBySemester;
 }
+function generateCourseCheckboxes() {
+    // Clear any existing content in the courseListContainer
+    const courseListContainer = document.getElementById('courseList');
+    courseListContainer.innerHTML = '';
+    // Get the current date
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth(); // Months are zero-indexed
+
+    // Determine the semester based on the month
+    let semester;
+    let semesterNumbers;
+    
+    if (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) {
+        semester = 'Χειμερινό Εξάμηνο'; // Winter semester for months October to December
+        semesterNumbers = ["1", "3", "5", "7", "9"]; // Semesters to display for winter semester
+    } else {
+        semester = 'Εαρινό Εξάμηνο'; // Spring semester for months March to June
+        semesterNumbers = ["2", "4", "6", "8"]; // Semesters to display for spring semester
+    }
+    
+    // Load data from JSON file using fetch
+    fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+        // Group courses by semester
+        const coursesBySemester = groupCoursesBySemester(data);
+        
+        // Filter courses based on semester numbers
+        const filteredCourses = semesterNumbers.reduce((accumulator, semesterNumber) => {
+            return accumulator.concat(coursesBySemester[semesterNumber.toString()] || []);
+        }, []);
+        
+        // Generate checkboxes for filtered courses
+        generateCheckBoxes(filteredCourses, courseListContainer, semester);
+    })
+    .catch(error => console.error('Error loading JSON file:', error));
+}
+
 
 function generateCheckBoxes(courses, courseListContainer, semester) {
     // Create semester header
