@@ -276,16 +276,16 @@ function generateCourseCheckboxes() {
     .then(data => {
         // Group courses by semester
         const coursesBySemester = groupCoursesBySemester(data);
-        
-        // Filter courses based on semester numbers
-        const filteredCourses = semesterNumbers.reduce((accumulator, semesterNumber) => {
-            return accumulator.concat(coursesBySemester[semesterNumber.toString()] || []);
-        }, []);
-        
-        // Generate checkboxes for filtered courses
-        generateCheckBoxes(filteredCourses, courseListContainer, semester);
+        // Generate checkboxes for each semester
+        Object.keys(coursesBySemester).forEach(semester => {
+            // Check if the semester is even (spring semester)
+            if (semester % 2 === 0) {
+                generateCheckBoxes(coursesBySemester[semester], courseListContainer, semester);
+            }
+        });
     })
     .catch(error => console.error('Error loading JSON file:', error));
+
 }
 
 
