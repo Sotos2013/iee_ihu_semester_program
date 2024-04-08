@@ -280,7 +280,10 @@ function addCustomCourse() {
                     time: `${selectedTime.start}-${selectedTime.end}`,
                     day: selectedDay
                 };
-                addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
+                const customCourseCheckbox = generateCheckbox(courseDetails.name);
+                if (customCourseCheckbox.checked) {
+                    addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
+                }
                 saveCourseToJSON(courseDetails); // Αποθήκευση του μαθήματος στο JSON αρχείο
                 addCourseCheckbox(courseDetails); // Προσθήκη του νέου checkbox στη λίστα μαθημάτων
             } else {
@@ -290,13 +293,14 @@ function addCustomCourse() {
     }
 }
 
+
 // Συνάρτηση για την αποθήκευση μαθήματος στο JSON αρχείο
 function saveCourseToJSON(courseDetails) {
     // Μετατροπή των δεδομένων σε JSON
     const jsonCourseDetails = {
         semester: "2",
         name: courseDetails.name,
-        occurrences: courseDetails.occurrences
+        occurrences: [{ day: courseDetails.day, time: courseDetails.time}]
     };
 
     // Αποθήκευση του JSON στο αρχείο
