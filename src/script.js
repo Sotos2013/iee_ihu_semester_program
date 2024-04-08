@@ -289,12 +289,17 @@ function addCustomCourse() {
                     day: selectedDay
                 };
                 addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
+                
+                // Δημιουργία και προσθήκη του νέου checkbox για το μάθημα
+                addCourseCheckbox(courseDetails);
             } else {
                 alert('Μη έγκυρη επιλογή ώρας ή ημέρας.');
             }
         }
     }
 }
+
+
 
 
 // Συνάρτηση για την προσθήκη μαθήματος στο πρόγραμμα
@@ -311,18 +316,16 @@ function addToSchedule(courseName, courseTime, courseDay) {
         courseEvent.textContent = `${startTime}-${endTime} ${courseName}`;
         courseEvent.classList.add(startClass, endClass, 'box2');
         
-        // Ελέγχουμε αν υπάρχει ήδη άλλο μάθημα στην ίδια ώρα
+        // Ελέγχουμε αν το μάθημα υπάρχει ήδη στο πρόγραμμα
         let existingEventFound = false;
         Array.from(dayEvents.children).forEach(event => {
-            const eventTime = event.textContent.split(' ')[0]; // Παίρνουμε το χρονικό διάστημα από το κείμενο του event
-            if (eventTime === `${startTime}-${endTime}`) {
-                // Αν υπάρχει ήδη μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα δίπλα του με κόμμα
-                event.textContent += `, ${courseName}`;
+            const eventText = event.textContent;
+            if (eventText.includes(courseName) && eventText.includes(startTime) && eventText.includes(endTime)) {
                 existingEventFound = true;
             }
         });
         
-        // Αν δεν βρέθηκε άλλο μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα κανονικά
+        // Αν το μάθημα δεν υπάρχει ήδη, το προσθέτουμε
         if (!existingEventFound) {
             dayEvents.appendChild(courseEvent);
         }
@@ -330,6 +333,7 @@ function addToSchedule(courseName, courseTime, courseDay) {
         console.log('Το στοιχείο δεν βρέθηκε');
     }
 }
+
 
 
 
@@ -344,6 +348,14 @@ function removeFromSchedule(courseName, courseTime, courseDay) {
         });
     }
 }
+function saveCheckboxState(courseName, checked) {
+    localStorage.setItem(courseName, checked);
+}
+
+// Συνάρτηση για την ανάκτηση της αποθηκευμένης κατάστασης του checkbox από το localStorage
+function getCheckboxState(courseName) {
+    return localStorage.getItem(courseName) === 'true'; // Επιστρέφει true αν το checkbox είναι επιλεγμένο, αλλιώς false
+}
 
 function addCourseCheckbox(courseDetails) {
     // Assuming there's a function to generate a checkbox for a single course
@@ -352,21 +364,21 @@ function addCourseCheckbox(courseDetails) {
     // Add the time and day information as data attributes to the checkbox
     customCourseCheckbox.dataset.time = courseDetails.time;
     customCourseCheckbox.dataset.day = courseDetails.day;
+    
+    // Ελέγχουμε την κατάσταση του checkbox από το localStorage και το ανανεώνουμε αναλόγως
+    const checkboxState = getCheckboxState(courseDetails.name);
+    customCourseCheckbox.checked = checkboxState;
+    
     const courseListContainer = document.getElementById('courseList');
     courseListContainer.appendChild(customCourseCheckbox);
+    
     customCourseCheckbox.addEventListener('change', function() {
-        if (this.checked) {
-            const courseName = this.value;
-            const courseTime = this.dataset.time;
-            const courseDay = this.dataset.day;
-            addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
-        } else {
-            // Υποθέτουμε ότι υπάρχει μια συνάρτηση για την αφαίρεση του μαθήματος από το πρόγραμμα
-            const courseName = this.value;
-            const courseTime = this.dataset.time;
-            const courseDay = this.dataset.day;
-            removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
-        }
+        const isChecked = this.checked;
+        const courseName = this.value;
+        const courseTime = this.dataset.time;
+        const courseDay = this.dataset.day;
+        addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
+        saveCheckboxState(courseName, isChecked); // Αποθήκευση της κατάστασης του checkbox στο localStorage
     });
 }
 
