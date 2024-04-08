@@ -250,6 +250,99 @@ function groupCoursesBySemester(data) {
     });
     return coursesBySemester;
 }
+const availableHours = [
+    { start: '09:00', end: '11:00' },
+    { start: '11:00', end: '13:00' },
+    { start: '14:00', end: '16:00' },
+    { start: '16:00', end: '18:00' },
+    { start: '18:00', end: '20:00' }
+];
+
+function addCustomCourse() {
+    const customCourseName = prompt('Εισάγετε το όνομα του μαθήματος:');
+    if (customCourseName) {
+        const selectedHour = prompt('Επιλέξτε μια από τις διαθέσιμες ώρες:\n\n' +
+                                   '1. 09:00 - 11:00\n' +
+                                   '2. 11:00 - 13:00\n' +
+                                   '3. 14:00 - 16:00\n' +
+                                   '4. 16:00 - 18:00\n' +
+                                   '5. 18:00 - 20:00');
+        const selectedDay = prompt('Επιλέξτε μια από τις διαθέσιμες ημέρες:\n\n' +
+                                  '1. Δευτέρα\n' +
+                                  '2. Τρίτη\n' +
+                                  '3. Τετάρτη\n' +
+                                  '4. Πέμπτη\n' +
+                                  '5. Παρασκευή');
+
+        if (selectedHour && selectedDay) {
+            const index = parseInt(selectedHour) - 1;
+            const dayIndex = parseInt(selectedDay) - 1;
+            if (index >= 0 && index < availableHours.length && dayIndex >= 0 && dayIndex < availableDays.length) {
+                const selectedTime = availableHours[index];
+                const selectedDay = availableDays[dayIndex];
+                const courseDetails = {
+                    name: customCourseName,
+                    time: `${selectedTime.start}-${selectedTime.end}`,
+                    day: selectedDay
+                };
+                // Assuming there's a function to handle adding a course checkbox
+                // You can implement this function according to your needs
+                addCourseCheckbox(courseDetails);
+            } else {
+                alert('Μη έγκυρη επιλογή ώρας ή ημέρας.');
+            }
+        }
+    }
+}
+
+
+
+function addCourseCheckbox(courseDetails) {
+    // Assuming there's a function to generate a checkbox for a single course
+    // You can implement this function according to your needs
+    const customCourseCheckbox = generateCheckbox(courseDetails.name);
+    // Add the time and day information as data attributes to the checkbox
+    customCourseCheckbox.dataset.time = courseDetails.time;
+    customCourseCheckbox.dataset.day = courseDetails.day;
+    const courseListContainer = document.getElementById('courseList');
+    courseListContainer.appendChild(customCourseCheckbox);
+    customCourseCheckbox.addEventListener('change', function() {
+    if (this.checked) {
+        const courseName = this.value;
+        const courseTime = this.dataset.time;
+        const courseDay = this.dataset.day;
+        addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
+    } else {
+        // Υποθέτουμε ότι υπάρχει μια συνάρτηση για την αφαίρεση του μαθήματος από το πρόγραμμα
+        const courseName = this.value;
+        const courseTime = this.dataset.time;
+        const courseDay = this.dataset.day;
+        removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
+    }
+});
+}
+
+
+
+function generateCheckbox(courseName) {
+    // Assuming this function generates a checkbox element for a single course
+    // You can implement this function according to your needs
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.name = 'course';
+    checkbox.value = courseName;
+    checkbox.id = courseName.replace(/\s+/g, '-'); // Convert spaces to dashes for ID
+
+    const label = document.createElement('label');
+    label.textContent = courseName;
+    label.htmlFor = checkbox.id;
+
+    const container = document.createElement('div');
+    container.appendChild(checkbox);
+    container.appendChild(label);
+
+    return container;
+}
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
     const courseListContainer = document.getElementById('courseList');
@@ -282,6 +375,16 @@ function generateCourseCheckboxes() {
             });
         })
         .catch(error => console.error('Error loading JSON file:', error));
+
+        // Add a button for adding a custom course
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Προσθήκη Δικού Μαθήματος';
+        addButton.addEventListener('click', function () {
+            // Assuming there's a function to handle adding a custom course
+            // You can implement this function according to your needs
+            addCustomCourse();
+        });
+        courseListContainer.appendChild(addButton);
 }
 
 
