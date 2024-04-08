@@ -281,6 +281,7 @@ function addCustomCourse() {
                     day: selectedDay
                 };
                 addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
+                saveCourseToJSON(courseDetails); // Αποθήκευση του μαθήματος στο JSON αρχείο
                 addCourseCheckbox(courseDetails); // Προσθήκη του νέου checkbox στη λίστα μαθημάτων
             } else {
                 alert('Μη έγκυρη επιλογή ώρας ή ημέρας.');
@@ -289,6 +290,33 @@ function addCustomCourse() {
     }
 }
 
+// Συνάρτηση για την αποθήκευση μαθήματος στο JSON αρχείο
+function saveCourseToJSON(courseDetails) {
+    // Μετατροπή των δεδομένων σε JSON
+    const jsonCourseDetails = {
+        semester: "2",
+        name: courseDetails.name,
+        occurrences: courseDetails.occurrences
+    };
+
+    // Αποθήκευση του JSON στο αρχείο
+    fetch('data.json', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonCourseDetails)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Αποτυχία αποθήκευσης του μαθήματος.');
+        }
+        console.log('Το μάθημα αποθηκεύτηκε με επιτυχία.');
+    })
+    .catch(error => {
+        console.error('Σφάλμα κατά την αποθήκευση του μαθήματος στο αρχείο data.json:', error);
+    });
+}
 
 
 // Συνάρτηση για την προσθήκη μαθήματος στο πρόγραμμα
