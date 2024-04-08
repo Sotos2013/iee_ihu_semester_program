@@ -277,12 +277,22 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
     semesterHeader.textContent = `Εξάμηνο ${semester}`;
     courseListContainer.appendChild(semesterHeader);
 
-    // Add courses to the list
+    // Load selected courses from localStorage
+    const selectedCourses = Object.keys(localStorage)
+        .filter(key => localStorage.getItem(key) === 'true');
+
     courses.forEach(course => {
         const courseItem = document.createElement('li');
         const courseName = document.createTextNode(course.name);
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
+        checkbox.id = course.name;
+        checkbox.name = course.name;
+        checkbox.value = course.name;
+
+        // Check if the course is selected
+        checkbox.checked = selectedCourses.includes(course.name);
+
         courseItem.appendChild(checkbox);
         courseItem.appendChild(courseName);
         courseListContainer.appendChild(courseItem);
