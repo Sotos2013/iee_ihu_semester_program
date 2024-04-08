@@ -258,6 +258,9 @@ const availableHours = [
     { start: '18:00', end: '20:00' }
 ];
 
+// Ορίζουμε τις διαθέσιμες ημέρες
+const availableDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+
 function addCustomCourse() {
     const customCourseName = prompt('Εισάγετε το όνομα του μαθήματος:');
     if (customCourseName) {
@@ -267,16 +270,16 @@ function addCustomCourse() {
                                    '3. 14:00 - 16:00\n' +
                                    '4. 16:00 - 18:00\n' +
                                    '5. 18:00 - 20:00');
-        const selectedDay = prompt('Επιλέξτε μια από τις διαθέσιμες ημέρες:\n\n' +
+        const selectedDayIndex = prompt('Επιλέξτε μια από τις διαθέσιμες ημέρες:\n\n' +
                                   '1. Δευτέρα\n' +
                                   '2. Τρίτη\n' +
                                   '3. Τετάρτη\n' +
                                   '4. Πέμπτη\n' +
                                   '5. Παρασκευή');
 
-        if (selectedHour && selectedDay) {
+        if (selectedHour && selectedDayIndex) {
             const index = parseInt(selectedHour) - 1;
-            const dayIndex = parseInt(selectedDay) - 1;
+            const dayIndex = parseInt(selectedDayIndex) - 1;
             if (index >= 0 && index < availableHours.length && dayIndex >= 0 && dayIndex < availableDays.length) {
                 const selectedTime = availableHours[index];
                 const selectedDay = availableDays[dayIndex];
@@ -285,9 +288,7 @@ function addCustomCourse() {
                     time: `${selectedTime.start}-${selectedTime.end}`,
                     day: selectedDay
                 };
-                // Assuming there's a function to handle adding a course checkbox
-                // You can implement this function according to your needs
-                addCourseCheckbox(courseDetails);
+                addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
             } else {
                 alert('Μη έγκυρη επιλογή ώρας ή ημέρας.');
             }
@@ -296,6 +297,53 @@ function addCustomCourse() {
 }
 
 
+// Συνάρτηση για την προσθήκη μαθήματος στο πρόγραμμα
+function addToSchedule(courseName, courseTime, courseDay) {
+    const dayEvents = document.getElementById(courseDay.toLowerCase() + 'Events'); // Προσαρμογή για μικρά γράμματα
+    if (dayEvents) {
+        const [startTime, endTime] = courseTime.split('-');
+        const [startHour, endHour] = [parseInt(startTime.split(':')[0], 10), parseInt(endTime.split(':')[0], 10)];
+
+        const startClass = 'start-' + startHour.toString().padStart(2, '0'); // Προσαρμογή για προσθήκη μηδενικών στην αρχή
+        const endClass = 'end-' + endHour.toString().padStart(2, '0'); // Προσαρμογή για προσθήκη μηδενικών στην αρχή
+
+        const courseEvent = document.createElement('div');
+        courseEvent.textContent = `${startTime}-${endTime} ${courseName}`;
+        courseEvent.classList.add(startClass, endClass, 'box2');
+        
+        // Ελέγχουμε αν υπάρχει ήδη άλλο μάθημα στην ίδια ώρα
+        let existingEventFound = false;
+        Array.from(dayEvents.children).forEach(event => {
+            const eventTime = event.textContent.split(' ')[0]; // Παίρνουμε το χρονικό διάστημα από το κείμενο του event
+            if (eventTime === `${startTime}-${endTime}`) {
+                // Αν υπάρχει ήδη μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα δίπλα του με κόμμα
+                event.textContent += `, ${courseName}`;
+                existingEventFound = true;
+            }
+        });
+        
+        // Αν δεν βρέθηκε άλλο μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα κανονικά
+        if (!existingEventFound) {
+            dayEvents.appendChild(courseEvent);
+        }
+    } else {
+        console.log('Το στοιχείο δεν βρέθηκε');
+    }
+}
+
+
+
+// Συνάρτηση για την αφαίρεση μαθήματος από το πρόγραμμα
+function removeFromSchedule(courseName, courseTime, courseDay) {
+    const dayEvents = document.getElementById(courseDay + 'Events');
+    if (dayEvents) {
+        Array.from(dayEvents.children).forEach(event => {
+            if (event.textContent.includes(courseName)) {
+                event.remove();
+            }
+        });
+    }
+}
 
 function addCourseCheckbox(courseDetails) {
     // Assuming there's a function to generate a checkbox for a single course
@@ -307,21 +355,20 @@ function addCourseCheckbox(courseDetails) {
     const courseListContainer = document.getElementById('courseList');
     courseListContainer.appendChild(customCourseCheckbox);
     customCourseCheckbox.addEventListener('change', function() {
-    if (this.checked) {
-        const courseName = this.value;
-        const courseTime = this.dataset.time;
-        const courseDay = this.dataset.day;
-        addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
-    } else {
-        // Υποθέτουμε ότι υπάρχει μια συνάρτηση για την αφαίρεση του μαθήματος από το πρόγραμμα
-        const courseName = this.value;
-        const courseTime = this.dataset.time;
-        const courseDay = this.dataset.day;
-        removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
-    }
-});
+        if (this.checked) {
+            const courseName = this.value;
+            const courseTime = this.dataset.time;
+            const courseDay = this.dataset.day;
+            addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
+        } else {
+            // Υποθέτουμε ότι υπάρχει μια συνάρτηση για την αφαίρεση του μαθήματος από το πρόγραμμα
+            const courseName = this.value;
+            const courseTime = this.dataset.time;
+            const courseDay = this.dataset.day;
+            removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
+        }
+    });
 }
-
 
 
 function generateCheckbox(courseName) {
@@ -343,6 +390,7 @@ function generateCheckbox(courseName) {
 
     return container;
 }
+
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
     const courseListContainer = document.getElementById('courseList');
