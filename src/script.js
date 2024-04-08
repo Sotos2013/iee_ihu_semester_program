@@ -1,3 +1,11 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.checked = false;
+    });
+});
+
+
 fetch('data.json')
   .then(response => response.json())
   .then(data => {
@@ -281,9 +289,7 @@ function addCustomCourse() {
                     day: selectedDay
                 };
                 const customCourseCheckbox = generateCheckbox(courseDetails.name);
-                if (customCourseCheckbox.checked) {
-                    addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
-                }
+                addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day); // Προσθήκη του μαθήματος στο πρόγραμμα
                 saveCourseToJSON(courseDetails); // Αποθήκευση του μαθήματος στο JSON αρχείο
                 addCourseCheckbox(courseDetails); // Προσθήκη του νέου checkbox στη λίστα μαθημάτων
             } else {
@@ -292,7 +298,6 @@ function addCustomCourse() {
         }
     }
 }
-
 
 // Συνάρτηση για την αποθήκευση μαθήματος στο JSON αρχείο
 function saveCourseToJSON(courseDetails) {
@@ -359,6 +364,7 @@ function addToSchedule(courseName, courseTime, courseDay) {
 
 
 
+
 // Συνάρτηση για την αφαίρεση μαθήματος από το πρόγραμμα
 function removeFromSchedule(courseName, courseTime, courseDay) {
     const dayEvents = document.getElementById(courseDay + 'Events');
@@ -395,6 +401,7 @@ function addCourseCheckbox(courseDetails) {
         }
     });
 }
+
 
 
 function generateCheckbox(courseName) {
@@ -506,7 +513,7 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 const dayEvents = document.getElementById(day + 'Events');
                 if (dayEvents) {
                     // Clear existing events for the current day
-                    dayEvents.innerHTML = '';
+                    //dayEvents.innerHTML = '';
                     // Generate events for selected course
                     courses.forEach(selectedCourse => {
                         if (localStorage.getItem(selectedCourse.name) === 'true') {
@@ -521,16 +528,15 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                                     const endClass = 'end-' + endHour.toString().padStart(2, '0');
         
                                     // Check if there's an existing event for the same time range
-                                    let existingEvent = null;
-                                    Array.from(dayEvents.children).forEach(event => {
-                                        if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
-                                            existingEvent = event;
-                                        }
-                                    });
+                                    const existingEvent = Array.from(dayEvents.children).find(event =>
+                                        event.classList.contains(startClass) && event.classList.contains(endClass)
+                                    );
         
                                     if (existingEvent) {
-                                        // Append course name to existing event with comma
-                                        existingEvent.textContent += `, ${selectedCourse.name}`;
+                                        // Append course name to existing event with comma if it's not already there
+                                        if (!existingEvent.textContent.includes(selectedCourse.name)) {
+                                            existingEvent.textContent += `, ${selectedCourse.name}`;
+                                        }
                                     } else {
                                         // Create a new event
                                         const courseEvent = document.createElement('div');
@@ -545,6 +551,8 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 }
             });
         });
+        
+        
         
         
         
