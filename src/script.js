@@ -323,7 +323,7 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
             const isChecked = this.checked;
             const labelText = course.name; // Get the course name
             localStorage.setItem(labelText, isChecked);
-
+        
             const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             days.forEach(day => {
                 const dayEvents = document.getElementById(day + 'Events');
@@ -339,15 +339,28 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                                     const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
                                     const startHour = parseInt(startTime.split(':')[0], 10);
                                     const endHour = parseInt(endTime.split(':')[0], 10);
-
+        
                                     const startClass = 'start-' + startHour.toString().padStart(1, '0');
                                     const endClass = 'end-' + endHour.toString().padStart(2, '0');
-
-                                    // Create a new event
-                                    const courseEvent = document.createElement('div');
-                                    courseEvent.textContent = `${startTime}-${endTime} ${selectedCourse.name}`;
-                                    courseEvent.classList.add(startClass, endClass, 'box2');
-                                    dayEvents.appendChild(courseEvent);
+        
+                                    // Check if there's an existing event for the same time range
+                                    let existingEvent = null;
+                                    Array.from(dayEvents.children).forEach(event => {
+                                        if (event.classList.contains(startClass) && event.classList.contains(endClass)) {
+                                            existingEvent = event;
+                                        }
+                                    });
+        
+                                    if (existingEvent) {
+                                        // Append course name to existing event with comma
+                                        existingEvent.textContent += `, ${selectedCourse.name}`;
+                                    } else {
+                                        // Create a new event
+                                        const courseEvent = document.createElement('div');
+                                        courseEvent.textContent = `${startTime}-${endTime} ${selectedCourse.name}`;
+                                        courseEvent.classList.add(startClass, endClass, 'box2');
+                                        dayEvents.appendChild(courseEvent);
+                                    }
                                 }
                             });
                         }
@@ -355,6 +368,7 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 }
             });
         });
+        
         
         
     });
