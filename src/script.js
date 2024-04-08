@@ -269,24 +269,21 @@ function generateCourseCheckboxes() {
         semester = 'Εαρινό Εξάμηνο'; // Spring semester for months March to June
         semesterNumbers = ["2", "4", "6", "8"]; // Semesters to display for spring semester
     }
-    
-    // Load data from JSON file using fetch
-    fetch('data.json')
-    .then(response => response.json())
-    .then(data => {
-        // Group courses by semester
-        const coursesBySemester = groupCoursesBySemester(data);
-        // Generate checkboxes for each semester
-        Object.keys(coursesBySemester).forEach(semester => {
-            // Check if the semester is even (spring semester)
-            if (semester % 2 === 0) {
-                generateCheckBoxes(coursesBySemester[semester], courseListContainer, semester);
-            }
-        });
-    })
-    .catch(error => console.error('Error loading JSON file:', error));
 
+    // Fetch data only if it's for the current semester
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            // Group courses by semester
+            const coursesBySemester = groupCoursesBySemester(data);
+            // Generate checkboxes for the current semester
+            semesterNumbers.forEach(semesterNumber => {
+                generateCheckBoxes(coursesBySemester[semesterNumber], courseListContainer, semesterNumber);
+            });
+        })
+        .catch(error => console.error('Error loading JSON file:', error));
 }
+
 
 
 function generateCheckBoxes(courses, courseListContainer, semester) {
