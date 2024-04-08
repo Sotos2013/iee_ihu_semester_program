@@ -71,8 +71,8 @@ function handleNavToggles() {
 handleNavToggles();
 
 function generatePDF() {
-    var tableContent = document.getElementById('allDays').innerHTML;
-    var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
+    var tableContent = document.getElementById('allDays');
+    var semesterContent = document.getElementById('academicYearAndSemester');
     var hours = document.getElementById('hours');
 
     var style = "<style>";
@@ -89,29 +89,22 @@ function generatePDF() {
     newWindow.document.write(style);
     newWindow.document.write('</head>');
     newWindow.document.write('<body>');
-    newWindow.document.write(semesterContent);
-    newWindow.document.write('<table id="printedTable">');
-    newWindow.document.write(tableContent);
-    newWindow.document.write('</table>');
+    newWindow.document.write(semesterContent.outerHTML);
+    newWindow.document.write('<div id="calendarImage"></div>');
     newWindow.document.write('</body></html>');
 
     newWindow.document.close();
 
-    // Sort events by start time before printing
-    var printedTable = newWindow.document.getElementById('printedTable');
-    var rows = printedTable.getElementsByTagName('tr');
-    var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
-    sortedRows.sort(function(a, b) {
-        var timeA = a.cells[0].textContent.split('-')[0].trim();
-        var timeB = b.cells[0].textContent.split('-')[0].trim();
-        return timeA.localeCompare(timeB);
-    });
-    sortedRows.forEach(function(row) {
-        printedTable.appendChild(row);
-    });
+    // Use html2canvas to capture the calendar content as an image
+    html2canvas(tableContent).then(function(canvas) {
+        var calendarImageContainer = newWindow.document.getElementById('calendarImage');
+        calendarImageContainer.appendChild(canvas);
 
-    newWindow.print();
+        // Print the new window with the calendar image
+        newWindow.print();
+    });
 }
+
 
 
 
