@@ -344,7 +344,24 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
         
     });
 }
-
+function clearCheckboxState() {
+    // Clear localStorage
+    localStorage.clear();
+    
+    // Uncheck all checkboxes
+    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    
+    // Remove all dynamically created divs and clear day events containers
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    days.forEach(day => {
+        const dayEventsContainers = document.querySelectorAll(`.${day}Events`);
+        dayEventsContainers.forEach(container => {
+            container.innerHTML = '';
+        });
+    });
+}
 
 
 //σχολιο 
