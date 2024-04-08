@@ -1,10 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        checkbox.checked = false;
-    });
-});
-
+clearCheckboxState();
 
 fetch('data.json')
   .then(response => response.json())
@@ -79,6 +73,48 @@ function handleNavToggles() {
 handleNavToggles();
 
 function generatePDF() {
+    var tableContent = document.getElementById('allDays').innerHTML;
+    var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
+    var hours = document.getElementById('hours');
+
+    var style = "<style>";
+    style += "@media print {";
+    style += "table {width: 100%;font: 17px Calibri;}";
+    style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
+    style += "padding: 2px 3px;}";
+    style += "</style>";
+
+    var newWindow = window.open('', '', 'height=700,width=700');
+
+    newWindow.document.write('<html><head>');
+    newWindow.document.write('<center>');
+    newWindow.document.write(style);
+    newWindow.document.write('</head>');
+    newWindow.document.write('<body>');
+    newWindow.document.write(semesterContent);
+    newWindow.document.write('<table id="printedTable">');
+    newWindow.document.write(tableContent);
+    newWindow.document.write('</table>');
+    newWindow.document.write('</body></html>');
+
+    newWindow.document.close();
+
+    // Sort events by start time before printing
+    var printedTable = newWindow.document.getElementById('printedTable');
+    var rows = printedTable.getElementsByTagName('tr');
+    var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
+    sortedRows.sort(function(a, b) {
+        var timeA = a.cells[0].textContent.split('-')[0].trim();
+        var timeB = b.cells[0].textContent.split('-')[0].trim();
+        return timeA.localeCompare(timeB);
+    });
+    sortedRows.forEach(function(row) {
+        printedTable.appendChild(row);
+    });
+
+    newWindow.print();
+}
+function generateImage() {
     var tableContent = document.getElementById('allDays');
     var semesterContent = document.getElementById('academicYearAndSemester');
     var hours = document.getElementById('hours');
@@ -108,10 +144,17 @@ function generatePDF() {
         var calendarImageContainer = newWindow.document.getElementById('calendarImage');
         calendarImageContainer.appendChild(canvas);
 
-        // Print the new window with the calendar image
-        newWindow.print();
+        // Convert canvas to PNG image data
+        var image = canvas.toDataURL("image/png");
+
+        // Create a link element to download the PNG image
+        var link = document.createElement('a');
+        link.href = image;
+        link.download = 'page.png';
+        link.click();
     });
 }
+
 
 
 
