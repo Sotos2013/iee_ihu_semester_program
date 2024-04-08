@@ -71,8 +71,8 @@ function handleNavToggles() {
 handleNavToggles();
 
 function generatePDF() {
-    var tableContent = document.getElementById('allDays');
-    var semesterContent = document.getElementById('academicYearAndSemester');
+    var tableContent = document.getElementById('allDays').innerHTML;
+    var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
     var hours = document.getElementById('hours');
 
     var style = "<style>";
@@ -89,22 +89,29 @@ function generatePDF() {
     newWindow.document.write(style);
     newWindow.document.write('</head>');
     newWindow.document.write('<body>');
-    newWindow.document.write(semesterContent.outerHTML);
-    newWindow.document.write('<div id="calendarImage"></div>');
+    newWindow.document.write(semesterContent);
+    newWindow.document.write('<table id="printedTable">');
+    newWindow.document.write(tableContent);
+    newWindow.document.write('</table>');
     newWindow.document.write('</body></html>');
 
     newWindow.document.close();
 
-    // Use html2canvas to capture the calendar content as an image
-    html2canvas(tableContent).then(function(canvas) {
-        var calendarImageContainer = newWindow.document.getElementById('calendarImage');
-        calendarImageContainer.appendChild(canvas);
-
-        // Print the new window with the calendar image
-        newWindow.print();
+    // Sort events by start time before printing
+    var printedTable = newWindow.document.getElementById('printedTable');
+    var rows = printedTable.getElementsByTagName('tr');
+    var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
+    sortedRows.sort(function(a, b) {
+        var timeA = a.cells[0].textContent.split('-')[0].trim();
+        var timeB = b.cells[0].textContent.split('-')[0].trim();
+        return timeA.localeCompare(timeB);
     });
-}
+    sortedRows.forEach(function(row) {
+        printedTable.appendChild(row);
+    });
 
+    newWindow.print();
+}
 
 
 
@@ -282,16 +289,13 @@ function addCustomCourse() {
                     day: selectedDay
                 };
                 addToSchedule(courseDetails.name, courseDetails.time, courseDetails.day);
-                
-                // Δημιουργία και προσθήκη του νέου checkbox για το μάθημα
-                addCourseCheckbox(courseDetails);
+                addCourseCheckbox(courseDetails); // Προσθήκη του νέου checkbox στη λίστα μαθημάτων
             } else {
                 alert('Μη έγκυρη επιλογή ώρας ή ημέρας.');
             }
         }
     }
 }
-
 
 
 
@@ -309,16 +313,18 @@ function addToSchedule(courseName, courseTime, courseDay) {
         courseEvent.textContent = `${startTime}-${endTime} ${courseName}`;
         courseEvent.classList.add(startClass, endClass, 'box2');
         
-        // Ελέγχουμε αν το μάθημα υπάρχει ήδη στο πρόγραμμα
+        // Ελέγχουμε αν υπάρχει ήδη άλλο μάθημα στην ίδια ώρα
         let existingEventFound = false;
         Array.from(dayEvents.children).forEach(event => {
-            const eventText = event.textContent;
-            if (eventText.includes(courseName) && eventText.includes(startTime) && eventText.includes(endTime)) {
+            const eventTime = event.textContent.split(' ')[0]; // Παίρνουμε το χρονικό διάστημα από το κείμενο του event
+            if (eventTime === `${startTime}-${endTime}`) {
+                // Αν υπάρχει ήδη μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα δίπλα του με κόμμα
+                event.textContent += `, ${courseName}`;
                 existingEventFound = true;
             }
         });
         
-        // Αν το μάθημα δεν υπάρχει ήδη, το προσθέτουμε
+        // Αν δεν βρέθηκε άλλο μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα κανονικά
         if (!existingEventFound) {
             dayEvents.appendChild(courseEvent);
         }
@@ -326,7 +332,6 @@ function addToSchedule(courseName, courseTime, courseDay) {
         console.log('Το στοιχείο δεν βρέθηκε');
     }
 }
-
 
 
 
@@ -341,14 +346,6 @@ function removeFromSchedule(courseName, courseTime, courseDay) {
         });
     }
 }
-function saveCheckboxState(courseName, checked) {
-    localStorage.setItem(courseName, checked);
-}
-
-// Συνάρτηση για την ανάκτηση της αποθηκευμένης κατάστασης του checkbox από το localStorage
-function getCheckboxState(courseName) {
-    return localStorage.getItem(courseName) === 'true'; // Επιστρέφει true αν το checkbox είναι επιλεγμένο, αλλιώς false
-}
 
 function addCourseCheckbox(courseDetails) {
     // Assuming there's a function to generate a checkbox for a single course
@@ -357,21 +354,21 @@ function addCourseCheckbox(courseDetails) {
     // Add the time and day information as data attributes to the checkbox
     customCourseCheckbox.dataset.time = courseDetails.time;
     customCourseCheckbox.dataset.day = courseDetails.day;
-    
-    // Ελέγχουμε την κατάσταση του checkbox από το localStorage και το ανανεώνουμε αναλόγως
-    const checkboxState = getCheckboxState(courseDetails.name);
-    customCourseCheckbox.checked = checkboxState;
-    
     const courseListContainer = document.getElementById('courseList');
     courseListContainer.appendChild(customCourseCheckbox);
-    
     customCourseCheckbox.addEventListener('change', function() {
-        const isChecked = this.checked;
-        const courseName = this.value;
-        const courseTime = this.dataset.time;
-        const courseDay = this.dataset.day;
-        addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
-        saveCheckboxState(courseName, isChecked); // Αποθήκευση της κατάστασης του checkbox στο localStorage
+        if (this.checked) {
+            const courseName = this.value;
+            const courseTime = this.dataset.time;
+            const courseDay = this.dataset.day;
+            addToSchedule(courseName, courseTime, courseDay); // Προσθήκη του μαθήματος στο πρόγραμμα
+        } else {
+            // Υποθέτουμε ότι υπάρχει μια συνάρτηση για την αφαίρεση του μαθήματος από το πρόγραμμα
+            const courseName = this.value;
+            const courseTime = this.dataset.time;
+            const courseDay = this.dataset.day;
+            removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
+        }
     });
 }
 
