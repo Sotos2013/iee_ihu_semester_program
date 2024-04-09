@@ -75,7 +75,8 @@ handleNavToggles();
 function generatePDF() {
     var tableContent = document.getElementById('allDays').innerHTML;
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
-    var hours = document.getElementById('hours');
+    var hours = document.getElementById('hours').innerHTML; // Προσθέστε αυτήν τη γραμμή για να πάρετε το περιεχόμενο του στοιχείου με το id 'hours'
+    var ECTS = document.getElementById('ECTS').innerHTML;
 
     var style = "<style>";
     style += "@media print {";
@@ -95,8 +96,10 @@ function generatePDF() {
     newWindow.document.write('<table id="printedTable">');
     newWindow.document.write(tableContent);
     newWindow.document.write('</table>');
+    newWindow.document.write('<br>');
+    newWindow.document.write('<p id="printedHours">' + hours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικό φορτίο εργασίας
+    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
     newWindow.document.write('</body></html>');
-
     newWindow.document.close();
 
     // Sort events by start time before printing
@@ -114,10 +117,12 @@ function generatePDF() {
 
     newWindow.print();
 }
+
 function generateImage() {
     var tableContent = document.getElementById('allDays');
     var semesterContent = document.getElementById('academicYearAndSemester');
     var hours = document.getElementById('hours');
+    var ECTS = document.getElementById('ECTS');
 
     var style = "<style>";
     style += "@media print {";
@@ -134,14 +139,13 @@ function generateImage() {
     newWindow.document.write('</head>');
     newWindow.document.write('<body>');
     newWindow.document.write(semesterContent.outerHTML);
-    newWindow.document.write('<div id="calendarImage"></div>');
     newWindow.document.write('</body></html>');
 
     newWindow.document.close();
 
     // Use html2canvas to capture the calendar content as an image
     html2canvas(tableContent).then(function(canvas) {
-        var calendarImageContainer = newWindow.document.getElementById('calendarImage');
+        var calendarImageContainer = newWindow.document.getElementById('academicYearAndSemester');
         calendarImageContainer.appendChild(canvas);
 
         // Convert canvas to PNG image data
@@ -153,24 +157,15 @@ function generateImage() {
         link.download = 'page.png';
         link.click();
     });
+
+    // Append hours and ECTS information
+    const totalWorkloadMessage = hours ? hours.textContent : '';
+    const totalECTSMessage = ECTS ? ECTS.textContent : '';
+    newWindow.document.body.insertAdjacentHTML('beforeend', `<p id='hours'>${totalWorkloadMessage}</p>`);
+    newWindow.document.body.insertAdjacentHTML('beforeend', `<p id='ECTS'>${totalECTSMessage}</p>`);
 }
 
 
-
-
-
-function myFunction(element) {
-    const step = element.dataset.step;
-    const steps = document.getElementsByClassName(`function${step}_steps`);
-
-    for (let i = 0; i < steps.length; i++) {
-        if (element.checked) {
-            steps[i].style.display = "block";
-        } else {
-            steps[i].style.display = "none";
-        }
-    }
-}
 
 function academic() {
     // Get the current date
@@ -591,16 +586,49 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                             });
                         }
                     });
+        
                 }
             });
+        
+            const totalWorkloadHours = calculateWorkloadHours();
+            const totalECTS = calculateECTS();
+            const totalWorkloadMessage = `Συνολικές ώρες φόρτου εργασίας: ${totalWorkloadHours}`;
+            const totalECTSMessage = `Συνολικά ECTS: ${totalECTS}`;
+            const existingHoursElement = document.getElementById('hours');
+            if (existingHoursElement) {
+                existingHoursElement.textContent = totalWorkloadMessage;
+            } else {
+                document.body.insertAdjacentHTML('beforeend', `<p id='hours'>${totalWorkloadMessage}</p>`);
+            }
+            const existingECTSElement = document.getElementById('ECTS');
+            if (existingECTSElement) {
+                existingECTSElement.textContent = totalECTSMessage;
+            } else {
+                document.body.insertAdjacentHTML('beforeend', `<p id='ECTS'>${totalECTSMessage}</p>`);
+            }
         });
-        
-        
-        
-        
         
     });
 }
+function calculateWorkloadHours() {
+    const selectedCourses = Object.keys(localStorage).filter(key => localStorage.getItem(key) === 'true');
+    const workloadPerCourse = 180; // Φορτίο εργασίας ανά μάθημα σε ώρες
+
+    const totalWorkloadHours = selectedCourses.length * workloadPerCourse;
+
+    return totalWorkloadHours;
+}
+
+function calculateECTS() {
+    const selectedCourses = Object.keys(localStorage).filter(key => localStorage.getItem(key) === 'true');
+    const ECTS = 6; // Φορτίο εργασίας ανά μάθημα σε ώρες
+
+    const totalECTS = selectedCourses.length * ECTS;
+
+    return totalECTS;
+}
+
+
 function clearCheckboxState() {
     // Clear localStorage
     localStorage.clear();
