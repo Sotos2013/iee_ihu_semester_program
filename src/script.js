@@ -294,7 +294,7 @@ function groupCoursesBySemester(data) {
     return coursesBySemester;
 }
 const availableHours = [
-    { start: '09:00', end: '11:00' },
+    { start: '9:00', end: '11:00' },
     { start: '11:00', end: '13:00' },
     { start: '14:00', end: '16:00' },
     { start: '16:00', end: '18:00' },
@@ -308,7 +308,7 @@ function addCustomCourse() {
     const customCourseName = prompt('Εισάγετε το όνομα του μαθήματος:');
     if (customCourseName) {
         const selectedHour = prompt('Επιλέξτε μια από τις διαθέσιμες ώρες:\n\n' +
-                                   '1. 09:00 - 11:00\n' +
+                                   '1. 9:00 - 11:00\n' +
                                    '2. 11:00 - 13:00\n' +
                                    '3. 14:00 - 16:00\n' +
                                    '4. 16:00 - 18:00\n' +
