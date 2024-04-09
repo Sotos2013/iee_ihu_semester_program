@@ -216,7 +216,7 @@ function displayCoursesBySemester() {
     // 4. Hide buttons with values "Εξαγωγή" and "Επιλογή μαθημάτων"
     const buttonsToHide = document.querySelectorAll('.buttons input');
     buttonsToHide.forEach(button => {
-        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων') {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων'|| button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF') {
             button.style.display = 'none';
         }
     });
@@ -275,7 +275,7 @@ function showCalendar() {
 
     const buttonsToHide = document.querySelectorAll('.buttons input');
     buttonsToHide.forEach(button => {
-        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων') {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων'|| button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF' || button.value === 'Clear Checkbox State') {
             button.style.display = 'block';
 
         }
