@@ -77,6 +77,7 @@ function generatePDF() {
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
     var hours = document.getElementById('hours').innerHTML; // Προσθέστε αυτήν τη γραμμή για να πάρετε το περιεχόμενο του στοιχείου με το id 'hours'
     var ECTS = document.getElementById('ECTS').innerHTML;
+    var labHours = document.getElementById('lab').innerHTML;
 
     var style = "<style>";
     style += "@media print {";
@@ -99,6 +100,7 @@ function generatePDF() {
     newWindow.document.write('<br>');
     newWindow.document.write('<p id="printedHours">' + hours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικό φορτίο εργασίας
     newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
+    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
     newWindow.document.write('</body></html>');
     newWindow.document.close();
 
@@ -367,6 +369,12 @@ function saveCourseToJSON(courseDetails) {
 
 
 // Συνάρτηση για την προσθήκη μαθήματος στο πρόγραμμα
+// Υπολογισμός συνολικών ωρών εργαστηρίου
+function calculateLabHours() {
+    const totalCustomCourses = document.querySelectorAll('input[type="checkbox"][name^="course"]:checked').length;
+    return totalCustomCourses * 2; // Κάθε custom μάθημα διαρκεί 2 ώρες
+}
+
 function addToSchedule(courseName, courseTime, courseDay) {
     const dayEvents = document.getElementById(courseDay.toLowerCase() + 'Events'); // Προσαρμογή για μικρά γράμματα
     if (dayEvents) {
@@ -395,10 +403,21 @@ function addToSchedule(courseName, courseTime, courseDay) {
         if (!existingEventFound) {
             dayEvents.appendChild(courseEvent);
         }
+        
+        // Ενημέρωση του συνολικού φορτίου εργασίας
+        const totalWorkloadHours = calculateLabHours();
+        const totalWorkloadMessage = `Συνολικές ώρες Εργαστηρίου: ${totalWorkloadHours}`;
+        const existingWorkloadElement = document.getElementById('lab');
+        if (existingWorkloadElement) {
+            existingWorkloadElement.textContent = totalWorkloadMessage;
+        } else {
+            document.body.insertAdjacentHTML('beforeend', `<p id='lab'>${totalWorkloadMessage}</p>`);
+        }
     } else {
         console.log('Το στοιχείο δεν βρέθηκε');
     }
 }
+
 
 
 
@@ -436,6 +455,14 @@ function addCourseCheckbox(courseDetails) {
             const courseTime = this.dataset.time;
             const courseDay = this.dataset.day;
             removeFromSchedule(courseName, courseTime, courseDay); // Αφαίρεση του μαθήματος από το πρόγραμμα
+        }
+        const totalWorkloadHours = calculateLabHours();
+        const totalWorkloadMessage = `Συνολικές ώρες Εργαστηρίου: ${totalWorkloadHours}`;
+        const existingHoursElement = document.getElementById('lab');
+        if (existingHoursElement) {
+            existingHoursElement.textContent = totalWorkloadMessage;
+        } else {
+            document.body.insertAdjacentHTML('beforeend', `<p id='lab'>${totalWorkloadMessage}</p>`);
         }
     });
 }
