@@ -470,24 +470,37 @@ function addCourseCheckbox(courseDetails) {
 
 
 function generateCheckbox(courseName) {
-    // Assuming this function generates a checkbox element for a single course
-    // You can implement this function according to your needs
+    // Create semester header
+    const semesterHeader = document.createElement('h2');
+    semesterHeader.textContent = `Εργαστηριακά Μαθήματα`;
+
+    // Create list item (li) element
+    const courseItem = document.createElement('li');
+
+    // Create checkbox input element
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.name = 'course';
     checkbox.value = courseName;
     checkbox.id = courseName.replace(/\s+/g, '-'); // Convert spaces to dashes for ID
 
+    // Create label element for the checkbox
     const label = document.createElement('label');
     label.textContent = courseName;
     label.htmlFor = checkbox.id;
 
+    // Append checkbox and label to list item
+    courseItem.appendChild(checkbox);
+    courseItem.appendChild(label);
+
+    // Create container div for the list item and header
     const container = document.createElement('div');
-    container.appendChild(checkbox);
-    container.appendChild(label);
+    container.appendChild(semesterHeader);
+    container.appendChild(courseItem);
 
     return container;
 }
+
 
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
@@ -569,10 +582,32 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
         }
 
         checkbox.addEventListener('change', function () {
+            console.log("Αλλαγή κατάστασης checkbox");
             const isChecked = this.checked;
             const labelText = course.name; // Get the course name
             localStorage.setItem(labelText, isChecked);
-        
+            // Υπολογίζουμε τον αριθμό των επιλεγμένων checkboxes
+            const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+            const selectedCount = selectedCheckboxes.length;
+            console.log("Επιλεγμένα checkboxes:", selectedCount);
+
+            // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
+            if (selectedCount >= 7) {
+                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+                allCheckboxes.forEach(cb => {
+                    cb.disabled = true;
+                });
+            } else {
+                // Αν ο αριθμός των επιλεγμένων είναι λιγότερος από 7, ενεργοποιούμε όλα τα checkboxes
+                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]');
+                allCheckboxes.forEach(cb => {
+                    cb.disabled = false;
+                });
+            }
+            console.log("Επιλεγμένα checkboxes:", selectedCount);
+            const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+            console.log("Όλα τα checkboxes:", allCheckboxes);
+
             const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
             days.forEach(day => {
                 const dayEvents = document.getElementById(day + 'Events');
@@ -665,6 +700,15 @@ function clearCheckboxState() {
         checkbox.checked = false;
     });
     
+    // Remove specific elements by their IDs
+    const elementsToRemove = ['hours', 'ECTS', 'lab']; // IDs of the elements to remove
+    elementsToRemove.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.remove(); // Remove the element if it exists
+        }
+    });
+    
     // Remove all dynamically created divs and clear day events containers
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     days.forEach(day => {
@@ -674,6 +718,7 @@ function clearCheckboxState() {
         });
     });
 }
+
 
 
 //σχολιο 

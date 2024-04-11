@@ -12104,4 +12104,6 @@ body {
 tr{
   display: none;
 }
-
+ .buttons, .academicYearAndSemester {
+  text-align: center;
+ }
