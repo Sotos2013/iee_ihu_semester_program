@@ -16,7 +16,7 @@
         var xhttp = new XMLHttpRequest();
 
         // Καθορισμός της λειτουργίας που θα εκτελεστεί όταν αλλάξει η κατάσταση του αιτήματος
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 // Εδώ μπορείτε να προσθέσετε οποιοδήποτε κώδικα JavaScript θέλετε να εκτελεστεί μετά την επιτυχή ολοκλήρωση του αιτήματος PHP
                 console.log("PHP script executed successfully!");
@@ -29,103 +29,107 @@
         // Αποστολή του αιτήματος
         xhttp.send();
     </script>
-    <center>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h1 id="academicYearAndSemester"></h1>
-            </div>
+        <div class="row justify-content-center">
+            <h1 id="academicYearAndSemester"></h1>
         </div>
-        <script>
-            academic();
-        </script>
-        </center>
+    </div>
+    <script>
+        academic();
+    </script>
     </div>
     <div class="container-fluid">
-        <div class="row" id="program">
-            <div class="col">
-                <div class="calendar" id="daysHours">
-                    <div class="timeline">
-                        <div class="spacer"></div>
-                        <div class="time-marker" id="hour9">9:00-11:00</div>
-                        <br>
-                        <div class="time-marker" id="hour11">11:00-13:00</div>
-                        <br>
-                        <div class="time-marker" id="hour14">14:00-16:00</div>
-                        <br>
-                        <div class="time-marker" id="hour16">16:00-18:00</div>
-                        <br>
-                        <div class="time-marker" id="hour18">18:00-20:00</div>
-                        <br>
-                    </div>
-                    <div class="days" id="allDays">
+        <div class="row justify-content-center">
+            <div class="row" id="program">
+                <div class="col">
+                    <div class="calendar" id="daysHours">
+                        <div class="timeline">
+                            <div class="spacer"></div>
+                            <div class="time-marker" id="hour9">9:00-11:00</div>
+                            <br>
+                            <div class="time-marker" id="hour11">11:00-13:00</div>
+                            <br>
+                            <div class="time-marker" id="hour14">14:00-16:00</div>
+                            <br>
+                            <div class="time-marker" id="hour16">16:00-18:00</div>
+                            <br>
+                            <div class="time-marker" id="hour18">18:00-20:00</div>
+                            <br>
+                        </div>
+                        <div class="days" id="allDays">
 
-                        <div class="day mon">
-                            <div class="date">
-                                <p class="date-num"></p>
-                                <p class="date-day">ΔΕΥΤΕΡΑ</p>
+                            <div class="day mon">
+                                <div class="date">
+                                    <p class="date-num"></p>
+                                    <p class="date-day">ΔΕΥΤΕΡΑ</p>
+                                </div>
+                                <div class="events" id="mondayEvents"> <!-- Unique ID for Monday's events -->
+                                    <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Δευτερας -->
+
+                                </div>
                             </div>
-                            <div class="events" id="mondayEvents"> <!-- Unique ID for Monday's events -->
-                                <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Δευτερας -->
-                                
+                            <div class="day tues">
+                                <div class="date">
+                                    <p class="date-num"></p>
+                                    <p class="date-day">ΤΡΙΤΗ</p>
+                                </div>
+                                <div class="events" id="tuesdayEvents"> <!-- Unique ID for Tuesday's events -->
+                                    <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τρίτης -->
+                                </div>
                             </div>
-                        </div>
-                        <div class="day tues">
-                            <div class="date">
-                                <p class="date-num"></p>
-                                <p class="date-day">ΤΡΙΤΗ</p>
+                            <div class="day wed">
+                                <div class="date">
+                                    <p class="date-num"></p>
+                                    <p class="date-day">ΤΕΤΑΡΤΗ</p>
+                                </div>
+                                <div class="events" id="wednesdayEvents"> <!-- Unique ID for Wednesday's events -->
+                                    <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τετάρτης -->
+                                </div>
                             </div>
-                            <div class="events" id="tuesdayEvents"> <!-- Unique ID for Tuesday's events -->
-                                <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τρίτης -->
+                            <div class="day thurs">
+                                <div class="date">
+                                    <p class="date-num"></p>
+                                    <p class="date-day">ΠΕΜΠΤΗ</p>
+                                </div>
+                                <div class="events" id="thursdayEvents"> <!-- Unique ID for Thursday's events -->
+                                    <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Πέμπτης -->
+                                </div>
                             </div>
-                        </div>
-                        <div class="day wed">
-                            <div class="date">
-                                <p class="date-num"></p>
-                                <p class="date-day">ΤΕΤΑΡΤΗ</p>
-                            </div>
-                            <div class="events" id="wednesdayEvents"> <!-- Unique ID for Wednesday's events -->
-                                <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Τετάρτης -->
-                            </div>
-                        </div>
-                        <div class="day thurs">
-                            <div class="date">
-                                <p class="date-num"></p>
-                                <p class="date-day">ΠΕΜΠΤΗ</p>
-                            </div>
-                            <div class="events" id="thursdayEvents"> <!-- Unique ID for Thursday's events -->
-                                <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Πέμπτης -->
-                            </div>
-                        </div>
-                        <div class="day fri">
-                            <div class="date">
-                                <p class="date-num"></p>
-                                <p class="date-day">ΠΑΡΑΣΚΕΥΗ</p>
-                            </div>
-                            <div class="events" id="fridayEvents"> <!-- Unique ID for Friday's events -->
-                                <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Παρασκευής -->
+                            <div class="day fri">
+                                <div class="date">
+                                    <p class="date-num"></p>
+                                    <p class="date-day">ΠΑΡΑΣΚΕΥΗ</p>
+                                </div>
+                                <div class="events" id="fridayEvents"> <!-- Unique ID for Friday's events -->
+                                    <!-- Εδώ μπορείτε να προσθέσετε τα μαθήματα της Παρασκευής -->
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row" id="courseList"></div>
+
         </div>
-        <div class="row" id="courseList"></div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
 
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
+                    <div class="buttons" id="buttonsContainer">
+                        <div class="row justify-content-center">
 
-                <div class="buttons" id="buttonsContainer">
-                    <input class="button btn btn-primary" type="button" value="Εξαγωγή ως PDF" onclick="generatePDF()">
-                    <input class="button btn btn-primary" type="button" value="Εξαγωγή ως Εικόνα" onclick="generateImage()">
-                    <input class="button btn btn-primary" type="button" value="Επιλογή μαθημάτων" onclick="displayCoursesBySemester()">
+                            <input class="button btn btn-primary" type="button" value="Εξαγωγή ως PDF"
+                                onclick="generatePDF()">
+                            <input class="button btn btn-primary" type="button" value="Εξαγωγή ως Εικόνα"
+                                onclick="generateImage()">
+                            <input class="button btn btn-primary" type="button" value="Επιλογή μαθημάτων"
+                                onclick="displayCoursesBySemester()">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
