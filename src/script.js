@@ -238,6 +238,9 @@ function displayCoursesBySemester() {
     });
     // 6. Append the new button to a container (assuming there's a container with id 'buttonsContainer')
     const buttonContainer = document.getElementById('buttonsContainer');
+    buttonContainer.style.textAlign = 'center';
+    buttonContainer.style.marginLeft = 'auto';
+    buttonContainer.style.marginRight = 'auto';
     // Replace existing button if it exists
     const existingButton = document.getElementById('newButton');
     const existButtonClear = document.getElementById('clearButton');
