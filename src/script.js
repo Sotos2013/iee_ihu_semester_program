@@ -541,7 +541,9 @@ function generateCourseCheckboxes() {
 
     // Add a button for adding a custom course
     const addButton = document.createElement('button');
-    addButton.textContent = 'Προσθήκη Δικού Μαθήματος';
+    addButton.textContent = 'Προσθήκη Εργαστηριακού Μαθήματος';
+    addButton.setAttribute('id', 'labButton'); // Προσθήκη ID
+    addButton.classList.add('btn', 'btn-primary');
     addButton.addEventListener('click', function () {
         // Assuming there's a function to handle adding a custom course
         // You can implement this function according to your needs

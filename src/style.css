@@ -12107,6 +12107,9 @@ tr{
  .buttons, .academicYearAndSemester {
   text-align: center;
  }
- #buttonsContainer {
+ #buttonsContainer{
   text-align: center;
+ }
+ #labButton{
+  width: fit-content;
  }
