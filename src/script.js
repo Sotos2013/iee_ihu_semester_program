@@ -75,11 +75,9 @@ handleNavToggles();
 function generatePDF() {
     var tableContent = document.getElementById('allDays').innerHTML;
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
-
-    // Calculate hours, ECTS, and labHours directly
-    var hours = calculateHours();
-    var ECTS = calculateECTS();
-    var labHours = calculateLabHours();
+    var hours = document.getElementById('hours').innerHTML; // Προσθέστε αυτήν τη γραμμή για να πάρετε το περιεχόμενο του στοιχείου με το id 'hours'
+    var ECTS = document.getElementById('ECTS').innerHTML;
+    var labHours = document.getElementById('lab').innerHTML;
 
     var style = "<style>";
     style += "@media print {";
@@ -100,9 +98,9 @@ function generatePDF() {
     newWindow.document.write(tableContent);
     newWindow.document.write('</table>');
     newWindow.document.write('<br>');
-    newWindow.document.write('<p id="printedHours">' + hours + '</p>');
-    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>');
-    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>');
+    newWindow.document.write('<p id="printedHours">' + hours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικό φορτίο εργασίας
+    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
+    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
     newWindow.document.write('</body></html>');
     newWindow.document.close();
 
@@ -110,33 +108,18 @@ function generatePDF() {
     var printedTable = newWindow.document.getElementById('printedTable');
     var rows = printedTable.getElementsByTagName('tr');
     var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
-    sortedRows.sort(function (a, b) {
+    sortedRows.sort(function(a, b) {
         var timeA = a.cells[0].textContent.split('-')[0].trim();
         var timeB = b.cells[0].textContent.split('-')[0].trim();
         return timeA.localeCompare(timeB);
     });
-    sortedRows.forEach(function (row) {
+    sortedRows.forEach(function(row) {
         printedTable.appendChild(row);
     });
 
     newWindow.print();
 }
 
-// Functions to calculate hours, ECTS, and labHours
-function calculateHours() {
-    // Add your calculation logic here
-    return 'Calculated Hours';
-}
-
-function calculateECTS() {
-    // Add your calculation logic here
-    return 'Calculated ECTS';
-}
-
-function calculateLabHours() {
-    // Add your calculation logic here
-    return 'Calculated Lab Hours';
-}
 
 function generateImage() {
     var tableContent = document.getElementById('allDays');
@@ -722,11 +705,11 @@ function clearCheckboxState() {
     });
 
     // Remove specific elements by their IDs
-    const elementsToRemove = ['hours', 'ECTS', 'lab']; // IDs of the elements to remove
-    elementsToRemove.forEach(id => {
+    const elementsToReset = ['hours', 'ECTS', 'lab']; // IDs of the elements to reset
+    elementsToReset.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
-            element.remove(); // Remove the element if it exists
+            element.innerText = ''; // Reset the content if the element exists
         }
     });
 
