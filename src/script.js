@@ -505,6 +505,15 @@ function generateCheckbox(courseName) {
     return container;
 }
 
+function generateBlockedCheckbox(course, container, semesterNumber) {
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.disabled = true; // Μπλοκάρει το checkbox
+    // Εδώ μπορείς να προσθέσεις το όνομα του μαθήματος ή άλλες πληροφορίες
+    checkbox.textContent = course.name;
+    // Προσθέτει το checkbox στον κατάλληλο container
+    container.appendChild(checkbox);
+}
 
 function generateCourseCheckboxes() {
     // Clear any existing content in the courseListContainer
@@ -552,8 +561,6 @@ function generateCourseCheckboxes() {
     courseListContainer.appendChild(addButton);
 }
 
-
-
 function generateCheckBoxes(courses, courseListContainer, semester) {
     // Create semester header
     const semesterHeader = document.createElement('h2');
@@ -565,119 +572,122 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
         .filter(key => localStorage.getItem(key) === 'true');
 
     courses.forEach(course => {
-        const courseItem = document.createElement('li');
-        const courseName = document.createTextNode(course.name);
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = course.name;
-        checkbox.name = course.name;
-        checkbox.value = course.name;
+        // Έλεγχος για το αν το μάθημα έχει καθορισμένες occurrences
+        if (course.occurrences && course.occurrences.length > 0) {
+            const courseItem = document.createElement('li');
+            const courseName = document.createTextNode(course.name);
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = course.name;
+            checkbox.name = course.name;
+            checkbox.value = course.name;
+    
+            // Check if the course is selected
+            checkbox.checked = selectedCourses.includes(course.name);
+    
+            // Disable the checkbox if the course doesn't have occurrences
+            checkbox.disabled = !course.occurrences || course.occurrences.length === 0;
+    
+            courseItem.appendChild(checkbox);
+            courseItem.appendChild(courseName);
+            courseListContainer.appendChild(courseItem);
 
-        // Check if the course is selected
-        checkbox.checked = selectedCourses.includes(course.name);
-
-        courseItem.appendChild(checkbox);
-        courseItem.appendChild(courseName);
-        courseListContainer.appendChild(courseItem);
-
-        // Set checkbox state based on current month
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth();
-        if (course.occurrences.some(occurrence => new Date(occurrence.day).getMonth() === currentMonth)) {
-            checkbox.checked = true;
-        }
-
-        checkbox.addEventListener('change', function () {
-            console.log("Αλλαγή κατάστασης checkbox");
-            const isChecked = this.checked;
-            const labelText = course.name; // Get the course name
-            localStorage.setItem(labelText, isChecked);
-            // Υπολογίζουμε τον αριθμό των επιλεγμένων checkboxes
-            const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-            const selectedCount = selectedCheckboxes.length;
-            console.log("Επιλεγμένα checkboxes:", selectedCount);
-
-            // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
-            if (selectedCount >= 7) {
-                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
-                allCheckboxes.forEach(cb => {
-                    cb.disabled = true;
-                });
-            } else {
-                // Αν ο αριθμός των επιλεγμένων είναι λιγότερος από 7, ενεργοποιούμε όλα τα checkboxes
-                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]');
-                allCheckboxes.forEach(cb => {
-                    cb.disabled = false;
-                });
+            if (!course.occurrences || course.occurrences.some(occurrence => occurrence.day === '' || occurrence.time === '')) {
+                checkbox.disabled = true;
             }
-            console.log("Επιλεγμένα checkboxes:", selectedCount);
-            const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
-            console.log("Όλα τα checkboxes:", allCheckboxes);
 
-            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-            days.forEach(day => {
-                const dayEvents = document.getElementById(day + 'Events');
-                if (dayEvents) {
-                    // Clear existing events for the current day
-                    //dayEvents.innerHTML = '';
-                    // Generate events for selected course
-                    courses.forEach(selectedCourse => {
-                        if (localStorage.getItem(selectedCourse.name) === 'true') {
-                            selectedCourse.occurrences.forEach(occurrence => {
-                                // Split the time range to get start and end time
-                                if (occurrence.day.toLowerCase() === day.toLowerCase()) {
-                                    const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
-                                    const startHour = parseInt(startTime.split(':')[0], 10);
-                                    const endHour = parseInt(endTime.split(':')[0], 10);
-
-                                    const startClass = 'start-' + startHour.toString().padStart(1, '0');
-                                    const endClass = 'end-' + endHour.toString().padStart(2, '0');
-
-                                    // Check if there's an existing event for the same time range
-                                    const existingEvent = Array.from(dayEvents.children).find(event =>
-                                        event.classList.contains(startClass) && event.classList.contains(endClass)
-                                    );
-
-                                    if (existingEvent) {
-                                        // Append course name to existing event with comma if it's not already there
-                                        if (!existingEvent.textContent.includes(selectedCourse.name)) {
-                                            existingEvent.textContent += `, ${selectedCourse.name}`;
-                                        }
-                                    } else {
-                                        // Create a new event
-                                        const courseEvent = document.createElement('div');
-                                        courseEvent.textContent = `${startTime}-${endTime} ${selectedCourse.name}`;
-                                        courseEvent.classList.add(startClass, endClass, 'box2');
-                                        dayEvents.appendChild(courseEvent);
-                                    }
-                                }
-                            });
-                        }
+            checkbox.addEventListener('change', function () {
+                console.log("Αλλαγή κατάστασης checkbox");
+                const isChecked = this.checked;
+                const labelText = course.name; // Get the course name
+                localStorage.setItem(labelText, isChecked);
+                // Υπολογίζουμε τον αριθμό των επιλεγμένων checkboxes
+                const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedCount = selectedCheckboxes.length;
+                console.log("Επιλεγμένα checkboxes:", selectedCount);
+    
+                // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
+                if (selectedCount >= 7) {
+                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+                    allCheckboxes.forEach(cb => {
+                        cb.disabled = true;
                     });
-
+                } else {
+                    // Αν ο αριθμός των επιλεγμένων είναι λιγότερος από 7, ενεργοποιούμε όλα τα checkboxes
+                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]');
+                    allCheckboxes.forEach(cb => {
+                        cb.disabled = false;
+                    });
+                }
+                console.log("Επιλεγμένα checkboxes:", selectedCount);
+                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+                console.log("Όλα τα checkboxes:", allCheckboxes);
+    
+                const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+                days.forEach(day => {
+                    const dayEvents = document.getElementById(day + 'Events');
+                    if (dayEvents) {
+                        // Clear existing events for the current day
+                        //dayEvents.innerHTML = '';
+                        // Generate events for selected course
+                        courses.forEach(selectedCourse => {
+                            if (localStorage.getItem(selectedCourse.name) === 'true') {
+                                selectedCourse.occurrences.forEach(occurrence => {
+                                    // Split the time range to get start and end time
+                                    if (occurrence.day.toLowerCase() === day.toLowerCase()) {
+                                        const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
+                                        const startHour = parseInt(startTime.split(':')[0], 10);
+                                        const endHour = parseInt(endTime.split(':')[0], 10);
+    
+                                        const startClass = 'start-' + startHour.toString().padStart(1, '0');
+                                        const endClass = 'end-' + endHour.toString().padStart(2, '0');
+    
+                                        // Check if there's an existing event for the same time range
+                                        const existingEvent = Array.from(dayEvents.children).find(event =>
+                                            event.classList.contains(startClass) && event.classList.contains(endClass)
+                                        );
+    
+                                        if (existingEvent) {
+                                            // Append course name to existing event with comma if it's not already there
+                                            if (!existingEvent.textContent.includes(selectedCourse.name)) {
+                                                existingEvent.textContent += `, ${selectedCourse.name}`;
+                                            }
+                                        } else {
+                                            // Create a new event
+                                            const courseEvent = document.createElement('div');
+                                            courseEvent.textContent = `${startTime}-${endTime} ${selectedCourse.name}`;
+                                            courseEvent.classList.add(startClass, endClass, 'box2');
+                                            dayEvents.appendChild(courseEvent);
+                                        }
+                                    }
+                                });
+                            }
+                        });
+    
+                    }
+                });
+    
+                const totalWorkloadHours = calculateWorkloadHours();
+                const totalECTS = calculateECTS();
+                const totalWorkloadMessage = `Συνολικές ώρες φόρτου εργασίας: ${totalWorkloadHours}`;
+                const totalECTSMessage = `Συνολικά ECTS: ${totalECTS}`;
+                const existingHoursElement = document.getElementById('hours');
+                if (existingHoursElement) {
+                    existingHoursElement.textContent = totalWorkloadMessage;
+                } else {
+                    document.body.insertAdjacentHTML('beforeend', `<p id='hours'>${totalWorkloadMessage}</p>`);
+                }
+                const existingECTSElement = document.getElementById('ECTS');
+                if (existingECTSElement) {
+                    existingECTSElement.textContent = totalECTSMessage;
+                } else {
+                    document.body.insertAdjacentHTML('beforeend', `<p id='ECTS'>${totalECTSMessage}</p>`);
                 }
             });
-
-            const totalWorkloadHours = calculateWorkloadHours();
-            const totalECTS = calculateECTS();
-            const totalWorkloadMessage = `Συνολικές ώρες φόρτου εργασίας: ${totalWorkloadHours}`;
-            const totalECTSMessage = `Συνολικά ECTS: ${totalECTS}`;
-            const existingHoursElement = document.getElementById('hours');
-            if (existingHoursElement) {
-                existingHoursElement.textContent = totalWorkloadMessage;
-            } else {
-                document.body.insertAdjacentHTML('beforeend', `<p id='hours'>${totalWorkloadMessage}</p>`);
-            }
-            const existingECTSElement = document.getElementById('ECTS');
-            if (existingECTSElement) {
-                existingECTSElement.textContent = totalECTSMessage;
-            } else {
-                document.body.insertAdjacentHTML('beforeend', `<p id='ECTS'>${totalECTSMessage}</p>`);
-            }
-        });
-
+        }
     });
 }
+
 function calculateWorkloadHours() {
     const selectedCourses = Object.keys(localStorage).filter(key => localStorage.getItem(key) === 'true');
     const workloadPerCourse = 180; // Φορτίο εργασίας ανά μάθημα σε ώρες
