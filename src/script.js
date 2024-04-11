@@ -1,12 +1,12 @@
 clearCheckboxState();
 
 fetch('data.json')
-  .then(response => response.json())
-  .then(data => {
-    // Εδώ μπορείτε να επεξεργαστείτε τα δεδομένα όπως επιθυμείτε
-    console.log(data);
-  })
-  .catch(error => console.error('Error fetching data:', error));
+    .then(response => response.json())
+    .then(data => {
+        // Εδώ μπορείτε να επεξεργαστείτε τα δεδομένα όπως επιθυμείτε
+        console.log(data);
+    })
+    .catch(error => console.error('Error fetching data:', error));
 
 function handleDropdowns() {
     var dropdownTriggers = document.querySelectorAll('.nav-js .dropdown a');
@@ -75,9 +75,11 @@ handleNavToggles();
 function generatePDF() {
     var tableContent = document.getElementById('allDays').innerHTML;
     var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
-    var hours = document.getElementById('hours').innerHTML; // Προσθέστε αυτήν τη γραμμή για να πάρετε το περιεχόμενο του στοιχείου με το id 'hours'
-    var ECTS = document.getElementById('ECTS').innerHTML;
-    var labHours = document.getElementById('lab').innerHTML;
+
+    // Calculate hours, ECTS, and labHours directly
+    var hours = calculateHours();
+    var ECTS = calculateECTS();
+    var labHours = calculateLabHours();
 
     var style = "<style>";
     style += "@media print {";
@@ -98,9 +100,9 @@ function generatePDF() {
     newWindow.document.write(tableContent);
     newWindow.document.write('</table>');
     newWindow.document.write('<br>');
-    newWindow.document.write('<p id="printedHours">' + hours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικό φορτίο εργασίας
-    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
-    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
+    newWindow.document.write('<p id="printedHours">' + hours + '</p>');
+    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>');
+    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>');
     newWindow.document.write('</body></html>');
     newWindow.document.close();
 
@@ -108,16 +110,32 @@ function generatePDF() {
     var printedTable = newWindow.document.getElementById('printedTable');
     var rows = printedTable.getElementsByTagName('tr');
     var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
-    sortedRows.sort(function(a, b) {
+    sortedRows.sort(function (a, b) {
         var timeA = a.cells[0].textContent.split('-')[0].trim();
         var timeB = b.cells[0].textContent.split('-')[0].trim();
         return timeA.localeCompare(timeB);
     });
-    sortedRows.forEach(function(row) {
+    sortedRows.forEach(function (row) {
         printedTable.appendChild(row);
     });
 
     newWindow.print();
+}
+
+// Functions to calculate hours, ECTS, and labHours
+function calculateHours() {
+    // Add your calculation logic here
+    return 'Calculated Hours';
+}
+
+function calculateECTS() {
+    // Add your calculation logic here
+    return 'Calculated ECTS';
+}
+
+function calculateLabHours() {
+    // Add your calculation logic here
+    return 'Calculated Lab Hours';
 }
 
 function generateImage() {
@@ -146,7 +164,7 @@ function generateImage() {
     newWindow.document.close();
 
     // Use html2canvas to capture the calendar content as an image
-    html2canvas(tableContent).then(function(canvas) {
+    html2canvas(tableContent).then(function (canvas) {
         var calendarImageContainer = newWindow.document.getElementById('academicYearAndSemester');
         calendarImageContainer.appendChild(canvas);
 
@@ -213,7 +231,7 @@ function displayCoursesBySemester() {
     // 4. Hide buttons with values "Εξαγωγή" and "Επιλογή μαθημάτων"
     const buttonsToHide = document.querySelectorAll('.buttons input');
     buttonsToHide.forEach(button => {
-        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων'|| button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF') {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων' || button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF') {
             button.style.display = 'none';
         }
     });
@@ -275,7 +293,7 @@ function showCalendar() {
 
     const buttonsToHide = document.querySelectorAll('.buttons input');
     buttonsToHide.forEach(button => {
-        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων'|| button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF' || button.value === 'Clear Checkbox State') {
+        if (button.value === 'Εξαγωγή' || button.value === 'Επιλογή μαθημάτων' || button.value === 'Εξαγωγή ως Εικόνα' || button.value === 'Εξαγωγή ως PDF' || button.value === 'Clear Checkbox State') {
             button.style.display = 'block';
 
         }
@@ -308,17 +326,17 @@ function addCustomCourse() {
     const customCourseName = prompt('Εισάγετε το όνομα του μαθήματος:');
     if (customCourseName) {
         const selectedHour = prompt('Επιλέξτε μια από τις διαθέσιμες ώρες:\n\n' +
-                                   '1. 9:00 - 11:00\n' +
-                                   '2. 11:00 - 13:00\n' +
-                                   '3. 14:00 - 16:00\n' +
-                                   '4. 16:00 - 18:00\n' +
-                                   '5. 18:00 - 20:00');
+            '1. 9:00 - 11:00\n' +
+            '2. 11:00 - 13:00\n' +
+            '3. 14:00 - 16:00\n' +
+            '4. 16:00 - 18:00\n' +
+            '5. 18:00 - 20:00');
         const selectedDayIndex = prompt('Επιλέξτε μια από τις διαθέσιμες ημέρες:\n\n' +
-                                  '1. Δευτέρα\n' +
-                                  '2. Τρίτη\n' +
-                                  '3. Τετάρτη\n' +
-                                  '4. Πέμπτη\n' +
-                                  '5. Παρασκευή');
+            '1. Δευτέρα\n' +
+            '2. Τρίτη\n' +
+            '3. Τετάρτη\n' +
+            '4. Πέμπτη\n' +
+            '5. Παρασκευή');
 
         if (selectedHour && selectedDayIndex) {
             const index = parseInt(selectedHour) - 1;
@@ -348,7 +366,7 @@ function saveCourseToJSON(courseDetails) {
     const jsonCourseDetails = {
         semester: "2",
         name: courseDetails.name,
-        occurrences: [{ day: courseDetails.day, time: courseDetails.time}]
+        occurrences: [{ day: courseDetails.day, time: courseDetails.time }]
     };
 
     // Αποθήκευση του JSON στο αρχείο
@@ -359,15 +377,15 @@ function saveCourseToJSON(courseDetails) {
         },
         body: JSON.stringify(jsonCourseDetails)
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Αποτυχία αποθήκευσης του μαθήματος.');
-        }
-        console.log('Το μάθημα αποθηκεύτηκε με επιτυχία.');
-    })
-    .catch(error => {
-        console.error('Σφάλμα κατά την αποθήκευση του μαθήματος στο αρχείο data.json:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Αποτυχία αποθήκευσης του μαθήματος.');
+            }
+            console.log('Το μάθημα αποθηκεύτηκε με επιτυχία.');
+        })
+        .catch(error => {
+            console.error('Σφάλμα κατά την αποθήκευση του μαθήματος στο αρχείο data.json:', error);
+        });
 }
 
 
@@ -390,7 +408,7 @@ function addToSchedule(courseName, courseTime, courseDay) {
         const courseEvent = document.createElement('div');
         courseEvent.textContent = `${startTime}-${endTime} ${courseName}`;
         courseEvent.classList.add(startClass, endClass, 'box2');
-        
+
         // Ελέγχουμε αν υπάρχει ήδη άλλο μάθημα στην ίδια ώρα
         let existingEventFound = false;
         Array.from(dayEvents.children).forEach(event => {
@@ -401,12 +419,12 @@ function addToSchedule(courseName, courseTime, courseDay) {
                 existingEventFound = true;
             }
         });
-        
+
         // Αν δεν βρέθηκε άλλο μάθημα την ίδια ώρα, προσθέτουμε το νέο μάθημα κανονικά
         if (!existingEventFound) {
             dayEvents.appendChild(courseEvent);
         }
-        
+
         // Ενημέρωση του συνολικού φορτίου εργασίας
         const totalWorkloadHours = calculateLabHours();
         const totalWorkloadMessage = `Συνολικές ώρες Εργαστηρίου: ${totalWorkloadHours}`;
@@ -446,7 +464,7 @@ function addCourseCheckbox(courseDetails) {
     customCourseCheckbox.dataset.day = courseDetails.day;
     const courseListContainer = document.getElementById('courseList');
     courseListContainer.appendChild(customCourseCheckbox);
-    customCourseCheckbox.addEventListener('change', function() {
+    customCourseCheckbox.addEventListener('change', function () {
         if (this.checked) {
             const courseName = this.value;
             const courseTime = this.dataset.time;
@@ -516,7 +534,7 @@ function generateCourseCheckboxes() {
     // Determine the semester based on the month
     let semester;
     let semesterNumbers;
-    
+
     if (currentMonth === 0 || currentMonth === 1 || currentMonth === 9 || currentMonth === 10 || currentMonth === 11) {
         semester = 'Χειμερινό Εξάμηνο'; // Winter semester for months October to December
         semesterNumbers = ["1", "3", "5", "7", "9"]; // Semesters to display for winter semester
@@ -538,15 +556,15 @@ function generateCourseCheckboxes() {
         })
         .catch(error => console.error('Error loading JSON file:', error));
 
-        // Add a button for adding a custom course
-        const addButton = document.createElement('button');
-        addButton.textContent = 'Προσθήκη Δικού Μαθήματος';
-        addButton.addEventListener('click', function () {
-            // Assuming there's a function to handle adding a custom course
-            // You can implement this function according to your needs
-            addCustomCourse();
-        });
-        courseListContainer.appendChild(addButton);
+    // Add a button for adding a custom course
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Προσθήκη Δικού Μαθήματος';
+    addButton.addEventListener('click', function () {
+        // Assuming there's a function to handle adding a custom course
+        // You can implement this function according to your needs
+        addCustomCourse();
+    });
+    courseListContainer.appendChild(addButton);
 }
 
 
@@ -626,15 +644,15 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                                     const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
                                     const startHour = parseInt(startTime.split(':')[0], 10);
                                     const endHour = parseInt(endTime.split(':')[0], 10);
-        
+
                                     const startClass = 'start-' + startHour.toString().padStart(1, '0');
                                     const endClass = 'end-' + endHour.toString().padStart(2, '0');
-        
+
                                     // Check if there's an existing event for the same time range
                                     const existingEvent = Array.from(dayEvents.children).find(event =>
                                         event.classList.contains(startClass) && event.classList.contains(endClass)
                                     );
-        
+
                                     if (existingEvent) {
                                         // Append course name to existing event with comma if it's not already there
                                         if (!existingEvent.textContent.includes(selectedCourse.name)) {
@@ -651,10 +669,10 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                             });
                         }
                     });
-        
+
                 }
             });
-        
+
             const totalWorkloadHours = calculateWorkloadHours();
             const totalECTS = calculateECTS();
             const totalWorkloadMessage = `Συνολικές ώρες φόρτου εργασίας: ${totalWorkloadHours}`;
@@ -672,7 +690,7 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 document.body.insertAdjacentHTML('beforeend', `<p id='ECTS'>${totalECTSMessage}</p>`);
             }
         });
-        
+
     });
 }
 function calculateWorkloadHours() {
@@ -697,12 +715,12 @@ function calculateECTS() {
 function clearCheckboxState() {
     // Clear localStorage
     localStorage.clear();
-    
+
     // Uncheck all checkboxes
     document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
         checkbox.checked = false;
     });
-    
+
     // Remove specific elements by their IDs
     const elementsToRemove = ['hours', 'ECTS', 'lab']; // IDs of the elements to remove
     elementsToRemove.forEach(id => {
@@ -711,7 +729,7 @@ function clearCheckboxState() {
             element.remove(); // Remove the element if it exists
         }
     });
-    
+
     // Remove all dynamically created divs and clear day events containers
     const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     days.forEach(day => {
