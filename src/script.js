@@ -605,23 +605,21 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
                 const selectedCount = selectedCheckboxes.length;
                 console.log("Επιλεγμένα checkboxes:", selectedCount);
-    
-                // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
+            
+                // Εάν ο αριθμός των επιλεγμένων είναι 7 ή περισσότερος, μπλοκάρουμε τα μη επιλεγμένα checkboxes
                 if (selectedCount >= 7) {
-                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
-                    allCheckboxes.forEach(cb => {
+                    const uncheckedCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
+                    uncheckedCheckboxes.forEach(cb => {
                         cb.disabled = true;
                     });
                 } else {
-                    // Αν ο αριθμός των επιλεγμένων είναι λιγότερος από 7, ενεργοποιούμε όλα τα checkboxes
-                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]');
+                    // Αλλιώς, ενεργοποιούμε όλα τα checkboxes
+                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
                     allCheckboxes.forEach(cb => {
                         cb.disabled = false;
                     });
                 }
                 console.log("Επιλεγμένα checkboxes:", selectedCount);
-                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
-                console.log("Όλα τα checkboxes:", allCheckboxes);
     
                 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
                 days.forEach(day => {
