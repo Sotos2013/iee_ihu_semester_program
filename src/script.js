@@ -594,8 +594,8 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
 
             if (!course.occurrences || course.occurrences.some(occurrence => occurrence.day === '' || occurrence.time === '')) {
                 checkbox.disabled = true;
+                checkbox.id += "_disabled";
             }
-
             checkbox.addEventListener('change', function () {
                 console.log("Αλλαγή κατάστασης checkbox");
                 const isChecked = this.checked;
@@ -608,19 +608,20 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
     
                 // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
                 if (selectedCount >= 7) {
-                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
                     allCheckboxes.forEach(cb => {
                         cb.disabled = true;
                     });
                 } else {
                     // Αν ο αριθμός των επιλεγμένων είναι λιγότερος από 7, ενεργοποιούμε όλα τα checkboxes
-                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]');
+                    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not([id$="_disabled"])');
+                    console.log(allCheckboxes);
                     allCheckboxes.forEach(cb => {
                         cb.disabled = false;
                     });
                 }
                 console.log("Επιλεγμένα checkboxes:", selectedCount);
-                const allCheckboxes = document.querySelectorAll('input[type="checkbox"][name^="custom"]:not(:checked)');
+                const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
                 console.log("Όλα τα checkboxes:", allCheckboxes);
     
                 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
