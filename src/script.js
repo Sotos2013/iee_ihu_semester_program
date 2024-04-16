@@ -638,8 +638,8 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                     });
                 }
                 console.log("Επιλεγμένα checkboxes:", selectedCount);
-                const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
-                console.log("Όλα τα checkboxes:", allCheckboxes);
+                const allCheckbox = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
+                console.log("Όλα τα checkboxes:", allCheckbox);
 
                 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
                 days.forEach(day => {
