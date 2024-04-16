@@ -227,6 +227,7 @@ function displayCoursesBySemester() {
     newButton.classList.add('button', 'btn', 'btn-primary');
     newButton.addEventListener('click', function () {
         showCalendar();
+        
     });
     // Create the new button
     const clearButton = document.createElement('input');
@@ -567,6 +568,23 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
     semesterHeader.textContent = `Εξάμηνο ${semester}`;
     courseListContainer.appendChild(semesterHeader);
 
+    // Add select all and deselect all links
+    const selectAllLink = document.createElement('a');
+    selectAllLink.href = 'javascript:void(0)';
+    selectAllLink.textContent = 'ΌΛΑ';
+    selectAllLink.onclick = function() {
+        selectall(semester);
+    };
+    courseListContainer.appendChild(selectAllLink);
+
+    const deselectAllLink = document.createElement('a');
+    deselectAllLink.href = 'javascript:void(0)';
+    deselectAllLink.textContent = 'ΚΑΝΕΝΑ';
+    deselectAllLink.onclick = function() {
+        deselectall(semester);
+    };
+    courseListContainer.appendChild(deselectAllLink);
+
     // Load selected courses from localStorage
     const selectedCourses = Object.keys(localStorage)
         .filter(key => localStorage.getItem(key) === 'true');
@@ -578,16 +596,16 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
             const courseName = document.createTextNode(course.name);
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
-            checkbox.id = course.name;
+            checkbox.id = course.name + " Εξάμηνο " + semester;
             checkbox.name = course.name;
             checkbox.value = course.name;
-    
+
             // Check if the course is selected
             checkbox.checked = selectedCourses.includes(course.name);
-    
+
             // Disable the checkbox if the course doesn't have occurrences
             checkbox.disabled = !course.occurrences || course.occurrences.length === 0;
-    
+
             courseItem.appendChild(checkbox);
             courseItem.appendChild(courseName);
             courseListContainer.appendChild(courseItem);
@@ -604,8 +622,7 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 // Υπολογίζουμε τον αριθμό των επιλεγμένων checkboxes
                 const selectedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
                 const selectedCount = selectedCheckboxes.length;
-                console.log("Επιλεγμένα checkboxes:", selectedCount);
-    
+                console.log("Επιλεγμένα checkboxes:", selectedCount);               
                 // Αν έχουν επιλεγεί 7 μαθήματα, απενεργοποιούμε τα υπόλοιπα checkboxes
                 if (selectedCount >= 7) {
                     const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
@@ -623,13 +640,13 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                 console.log("Επιλεγμένα checkboxes:", selectedCount);
                 const allCheckboxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
                 console.log("Όλα τα checkboxes:", allCheckboxes);
-    
+
                 const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
                 days.forEach(day => {
                     const dayEvents = document.getElementById(day + 'Events');
                     if (dayEvents) {
                         // Clear existing events for the current day
-                        //dayEvents.innerHTML = '';
+                        dayEvents.innerHTML = '';
                         // Generate events for selected course
                         courses.forEach(selectedCourse => {
                             if (localStorage.getItem(selectedCourse.name) === 'true') {
@@ -639,15 +656,15 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                                         const [startTime, endTime] = occurrence.time.split('-').map(time => time.trim());
                                         const startHour = parseInt(startTime.split(':')[0], 10);
                                         const endHour = parseInt(endTime.split(':')[0], 10);
-    
+
                                         const startClass = 'start-' + startHour.toString().padStart(1, '0');
                                         const endClass = 'end-' + endHour.toString().padStart(2, '0');
-    
+
                                         // Check if there's an existing event for the same time range
                                         const existingEvent = Array.from(dayEvents.children).find(event =>
                                             event.classList.contains(startClass) && event.classList.contains(endClass)
                                         );
-    
+
                                         if (existingEvent) {
                                             // Append course name to existing event with comma if it's not already there
                                             if (!existingEvent.textContent.includes(selectedCourse.name)) {
@@ -664,10 +681,10 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                                 });
                             }
                         });
-    
+
                     }
                 });
-    
+
                 const totalWorkloadHours = calculateWorkloadHours();
                 const totalECTS = calculateECTS();
                 const totalWorkloadMessage = `Συνολικές ώρες φόρτου εργασίας: ${totalWorkloadHours}`;
@@ -688,6 +705,35 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
         }
     });
 }
+function selectall(ex) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([id$="_disabled"])');
+    const examhno = " Εξάμηνο " + ex;
+    let selectedCount = 0;
+
+    checkboxes.forEach(checkbox => {
+        if (selectedCount < 7 && checkbox.id.includes(examhno)) {
+            checkbox.checked = true;
+            checkbox.dispatchEvent(new Event('change'));
+            selectedCount++;
+        }
+    });
+}
+
+
+function deselectall(ex) {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([id$="_disabled"])');
+    const examhno = " Εξάμηνο " + ex;
+    let selectedCount = 0;
+
+    checkboxes.forEach(checkbox => {
+        if (selectedCount < 7 && checkbox.id.includes(examhno)) {
+            checkbox.checked = false;
+            checkbox.dispatchEvent(new Event('change'));
+            selectedCount++;
+        }
+    });
+}
+
 
 function calculateWorkloadHours() {
     const selectedCourses = Object.keys(localStorage).filter(key => localStorage.getItem(key) === 'true');
