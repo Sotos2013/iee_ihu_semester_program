@@ -205,6 +205,11 @@ function showCalendar() {
     courseListContainer.style.display = 'none';
     programContainer.style.display = 'block';
     const newButton = document.getElementById('newButton');
+    const clearButton = document.getElementById('clearButton');
+    if (clearButton) {
+        clearButton.style.display = 'none';
+
+    }
 
     if (newButton) {
         newButton.style.display = 'none';
@@ -582,7 +587,10 @@ function generateCheckBoxes(courses, courseListContainer, semester) {
                     const dayEvents = document.getElementById(day + 'Events');
                     if (dayEvents) {
                         // Clear existing events for the current day
-                        dayEvents.innerHTML = '';
+                        if(isChecked==false){
+                            dayEvents.innerHTML = '';
+                        }
+                        //dayEvents.innerHTML = '';
                         // Generate events for selected course
                         courses.forEach(selectedCourse => {
                             if (localStorage.getItem(selectedCourse.name) === 'true') {
@@ -695,10 +703,12 @@ function clearCheckboxState() {
     localStorage.clear();
 
     // Uncheck all checkboxes
-    document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.dispatchEvent(new Event('change'));
+    });
     // Remove specific elements by their IDs
     const elementsToReset = ['hours', 'ECTS', 'lab']; // IDs of the elements to reset
     elementsToReset.forEach(id => {

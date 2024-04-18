@@ -12110,7 +12110,7 @@ tr{
  #buttonsContainer{
   text-align: center;
  }
- #labButton, #ButtonFix, #clearButton{
+ #labButton, #ButtonFix{
   width: fit-content;
   text-align: center;
  }
