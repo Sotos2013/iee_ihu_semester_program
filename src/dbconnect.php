@@ -13,7 +13,7 @@ $conn = new mysqli($servername, $username, $password, $database,'/home/student/i
         $conn = new mysqli($host, $user, $pass, $db);
 }
 if ($conn->connect_errno) {
-    echo " to MySQL: (" . 
+    echo "FAILED to MySQL: (" . 
     $conn->connect_errno . ") " . $conn->connect_error;
 }
 
