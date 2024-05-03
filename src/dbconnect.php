@@ -15,6 +15,7 @@ $conn = new mysqli($servername, $username, $password, $database,'/home/student/i
 if ($conn->connect_errno) {
     echo "FAILED to MySQL: (" . 
     $conn->connect_errno . ") " . $conn->connect_error;
+    error_log("ERRORRRRR");
 }
 
 // Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
