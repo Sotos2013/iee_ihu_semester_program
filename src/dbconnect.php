@@ -1,16 +1,20 @@
 <?php
 
 // Σύνδεση με τη βάση δεδομένων
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "courses_db";
+$host='localhost';
+$db ='courses_db';
+require_once 'db_user_pass.php';
+$user=$DB_USER;
+$pass=$DB_PASS;
 
+if(gethostname()=='users.iee.ihu.gr') {
 $conn = new mysqli($servername, $username, $password, $database,'/home/student/iee/2019/iee2019185/mysql/run/mysql.sock');
-
-// Έλεγχος σύνδεσης
-if ($conn->connect_error) {
-  die("Connection failed: " . $conn->connect_error);
+} else {
+        $conn = new mysqli($host, $user, $pass, $db);
+}
+if ($conn->connect_errno) {
+    echo "Failed to connect to MySQL: (" . 
+    $conn->connect_errno . ") " . $conn->connect_error;
 }
 
 // Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
