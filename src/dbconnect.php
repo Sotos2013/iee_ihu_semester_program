@@ -6,7 +6,7 @@ $username = "root";
 $password = "";
 $database = "courses_db";
 
-$conn = new mysqli($servername, $username, $password, $database);
+$conn = new mysqli($servername, $username, $password, $database,'/home/student/iee/2019/iee2019185/mysql/run/mysql.sock');
 
 // Έλεγχος σύνδεσης
 if ($conn->connect_error) {
