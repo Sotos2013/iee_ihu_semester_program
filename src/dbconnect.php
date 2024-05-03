@@ -8,7 +8,7 @@ $user=$DB_USER;
 $pass=$DB_PASS;
 
 if(gethostname()=='users.iee.ihu.gr') {
-$conn = new mysqli($servername, $username, $password, $database,'/home/student/iee/2019/iee2019185/mysql/run/mysql.sock');
+$conn = new mysqli($servername, $username, $password, $database,'/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
 } else {
         $conn = new mysqli($host, $user, $pass, $db);
 }
