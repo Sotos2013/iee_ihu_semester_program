@@ -3,7 +3,7 @@
 // Σύνδεση με τη βάση δεδομένων
 $host='localhost';
 $db ='program_db';
-require_once 'db_user_pass.php';
+require_once 'db_upass.php';
 $user=$DB_USER;
 $pass=$DB_PASS;
 
