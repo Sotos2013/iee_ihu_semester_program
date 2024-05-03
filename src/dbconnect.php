@@ -1,24 +1,23 @@
 <?php
 
 // Σύνδεση με τη βάση δεδομένων
-$host = 'localhost';
+$host='localhost';
 $db = 'program_db';
+require_once "db_upass.php";
 
-// Φορτώστε τις πληροφορίες χρήστη από το αρχείο db_upass.php
-require_once 'db_upass.php';
+$user=$DB_USER;
+$pass=$DB_PASS;
 
-// Αποθηκεύστε τις πληροφορίες χρήστη σε μεταβλητές
-$user = $DB_USER;
-$pass = $DB_PASS;
 
-// Καθορίστε τη σύνδεση με τη βάση δεδομένων
-$conn = new mysqli($host, $user, $pass, $db);
+if(gethostname()=='users.iee.ihu.gr') {
+	$mysqli = new mysqli($host, $user, $pass, $db,null,'/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
+} else {
+        $mysqli = new mysqli($host, $user, $pass, $db);
+}
 
-// Έλεγχος για σφάλματα σύνδεσης
-if ($conn->connect_errno) {
-    echo "FAILED to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error;
-    error_log("FAILED to MySQL: (" . $conn->connect_errno . ") " . $conn->connect_error);
-    exit; // Τερματίστε την εκτέλεση του script σε περίπτωση σφάλματος σύνδεσης
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: (" . 
+    $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 
 // Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
