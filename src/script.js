@@ -1,6 +1,6 @@
 clearCheckboxState();
 
-fetch('../data.json')
+fetch('data.json')
     .then(response => response.json())
     .then(data => {
         // Εδώ μπορείτε να επεξεργαστείτε τα δεδομένα όπως επιθυμείτε
