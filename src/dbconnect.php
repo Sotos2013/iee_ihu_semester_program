@@ -1,29 +1,27 @@
 <?php
 
 // Σύνδεση με τη βάση δεδομένων
-$host='localhost';
+$host = 'localhost';
 $db = 'program_db';
 require_once "db_upass.php";
 
-$user=$DB_USER;
-$pass=$DB_PASS;
+$user = $DB_USER;
+$pass = $DB_PASS;
 
-
-if(gethostname()=='users.iee.ihu.gr') {
-	$mysqli = new mysqli($host, $user, $pass, $db,null,'/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
+if (gethostname() == 'users.iee.ihu.gr') {
+    $mysqli = new mysqli($host, $user, $pass, $db, null, '/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
 } else {
-        $mysqli = new mysqli($host, $user, $pass, $db);
+    $mysqli = new mysqli($host, $user, $pass, $db);
 }
 
 if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: (" . 
-    $mysqli->connect_errno . ") " . $mysqli->connect_error;
+    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
 }
 
 // Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
 $sql = "SELECT courses.name AS course_name, course_occurrences.day, course_occurrences.time, courses.semester FROM course_occurrences INNER JOIN courses ON course_occurrences.course_id = courses.id";
 
-$result = $conn->query($sql);
+$result = $mysqli->query($sql);
 
 // Δημιουργία πίνακα για την αποθήκευση των δεδομένων
 $data = array();
@@ -53,13 +51,13 @@ if ($result) {
     // Απελευθέρωση αποτελεσμάτων
     $result->free();
 } else {
-    echo "Error executing query: " . $conn->error;
-    error_log("Error executing query: " . $conn->error);
+    echo "Error executing query: " . $mysqli->error;
+    error_log("Error executing query: " . $mysqli->error);
     exit; // Τερματίστε την εκτέλεση του script σε περίπτωση σφάλματος εκτέλεσης ερωτήματος
 }
 
 // Κλείσιμο σύνδεσης
-$conn->close();
+$mysqli->close();
 
 // Εγγραφή των δεδομένων σε ένα JSON αρχείο
 $file = '../data.json';
