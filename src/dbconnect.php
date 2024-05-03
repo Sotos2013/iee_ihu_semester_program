@@ -55,7 +55,7 @@ $result->free_result();
 $conn->close();
 
 // Εγγραφή των δεδομένων σε ένα JSON αρχείο
-$file = 'data.json';
+$file = '../data.json';
 file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE));
 
 echo "JSON file has been created successfully.";
