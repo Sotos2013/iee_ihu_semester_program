@@ -3,7 +3,6 @@ clearCheckboxState();
 fetch('data.json')
     .then(response => response.json())
     .then(data => {
-        // Εδώ μπορείτε να επεξεργαστείτε τα δεδομένα όπως επιθυμείτε
         console.log(data);
     })
     .catch(error => console.error('Error fetching data:', error));
@@ -192,12 +191,7 @@ function displayCoursesBySemester() {
     } else {
         buttonContainer.appendChild(clearButton);
     }
-
-    //createClearCheckboxButton();
 }
-
-
-
 
 function showCalendar() {
     const programContainer = document.getElementById('program');
@@ -364,10 +358,6 @@ function addToSchedule(courseName, courseTime, courseDay) {
     }
 }
 
-
-
-
-
 // Συνάρτηση για την αφαίρεση μαθήματος από το πρόγραμμα
 function removeFromSchedule(courseName, courseTime, courseDay) {
     const dayEvents = document.getElementById(courseDay + 'Events');
@@ -381,8 +371,6 @@ function removeFromSchedule(courseName, courseTime, courseDay) {
 }
 
 function addCourseCheckbox(courseDetails) {
-    // Assuming there's a function to generate a checkbox for a single course
-    // You can implement this function according to your needs
     const customCourseCheckbox = generateCheckbox(courseDetails.name);
     // Add the time and day information as data attributes to the checkbox
     customCourseCheckbox.dataset.time = courseDetails.time;
@@ -412,8 +400,6 @@ function addCourseCheckbox(courseDetails) {
         }
     });
 }
-
-
 
 function generateCheckbox(courseName) {
     // Create semester header
@@ -663,7 +649,6 @@ function selectall(ex) {
     });
 }
 
-
 function deselectall(ex) {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]:not([id$="_disabled"])');
     const examhno = " Εξάμηνο " + ex;
@@ -727,7 +712,3 @@ function clearCheckboxState() {
         });
     });
 }
-
-
-
-//σχολιο 
