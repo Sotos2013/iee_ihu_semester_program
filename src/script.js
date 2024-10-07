@@ -52,9 +52,9 @@ fetch('data.json')
         newWindow.document.write('</table>');
     
         // Εισαγωγή των ωρών φόρτου εργασίας, ECTS και εργαστηρίου κάτω από τον πίνακα
-        newWindow.document.write('<h3>Συνολικές Ώρες Φόρτου Εργασίας: ' + totalWorkloadHours + '</h3>');
-        newWindow.document.write('<h3>Συνολικά ECTS: ' + totalECTS + '</h3>');
-        newWindow.document.write('<h3>Συνολικές Ώρες Εργαστηρίου: ' + labHours + '</h3>');
+        newWindow.document.write('<h3>' + totalWorkloadHours + '</h3>');
+        newWindow.document.write('<h3>' + totalECTS + '</h3>');
+        newWindow.document.write('<h3>' + labHours + '</h3>');
     
         newWindow.document.write('</body></html>');
         newWindow.document.close();
