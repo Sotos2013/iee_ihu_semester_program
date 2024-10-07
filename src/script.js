@@ -18,9 +18,9 @@ fetch('data.json')
         var fridayClasses = document.getElementById('fridayEvents').innerHTML;
     
         // Παίρνουμε τα περιεχόμενα για ώρες φόρτου εργασίας, ECTS, ώρες εργαστηρίου
-        var totalWorkloadHours = document.getElementById('totalWorkloadHours').innerHTML;
-        var totalECTS = document.getElementById('totalECTS').innerHTML;
-        var labHours = document.getElementById('labHours').innerHTML;
+        var totalWorkloadHours = document.getElementById('hours').innerHTML;
+        var totalECTS = document.getElementById('ECTS').innerHTML;
+        var labHours = document.getElementById('lab').innerHTML;
     
         var style = "<style>";
         style += "table {width: 100%; border-collapse: collapse;}";
@@ -52,9 +52,9 @@ fetch('data.json')
         newWindow.document.write('</table>');
     
         // Εισαγωγή των ωρών φόρτου εργασίας, ECTS και εργαστηρίου κάτω από τον πίνακα
-        newWindow.document.write('<h3>Συνολικές Ώρες Φόρτου Εργασίας: ' + hours + '</h3>');
-        newWindow.document.write('<h3>Συνολικά ECTS: ' + ECTS + '</h3>');
-        newWindow.document.write('<h3>Συνολικές Ώρες Εργαστηρίου: ' + lab + '</h3>');
+        newWindow.document.write('<h3>Συνολικές Ώρες Φόρτου Εργασίας: ' + totalWorkloadHours + '</h3>');
+        newWindow.document.write('<h3>Συνολικά ECTS: ' + totalECTS + '</h3>');
+        newWindow.document.write('<h3>Συνολικές Ώρες Εργαστηρίου: ' + labHours + '</h3>');
     
         newWindow.document.write('</body></html>');
         newWindow.document.close();
