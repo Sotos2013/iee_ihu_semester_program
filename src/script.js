@@ -10,57 +10,33 @@ fetch('data.json')
     function generatePDF() {
         var tableContent = document.getElementById('allDays').innerHTML;
         var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
-        var hours = document.getElementById('hours').innerHTML;
-        var ECTS = document.getElementById('ECTS').innerHTML;
-        var labHours = document.getElementById('lab').innerHTML;
     
         var style = "<style>";
-        style += "@media print {";
-        style += "table {width: 100%;font: 17px Calibri;}"; 
-        style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
-        style += "padding: 2px 3px;}";
+        style += "body {font-family: Arial, sans-serif;}";
+        style += "table {width: 100%; border-collapse: collapse;}";
+        style += "th, td {border: 1px solid black; text-align: center; padding: 10px;}";
+        style += ".day-header {background-color: #f0f0f0; font-weight: bold;}";
+        style += ".time-slot {background-color: #336699; color: white; height: 100px;}";
         style += "</style>";
     
         var newWindow = window.open('', '', 'height=700,width=700');
-    
         newWindow.document.write('<html><head>');
-        newWindow.document.write('<center>');
+        newWindow.document.write('<title>Πρόγραμμα Εξαμήνου</title>');
         newWindow.document.write(style);
-        newWindow.document.write('</head>');
-        newWindow.document.write('<body>');
+        newWindow.document.write('</head><body>');
         newWindow.document.write('<h2>' + semesterContent + '</h2>');
-    
-        // Προσθήκη νέου πίνακα για την εμφάνιση των hours, ECTS και labHours
-        newWindow.document.write('<table id="infoTable">');
-        newWindow.document.write('<tr><th>Συνολικές Ώρες</th><th>ECTS</th><th>Ώρες Εργαστηρίου</th></tr>');
-        newWindow.document.write('<tr><td>' + hours + '</td><td>' + ECTS + '</td><td>' + labHours + '</td></tr>');
-        newWindow.document.write('</table>');
-    
-        newWindow.document.write('<br>');
-    
-        // Προσθήκη του πίνακα των ημερών
-        newWindow.document.write('<table id="printedTable">');
-        newWindow.document.write(tableContent);
+        
+        // Δημιουργία του πίνακα με το περιεχόμενο
+        newWindow.document.write('<table>');
+        newWindow.document.write('<tr><th>ΔΕΥΤΕΡΑ</th><th>ΤΡΙΤΗ</th><th>ΤΕΤΑΡΤΗ</th><th>ΠΕΜΠΤΗ</th><th>ΠΑΡΑΣΚΕΥΗ</th></tr>');
+        newWindow.document.write(tableContent); // Προσθήκη του υπάρχοντος πίνακα
         newWindow.document.write('</table>');
     
         newWindow.document.write('</body></html>');
         newWindow.document.close();
-    
-        // Ταξινόμηση των γεγονότων βάσει ώρας πριν την εκτύπωση
-        var printedTable = newWindow.document.getElementById('printedTable');
-        var rows = printedTable.getElementsByTagName('tr');
-        var sortedRows = Array.from(rows).slice(1); // Εξαιρείται η επικεφαλίδα του πίνακα
-        sortedRows.sort(function(a, b) {
-            var timeA = a.cells[0].textContent.split('-')[0].trim();
-            var timeB = b.cells[0].textContent.split('-')[0].trim();
-            return timeA.localeCompare(timeB);
-        });
-        sortedRows.forEach(function(row) {
-            printedTable.appendChild(row);
-        });
-    
         newWindow.print();
     }
+    
     
 
 
