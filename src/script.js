@@ -8,15 +8,20 @@ fetch('data.json')
     .catch(error => console.error('Error fetching data:', error));
 
     function generatePDF() {
-        var tableContent = document.getElementById('allDays').innerHTML;
         var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
     
+        // Παίρνουμε τα δεδομένα δυναμικά από το HTML
+        var mondayClasses = document.getElementById('monday').innerHTML;
+        var tuesdayClasses = document.getElementById('tuesday').innerHTML;
+        var wednesdayClasses = document.getElementById('wednesday').innerHTML;
+        var thursdayClasses = document.getElementById('thursday').innerHTML;
+        var fridayClasses = document.getElementById('friday').innerHTML;
+    
         var style = "<style>";
-        style += "body {font-family: Arial, sans-serif;}";
         style += "table {width: 100%; border-collapse: collapse;}";
         style += "th, td {border: 1px solid black; text-align: center; padding: 10px;}";
         style += ".day-header {background-color: #f0f0f0; font-weight: bold;}";
-        style += ".time-slot {background-color: #336699; color: white; height: 100px;}";
+        style += ".time-slot {background-color: #336699; color: white; padding: 15px;}";
         style += "</style>";
     
         var newWindow = window.open('', '', 'height=700,width=700');
@@ -25,11 +30,20 @@ fetch('data.json')
         newWindow.document.write(style);
         newWindow.document.write('</head><body>');
         newWindow.document.write('<h2>' + semesterContent + '</h2>');
-        
-        // Δημιουργία του πίνακα με το περιεχόμενο
+    
+        // Δημιουργία πίνακα με τις ημέρες της εβδομάδας ως στήλες
         newWindow.document.write('<table>');
         newWindow.document.write('<tr><th>ΔΕΥΤΕΡΑ</th><th>ΤΡΙΤΗ</th><th>ΤΕΤΑΡΤΗ</th><th>ΠΕΜΠΤΗ</th><th>ΠΑΡΑΣΚΕΥΗ</th></tr>');
-        newWindow.document.write(tableContent); // Προσθήκη του υπάρχοντος πίνακα
+        newWindow.document.write('<tr>');
+    
+        // Εισαγωγή των μαθημάτων κάθε ημέρας
+        newWindow.document.write('<td>' + mondayClasses + '</td>');
+        newWindow.document.write('<td>' + tuesdayClasses + '</td>');
+        newWindow.document.write('<td>' + wednesdayClasses + '</td>');
+        newWindow.document.write('<td>' + thursdayClasses + '</td>');
+        newWindow.document.write('<td>' + fridayClasses + '</td>');
+    
+        newWindow.document.write('</tr>');
         newWindow.document.write('</table>');
     
         newWindow.document.write('</body></html>');
@@ -37,9 +51,6 @@ fetch('data.json')
         newWindow.print();
     }
     
-    
-
-
 function generateImage() {
     var tableContent = document.getElementById('allDays');
     var semesterContent = document.getElementById('academicYearAndSemester');
