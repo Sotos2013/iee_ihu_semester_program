@@ -11,11 +11,11 @@ fetch('data.json')
         var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
     
         // Παίρνουμε τα δεδομένα δυναμικά από το HTML
-        var mondayClasses = document.getElementById('monday').innerHTML;
-        var tuesdayClasses = document.getElementById('tuesday').innerHTML;
-        var wednesdayClasses = document.getElementById('wednesday').innerHTML;
-        var thursdayClasses = document.getElementById('thursday').innerHTML;
-        var fridayClasses = document.getElementById('friday').innerHTML;
+        var mondayClasses = document.getElementById('mondayEvents').innerHTML;
+        var tuesdayClasses = document.getElementById('tuesdayEvents').innerHTML;
+        var wednesdayClasses = document.getElementById('wednesdayEvents').innerHTML;
+        var thursdayClasses = document.getElementById('thursdayEvents').innerHTML;
+        var fridayClasses = document.getElementById('fridayEvents').innerHTML;
     
         var style = "<style>";
         style += "table {width: 100%; border-collapse: collapse;}";
