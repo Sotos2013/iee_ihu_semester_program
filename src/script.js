@@ -460,13 +460,16 @@ function generateCourseCheckboxes() {
     let semester;
     let semesterNumbers;
 
-    if (currentMonth === 0 || currentMonth === 1 || currentMonth === 8 || currentMonth === 10 || currentMonth === 11) {
-        semester = 'Χειμερινό Εξάμηνο'; // Winter semester for months October to December
-        semesterNumbers = ["1", "3", "5", "7", "9"]; // Semesters to display for winter semester
+    if (currentMonth >= 0 && currentMonth <= 1 || currentMonth >= 8 && currentMonth <= 11) {
+        // Winter semester: September (8) to January (0 or 1)
+        semester = 'Χειμερινό Εξάμηνο';
+        semesterNumbers = ["1", "3", "5", "7", "9"];
     } else {
-        semester = 'Εαρινό Εξάμηνο'; // Spring semester for months March to June
-        semesterNumbers = ["2", "4", "6", "8"]; // Semesters to display for spring semester
+        // Spring semester: February (2) to June (6)
+        semester = 'Εαρινό Εξάμηνο';
+        semesterNumbers = ["2", "4", "6", "8"];
     }
+    
 
     // Fetch data only if it's for the current semester
     fetch('data.json')
