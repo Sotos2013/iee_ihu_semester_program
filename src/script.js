@@ -119,20 +119,25 @@ function academic() {
         semester = 'Χειμερινού';
     }
 
-    // Calculate previous and current academic years
-    var previousYearStart = new Date(currentYear - 1, 8); // September is month 8 (0-indexed)
-    var previousYearEnd = new Date(currentYear, 7); // August is month 7 (0-indexed)
-    var currentYearStart = new Date(currentYear, 8); // September is month 8 (0-indexed)
-    var currentYearEnd = new Date(currentYear + 1, 7); // August is month 7 (0-indexed)
+    // Calculate current academic year (which starts in September)
+    var academicYearStart, academicYearEnd;
+    
+    if (currentMonth >= 8) { // If it's September (8) or later, we're in the current academic year
+        academicYearStart = currentYear;
+        academicYearEnd = currentYear + 1;
+    } else { // If it's before September, we're in the previous academic year
+        academicYearStart = currentYear - 1;
+        academicYearEnd = currentYear;
+    }
 
-    // Format the academic years
-    var previousAcademicYear = previousYearStart.getFullYear() + ' - ' + previousYearEnd.getFullYear();
-    var currentAcademicYear = currentYearStart.getFullYear() + ' - ' + currentYearEnd.getFullYear();
+    // Format the academic year
+    var academicYear = academicYearStart + ' - ' + academicYearEnd;
 
-    // Get the semester element and set its text content to include the academic years and semester
+    // Get the semester element and set its text content to include the academic year and semester
     var semesterElement = document.getElementById('academicYearAndSemester');
-    semesterElement.textContent = 'Πρόγραμμα ' + semester + ' Εξαμήνου ' + previousAcademicYear;
+    semesterElement.textContent = 'Πρόγραμμα ' + semester + ' Εξαμήνου ' + academicYear;
 }
+
 
 function displayCoursesBySemester() {
     // 1. Hide the existing program/calendar container
