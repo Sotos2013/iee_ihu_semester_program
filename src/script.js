@@ -7,53 +7,61 @@ fetch('data.json')
     })
     .catch(error => console.error('Error fetching data:', error));
 
-function generatePDF() {
-    var tableContent = document.getElementById('allDays').innerHTML;
-    var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
-    var hours = document.getElementById('hours').innerHTML; // Προσθέστε αυτήν τη γραμμή για να πάρετε το περιεχόμενο του στοιχείου με το id 'hours'
-    var ECTS = document.getElementById('ECTS').innerHTML;
-    var labHours = document.getElementById('lab').innerHTML;
-
-    var style = "<style>";
-    style += "@media print {";
-    style += "table {width: 100%;font: 17px Calibri;}";
-    style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
-    style += "padding: 2px 3px;}";
-    style += "</style>";
-
-    var newWindow = window.open('', '', 'height=700,width=700');
-
-    newWindow.document.write('<html><head>');
-    newWindow.document.write('<center>');
-    newWindow.document.write(style);
-    newWindow.document.write('</head>');
-    newWindow.document.write('<body>');
-    newWindow.document.write(semesterContent);
-    newWindow.document.write('<table id="printedTable">');
-    newWindow.document.write(tableContent);
-    newWindow.document.write('</table>');
-    newWindow.document.write('<br>');
-    newWindow.document.write('<p id="printedHours">' + hours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικό φορτίο εργασίας
-    newWindow.document.write('<p id="printedECTS">' + ECTS + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
-    newWindow.document.write('<p id="printedLabHours">' + labHours + '</p>'); // Προσθέστε αυτήν τη γραμμή για να εμφανίσετε το συνολικά ECTS
-    newWindow.document.write('</body></html>');
-    newWindow.document.close();
-
-    // Sort events by start time before printing
-    var printedTable = newWindow.document.getElementById('printedTable');
-    var rows = printedTable.getElementsByTagName('tr');
-    var sortedRows = Array.from(rows).slice(1); // Exclude header row from sorting
-    sortedRows.sort(function(a, b) {
-        var timeA = a.cells[0].textContent.split('-')[0].trim();
-        var timeB = b.cells[0].textContent.split('-')[0].trim();
-        return timeA.localeCompare(timeB);
-    });
-    sortedRows.forEach(function(row) {
-        printedTable.appendChild(row);
-    });
-
-    newWindow.print();
-}
+    function generatePDF() {
+        var tableContent = document.getElementById('allDays').innerHTML;
+        var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
+        var hours = document.getElementById('hours').innerHTML;
+        var ECTS = document.getElementById('ECTS').innerHTML;
+        var labHours = document.getElementById('lab').innerHTML;
+    
+        var style = "<style>";
+        style += "@media print {";
+        style += "table {width: 100%;font: 17px Calibri;}"; 
+        style += "table, tr, th, td {border: solid 1px #DDD; border-collapse: collapse; text-align: center;}";
+        style += "padding: 2px 3px;}";
+        style += "</style>";
+    
+        var newWindow = window.open('', '', 'height=700,width=700');
+    
+        newWindow.document.write('<html><head>');
+        newWindow.document.write('<center>');
+        newWindow.document.write(style);
+        newWindow.document.write('</head>');
+        newWindow.document.write('<body>');
+        newWindow.document.write('<h2>' + semesterContent + '</h2>');
+    
+        // Προσθήκη νέου πίνακα για την εμφάνιση των hours, ECTS και labHours
+        newWindow.document.write('<table id="infoTable">');
+        newWindow.document.write('<tr><th>Συνολικές Ώρες</th><th>ECTS</th><th>Ώρες Εργαστηρίου</th></tr>');
+        newWindow.document.write('<tr><td>' + hours + '</td><td>' + ECTS + '</td><td>' + labHours + '</td></tr>');
+        newWindow.document.write('</table>');
+    
+        newWindow.document.write('<br>');
+    
+        // Προσθήκη του πίνακα των ημερών
+        newWindow.document.write('<table id="printedTable">');
+        newWindow.document.write(tableContent);
+        newWindow.document.write('</table>');
+    
+        newWindow.document.write('</body></html>');
+        newWindow.document.close();
+    
+        // Ταξινόμηση των γεγονότων βάσει ώρας πριν την εκτύπωση
+        var printedTable = newWindow.document.getElementById('printedTable');
+        var rows = printedTable.getElementsByTagName('tr');
+        var sortedRows = Array.from(rows).slice(1); // Εξαιρείται η επικεφαλίδα του πίνακα
+        sortedRows.sort(function(a, b) {
+            var timeA = a.cells[0].textContent.split('-')[0].trim();
+            var timeB = b.cells[0].textContent.split('-')[0].trim();
+            return timeA.localeCompare(timeB);
+        });
+        sortedRows.forEach(function(row) {
+            printedTable.appendChild(row);
+        });
+    
+        newWindow.print();
+    }
+    
 
 
 function generateImage() {
