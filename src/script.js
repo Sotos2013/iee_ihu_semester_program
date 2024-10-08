@@ -22,6 +22,27 @@ fetch('data.json')
         var totalECTS = document.getElementById('ECTS').innerHTML;
         var labHours = document.getElementById('lab').innerHTML;
     
+        // Συνάρτηση για την εξαγωγή των ωρών από το κείμενο των μαθημάτων και ταξινόμησή τους
+        function sortClassesByTime(classesHtml) {
+            // Δημιουργούμε έναν πίνακα με τα στοιχεία των μαθημάτων
+            var classes = classesHtml.split('<br>').filter(Boolean); // Χωρίζουμε τα μαθήματα και αφαιρούμε κενές γραμμές
+            // Ταξινομούμε τα μαθήματα με βάση την ώρα τους
+            classes.sort(function(a, b) {
+                // Εξάγουμε τις ώρες από τα μαθήματα
+                var timeA = a.match(/\d{1,2}:\d{2}-\d{1,2}:\d{2}/);
+                var timeB = b.match(/\d{1,2}:\d{2}-\d{1,2}:\d{2}/);
+                return timeA > timeB ? 1 : -1; // Ταξινομούμε με βάση τις ώρες
+            });
+            return classes.join('<br>'); // Επανασυνθέτουμε το HTML
+        }
+    
+        // Ταξινομούμε τα μαθήματα ανά ημέρα
+        mondayClasses = sortClassesByTime(mondayClasses);
+        tuesdayClasses = sortClassesByTime(tuesdayClasses);
+        wednesdayClasses = sortClassesByTime(wednesdayClasses);
+        thursdayClasses = sortClassesByTime(thursdayClasses);
+        fridayClasses = sortClassesByTime(fridayClasses);
+    
         var style = "<style>";
         style += "table {width: 100%; border-collapse: collapse;}";
         style += "th, td {border: 1px solid black; text-align: center; padding: 10px;}";
@@ -60,6 +81,7 @@ fetch('data.json')
         newWindow.document.close();
         newWindow.print();
     }
+    
     
     
 function generateImage() {
