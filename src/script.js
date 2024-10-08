@@ -11,38 +11,34 @@ fetch('data.json')
         var semesterContent = document.getElementById('academicYearAndSemester').innerHTML;
     
         // Παίρνουμε τα δεδομένα δυναμικά από το HTML
-        var mondayClasses = document.getElementById('mondayEvents').innerHTML;
-        var tuesdayClasses = document.getElementById('tuesdayEvents').innerHTML;
-        var wednesdayClasses = document.getElementById('wednesdayEvents').innerHTML;
-        var thursdayClasses = document.getElementById('thursdayEvents').innerHTML;
-        var fridayClasses = document.getElementById('fridayEvents').innerHTML;
+        var mondayClasses = document.getElementById('mondayEvents').innerText.split('\n');
+        var tuesdayClasses = document.getElementById('tuesdayEvents').innerText.split('\n');
+        var wednesdayClasses = document.getElementById('wednesdayEvents').innerText.split('\n');
+        var thursdayClasses = document.getElementById('thursdayEvents').innerText.split('\n');
+        var fridayClasses = document.getElementById('fridayEvents').innerText.split('\n');
+    
+        // Συνάρτηση για ταξινόμηση βάσει ώρας (π.χ. 09:00-11:00)
+        function sortByTime(classesArray) {
+            return classesArray.sort((a, b) => {
+                var timeA = a.match(/\d{2}:\d{2}/); // Παίρνουμε την πρώτη ώρα
+                var timeB = b.match(/\d{2}:\d{2}/);
+                return timeA > timeB ? 1 : -1;
+            });
+        }
+    
+        // Ταξινομούμε τα μαθήματα ανά ημέρα
+        mondayClasses = sortByTime(mondayClasses);
+        tuesdayClasses = sortByTime(tuesdayClasses);
+        wednesdayClasses = sortByTime(wednesdayClasses);
+        thursdayClasses = sortByTime(thursdayClasses);
+        fridayClasses = sortByTime(fridayClasses);
     
         // Παίρνουμε τα περιεχόμενα για ώρες φόρτου εργασίας, ECTS, ώρες εργαστηρίου
         var totalWorkloadHours = document.getElementById('hours').innerHTML;
         var totalECTS = document.getElementById('ECTS').innerHTML;
         var labHours = document.getElementById('lab').innerHTML;
     
-        // Συνάρτηση για την εξαγωγή των ωρών από το κείμενο των μαθημάτων και ταξινόμησή τους
-        function sortClassesByTime(classesHtml) {
-            // Δημιουργούμε έναν πίνακα με τα στοιχεία των μαθημάτων
-            var classes = classesHtml.split('<br>').filter(Boolean); // Χωρίζουμε τα μαθήματα και αφαιρούμε κενές γραμμές
-            // Ταξινομούμε τα μαθήματα με βάση την ώρα τους
-            classes.sort(function(a, b) {
-                // Εξάγουμε τις ώρες από τα μαθήματα
-                var timeA = a.match(/\d{1,2}:\d{2}-\d{1,2}:\d{2}/);
-                var timeB = b.match(/\d{1,2}:\d{2}-\d{1,2}:\d{2}/);
-                return timeA > timeB ? 1 : -1; // Ταξινομούμε με βάση τις ώρες
-            });
-            return classes.join('<br>'); // Επανασυνθέτουμε το HTML
-        }
-    
-        // Ταξινομούμε τα μαθήματα ανά ημέρα
-        mondayClasses = sortClassesByTime(mondayClasses);
-        tuesdayClasses = sortClassesByTime(tuesdayClasses);
-        wednesdayClasses = sortClassesByTime(wednesdayClasses);
-        thursdayClasses = sortClassesByTime(thursdayClasses);
-        fridayClasses = sortClassesByTime(fridayClasses);
-    
+        // Στυλ για τον πίνακα και τα μαθήματα
         var style = "<style>";
         style += "table {width: 100%; border-collapse: collapse;}";
         style += "th, td {border: 1px solid black; text-align: center; padding: 10px;}";
@@ -62,12 +58,12 @@ fetch('data.json')
         newWindow.document.write('<tr><th>ΔΕΥΤΕΡΑ</th><th>ΤΡΙΤΗ</th><th>ΤΕΤΑΡΤΗ</th><th>ΠΕΜΠΤΗ</th><th>ΠΑΡΑΣΚΕΥΗ</th></tr>');
         newWindow.document.write('<tr>');
     
-        // Εισαγωγή των μαθημάτων κάθε ημέρας
-        newWindow.document.write('<td>' + mondayClasses + '</td>');
-        newWindow.document.write('<td>' + tuesdayClasses + '</td>');
-        newWindow.document.write('<td>' + wednesdayClasses + '</td>');
-        newWindow.document.write('<td>' + thursdayClasses + '</td>');
-        newWindow.document.write('<td>' + fridayClasses + '</td>');
+        // Εισαγωγή των ταξινομημένων μαθημάτων κάθε ημέρας
+        newWindow.document.write('<td>' + mondayClasses.join('<br>') + '</td>');
+        newWindow.document.write('<td>' + tuesdayClasses.join('<br>') + '</td>');
+        newWindow.document.write('<td>' + wednesdayClasses.join('<br>') + '</td>');
+        newWindow.document.write('<td>' + thursdayClasses.join('<br>') + '</td>');
+        newWindow.document.write('<td>' + fridayClasses.join('<br>') + '</td>');
     
         newWindow.document.write('</tr>');
         newWindow.document.write('</table>');
@@ -81,7 +77,6 @@ fetch('data.json')
         newWindow.document.close();
         newWindow.print();
     }
-    
     
     
 function generateImage() {
