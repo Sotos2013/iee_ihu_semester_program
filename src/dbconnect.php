@@ -46,7 +46,12 @@ if ($result) {
 
 $mysqli->close();
 
-// Επιστροφή των δεδομένων απευθείας σε JSON μορφή για το script.js
-header('Content-Type: application/json; charset=utf-8');
-echo json_encode($data, JSON_UNESCAPED_UNICODE);
+// Εγγραφή των δεδομένων σε ένα JSON αρχείο
+$file = 'data.json';
+if (file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE))) {
+    echo "JSON file has been created successfully.";
+} else {
+    echo "Error writing JSON file.";
+    error_log("Error writing JSON file.");
+}
 ?>
