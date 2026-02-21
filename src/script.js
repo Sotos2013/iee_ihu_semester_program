@@ -1,6 +1,6 @@
 clearCheckboxState();
 //check
-fetch('db_connect.php') 
+fetch('data.json')
     .then(response => response.json())
     .then(data => {
         console.log(data);
@@ -317,7 +317,7 @@ function saveCourseToJSON(courseDetails) {
     };
 
     // Αποθήκευση του JSON στο αρχείο
-    fetch('db_connect.php', {
+    fetch('data.json', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -492,7 +492,7 @@ function generateCourseCheckboxes() {
     }
 
     // Fetch δεδομένων
-    fetch('db_connect.php')
+    fetch('data.json')
         .then(response => response.json())
         .then(data => {
             const coursesBySemester = groupCoursesBySemester(data);
