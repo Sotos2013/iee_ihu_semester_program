@@ -3,7 +3,7 @@
 require_once "db_upass.php"; // Βεβαιώσου ότι εδώ έχεις τα σωστά $DB_USER, $DB_PASS
 
 $host = 'sql7.freesqldatabase.com';
-$db   = 'sql7817711y';
+$db   = 'sql7817711';
 $user = $DB_USER;
 $pass = $DB_PASS;
 
