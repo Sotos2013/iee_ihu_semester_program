@@ -1,6 +1,6 @@
 <?php
 // db_connect.php
-require_once('db_config.php');
+require_once 'db_config.php';
 
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
