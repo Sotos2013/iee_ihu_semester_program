@@ -1,8 +1,8 @@
 <?php
 
 // Σύνδεση με τη βάση δεδομένων
-$host = 'localhost';
-$db = 'program_db';
+$host = 'sql7.freesqldatabase.com';
+$db = 'sql7817711';
 require_once "db_upass.php";
 
 $user = $DB_USER;
