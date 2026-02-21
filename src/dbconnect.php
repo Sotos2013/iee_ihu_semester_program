@@ -1,71 +1,56 @@
 <?php
+// Στοιχεία σύνδεσης από το FreeSQLDatabase email
+$host = 'sql7.freesqldatabase.com'; // Αντικατάστησε το X με τον αριθμό που σου έδωσαν
+$db   = 'sql7817711';               // Το όνομα της βάσης δεδομένων
+$user = 'sql7817711';               // Το όνομα χρήστη
+$pass = '4g3XGcUAZN';              // Ο κωδικός πρόσβασης
 
 // Σύνδεση με τη βάση δεδομένων
-$host = 'localhost';
-$db = 'program_db';
-require_once "db_upass.php";
+$mysqli = new mysqli($host, $user, $pass, $db);
 
-$user = $DB_USER;
-$pass = $DB_PASS;
-
-if (gethostname() == 'users.iee.ihu.gr') {
-    $mysqli = new mysqli($host, $user, $pass, $db, null, '/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
-} else {
-    $mysqli = new mysqli($host, $user, $pass, $db);
-}
+// Ορισμός charset σε utf8mb4 για να εμφανίζονται σωστά τα Ελληνικά
+$mysqli->set_charset("utf8mb4");
 
 if ($mysqli->connect_errno) {
-    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+    die("Αποτυχία σύνδεσης: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 }
 
-// Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
-$sql = "SELECT courses.name AS course_name, course_occurrences.day, course_occurrences.time, courses.semester FROM course_occurrences INNER JOIN courses ON course_occurrences.course_id = courses.id";
+// Ερώτημα SQL (Inner Join για να πάρουμε όνομα, εξάμηνο και ώρες)
+$sql = "SELECT courses.name AS course_name, 
+               course_occurrences.day, 
+               course_occurrences.time, 
+               courses.semester 
+        FROM course_occurrences 
+        INNER JOIN courses ON course_occurrences.course_id = courses.id";
 
 $result = $mysqli->query($sql);
-
-// Δημιουργία πίνακα για την αποθήκευση των δεδομένων
 $data = array();
 
 if ($result) {
-    // Αποθήκευση δεδομένων στον πίνακα
     while ($row = $result->fetch_assoc()) {
-        $days = explode(", ", $row["day"]); // Διαχωρισμός ημερών
-        $times = explode(", ", $row["time"]); // Διαχωρισμός χρόνων
-        $occurrences = array(); // Αρχικοποίηση του πίνακα occurrences
+        $days = explode(", ", $row["day"]);
+        $times = explode(", ", $row["time"]);
+        $occurrences = array();
 
-        // Δημιουργία αντικειμένων για κάθε ημέρα και ώρα
         foreach ($days as $key => $day) {
             $occurrences[] = array(
                 "day" => $day,
-                "time" => $times[$key]
+                "time" => isset($times[$key]) ? $times[$key] : ""
             );
         }
 
-        // Αποθήκευση μαθήματος με το πεδίο "semester"
         $data[] = array(
             "semester" => $row["semester"],
             "name" => $row["course_name"],
             "occurrences" => $occurrences
         );
     }
-    // Απελευθέρωση αποτελεσμάτων
     $result->free();
-} else {
-    echo "Error executing query: " . $mysqli->error;
-    error_log("Error executing query: " . $mysqli->error);
-    exit; // Τερματίστε την εκτέλεση του script σε περίπτωση σφάλματος εκτέλεσης ερωτήματος
 }
 
-// Κλείσιμο σύνδεσης
 $mysqli->close();
 
-// Εγγραφή των δεδομένων σε ένα JSON αρχείο
-$file = 'data.json';
-if (file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE))) {
-    echo "JSON file has been created successfully.";
-} else {
-    echo "Error writing JSON file.";
-    error_log("Error writing JSON file.");
-}
-
+// Επιστροφή των δεδομένων απευθείας σε JSON μορφή για το script.js
+header('Content-Type: application/json; charset=utf-8');
+echo json_encode($data, JSON_UNESCAPED_UNICODE);
 ?>

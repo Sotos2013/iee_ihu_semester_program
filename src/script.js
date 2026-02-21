@@ -132,7 +132,7 @@ function academic() {
     // Get the current date
     var currentDate = new Date();
     var currentYear = currentDate.getFullYear();
-    var currentMonth = currentDate.getMonth(); // Months are zero-based
+    var currentMonth = currentDate.getMonth() + 1; // Months are zero-based
 
     // Determine the semester based on the current month
     var semester;
@@ -472,54 +472,47 @@ function generateBlockedCheckbox(course, container, semesterNumber) {
 }
 
 function generateCourseCheckboxes() {
-    // Clear any existing content in the courseListContainer
     const courseListContainer = document.getElementById('courseList');
     courseListContainer.innerHTML = '';
-    // Get the current date
+    
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth(); // Months are zero-indexed
+    const currentMonth = currentDate.getMonth(); 
 
-    // Determine the semester based on the month
-    let semester;
     let semesterNumbers;
 
-    if (currentMonth >= 0 && currentMonth <= 1 || currentMonth >= 8 && currentMonth <= 11) {
-        // Winter semester: September (8) to January (0 or 1)
-        semester = 'Χειμερινό Εξάμηνο';
+    // ΔΙΟΡΘΩΣΗ ΛΟΓΙΚΗΣ:
+    // Χειμερινό: Σεπτέμβριος (8) έως και Ιανουάριο (0)
+    // Εαρινό: Φεβρουάριος (1) έως και Αύγουστο (7)
+    if (currentMonth >= 8 || currentMonth === 0) {
+        // Χειμερινό Εξάμηνο
         semesterNumbers = ["1", "3", "5", "7", "9"];
     } else {
-        // Spring semester: February (2) to June (6)
-        semester = 'Εαρινό Εξάμηνο';
+        // Εαρινό Εξάμηνο (Φεβρουάριος - Αύγουστος)
         semesterNumbers = ["2", "4", "6", "8"];
     }
-    
 
-    // Fetch data only if it's for the current semester
+    // Fetch δεδομένων
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            // Group courses by semester
             const coursesBySemester = groupCoursesBySemester(data);
-            // Generate checkboxes for the current semester
+            
             semesterNumbers.forEach(semesterNumber => {
-                generateCheckBoxes(coursesBySemester[semesterNumber], courseListContainer, semesterNumber);
+                if (coursesBySemester[semesterNumber]) {
+                    generateCheckBoxes(coursesBySemester[semesterNumber], courseListContainer, semesterNumber);
+                }
             });
         })
         .catch(error => console.error('Error loading JSON file:', error));
 
-    // Add a button for adding a custom course
+    // Κουμπί για εργαστήριο
     const addButton = document.createElement('button');
     addButton.textContent = 'Προσθήκη Εργαστηριακού Μαθήματος';
-    addButton.setAttribute('id', 'labButton'); // Προσθήκη ID
+    addButton.setAttribute('id', 'labButton');
     addButton.classList.add('btn', 'btn-primary');
-    addButton.addEventListener('click', function () {
-        // Assuming there's a function to handle adding a custom course
-        // You can implement this function according to your needs
-        addCustomCourse();
-    });
+    addButton.addEventListener('click', addCustomCourse);
     courseListContainer.appendChild(addButton);
 }
-
 function generateCheckBoxes(courses, courseListContainer, semester) {
     // Create semester header
     const semesterHeader = document.createElement('h2');

@@ -1,3 +1,4 @@
 {
-    "codetogether.virtualCursorJoin": "ownVirtualCursor"
+    "codetogether.virtualCursorJoin": "ownVirtualCursor",
+    "snyk.advanced.autoSelectOrganization": true
 }
