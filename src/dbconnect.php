@@ -1,17 +1,18 @@
 <?php
-// db_connect.php (Λειτουργεί πλέον ως Generator)
-require_once('db_config.php');
+// Συμπερίληψη ρυθμίσεων
+require_once "db_config.php";
 
+// Σύνδεση με τη νέα απομακρυσμένη βάση δεδομένων
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
-// Ορισμός charset σε utf8mb4 για να εμφανίζονται σωστά τα Ελληνικά
+// Ορισμός charset σε utf8mb4 για τα Ελληνικά (Πολύ σημαντικό για τη νέα βάση!)
 $mysqli->set_charset("utf8mb4");
 
 if ($mysqli->connect_errno) {
-    die("Αποτυχία σύνδεσης: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
+    die("Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 }
 
-// Ερώτημα SQL
+// Ερώτημα για ανάκτηση δεδομένων (το ίδιο με πριν)
 $sql = "SELECT courses.name AS course_name, 
                course_occurrences.day, 
                course_occurrences.time, 
@@ -20,6 +21,8 @@ $sql = "SELECT courses.name AS course_name,
         INNER JOIN courses ON course_occurrences.course_id = courses.id";
 
 $result = $mysqli->query($sql);
+
+// Δημιουργία πίνακα για την αποθήκευση των δεδομένων
 $data = array();
 
 if ($result) {
@@ -42,22 +45,19 @@ if ($result) {
         );
     }
     $result->free();
+} else {
+    die("Error executing query: " . $mysqli->error);
 }
 
+// Κλείσιμο σύνδεσης
 $mysqli->close();
 
-// --- Η ΑΛΛΑΓΗ ΕΙΝΑΙ ΕΔΩ ---
-
-// Μετατροπή του πίνακα σε JSON string με "όμορφη" μορφή (PRETTY_PRINT)
-$json_content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-
-// Όνομα του αρχείου που θα δημιουργηθεί
-$filename = 'data.json';
-
-// Εγγραφή στο αρχείο
-if (file_put_contents($filename, $json_content)) {
-    echo "Επιτυχία! Το αρχείο " . $filename . " δημιουργήθηκε/ενημερώθηκε.";
+// Εγγραφή των δεδομένων στο αρχείο data.json
+$file = 'data.json';
+// Χρησιμοποιούμε JSON_PRETTY_PRINT για να είναι ευανάγνωστο και JSON_UNESCAPED_UNICODE για τα ελληνικά
+if (file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT))) {
+    echo "Το αρχείο data.json δημιουργήθηκε επιτυχώς από τη νέα βάση!";
 } else {
-    echo "Σφάλμα: Δεν ήταν δυνατή η εγγραφή στο αρχείο. Ελέγξτε τα δικαιώματα φακέλου (permissions).";
+    echo "Σφάλμα κατά την εγγραφή του αρχείου.";
 }
 ?>
