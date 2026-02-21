@@ -1,12 +1,8 @@
 <?php
-// Στοιχεία σύνδεσης από το FreeSQLDatabase email
-$host = 'sql7.freesqldatabase.com'; // Αντικατάστησε το X με τον αριθμό που σου έδωσαν
-$db   = 'sql7817711';               // Το όνομα της βάσης δεδομένων
-$user = 'sql7817711';               // Το όνομα χρήστη
-$pass = '4g3XGcUAZN';              // Ο κωδικός πρόσβασης
+// db_connect.php
+require_once('db_config.php');
 
-// Σύνδεση με τη βάση δεδομένων
-$mysqli = new mysqli($host, $user, $pass, $db);
+$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Ορισμός charset σε utf8mb4 για να εμφανίζονται σωστά τα Ελληνικά
 $mysqli->set_charset("utf8mb4");
