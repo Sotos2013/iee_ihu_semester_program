@@ -1,56 +1,71 @@
 <?php
-// db_to_json.php
-require_once "db_config.php";
 
-// Απενεργοποιούμε την εμφάνιση σφαλμάτων στην οθόνη για να μη χαλάνε το JSON
-error_reporting(0);
-ini_set('display_errors', 0);
+// Σύνδεση με τη βάση δεδομένων
+$host = 'localhost';
+$db = 'program_db';
+require_once "db_upass.php";
 
-$mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-$mysqli->set_charset("utf8mb4");
+$user = $DB_USER;
+$pass = $DB_PASS;
 
-if ($mysqli->connect_errno) {
-    // Αν αποτύχει, στείλε JSON σφάλμα, όχι HTML
-    header('Content-Type: application/json');
-    die(json_encode(["error" => "Connection failed"]));
+if (gethostname() == 'users.iee.ihu.gr') {
+    $mysqli = new mysqli($host, $user, $pass, $db, null, '/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
+} else {
+    $mysqli = new mysqli($host, $user, $pass, $db);
 }
 
-$sql = "SELECT courses.name AS course_name, 
-               course_occurrences.day, 
-               course_occurrences.time, 
-               courses.semester 
-        FROM course_occurrences 
-        INNER JOIN courses ON course_occurrences.course_id = courses.id";
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+}
+
+// Ερώτημα για ανάκτηση δεδομένων από τον πίνακα course_occurrences
+$sql = "SELECT courses.name AS course_name, course_occurrences.day, course_occurrences.time, courses.semester FROM course_occurrences INNER JOIN courses ON course_occurrences.course_id = courses.id";
 
 $result = $mysqli->query($sql);
+
+// Δημιουργία πίνακα για την αποθήκευση των δεδομένων
 $data = array();
 
 if ($result) {
+    // Αποθήκευση δεδομένων στον πίνακα
     while ($row = $result->fetch_assoc()) {
-        $days = explode(", ", $row["day"]);
-        $times = explode(", ", $row["time"]);
-        $occurrences = array();
+        $days = explode(", ", $row["day"]); // Διαχωρισμός ημερών
+        $times = explode(", ", $row["time"]); // Διαχωρισμός χρόνων
+        $occurrences = array(); // Αρχικοποίηση του πίνακα occurrences
+
+        // Δημιουργία αντικειμένων για κάθε ημέρα και ώρα
         foreach ($days as $key => $day) {
-            $occurrences[] = [
+            $occurrences[] = array(
                 "day" => $day,
-                "time" => isset($times[$key]) ? $times[$key] : ""
-            ];
+                "time" => $times[$key]
+            );
         }
-        $data[] = [
+
+        // Αποθήκευση μαθήματος με το πεδίο "semester"
+        $data[] = array(
             "semester" => $row["semester"],
             "name" => $row["course_name"],
             "occurrences" => $occurrences
-        ];
+        );
     }
+    // Απελευθέρωση αποτελεσμάτων
+    $result->free();
+} else {
+    echo "Error executing query: " . $mysqli->error;
+    error_log("Error executing query: " . $mysqli->error);
+    exit; // Τερματίστε την εκτέλεση του script σε περίπτωση σφάλματος εκτέλεσης ερωτήματος
 }
 
+// Κλείσιμο σύνδεσης
 $mysqli->close();
 
-// Γράφουμε το αρχείο
-$json_final = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
-file_put_contents('data.json', $json_final);
+// Εγγραφή των δεδομένων σε ένα JSON αρχείο
+$file = 'data.json';
+if (file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE))) {
+    echo "JSON file has been created successfully.";
+} else {
+    echo "Error writing JSON file.";
+    error_log("Error writing JSON file.");
+}
 
-// ΣΗΜΑΝΤΙΚΟ: Στέλνουμε το JSON και στον browser για το fetch
-header('Content-Type: application/json; charset=utf-8');
-echo $json_final;
 ?>
