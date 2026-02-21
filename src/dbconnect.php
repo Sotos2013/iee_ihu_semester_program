@@ -1,6 +1,6 @@
 <?php
-// db_connect.php
-require_once 'db_config.php';
+// db_connect.php (Λειτουργεί πλέον ως Generator)
+require_once('db_config.php');
 
 $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -11,7 +11,7 @@ if ($mysqli->connect_errno) {
     die("Αποτυχία σύνδεσης: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error);
 }
 
-// Ερώτημα SQL (Inner Join για να πάρουμε όνομα, εξάμηνο και ώρες)
+// Ερώτημα SQL
 $sql = "SELECT courses.name AS course_name, 
                course_occurrences.day, 
                course_occurrences.time, 
@@ -46,12 +46,18 @@ if ($result) {
 
 $mysqli->close();
 
-// Εγγραφή των δεδομένων σε ένα JSON αρχείο
-$file = 'data.json';
-if (file_put_contents($file, json_encode($data, JSON_UNESCAPED_UNICODE))) {
-    echo "JSON file has been created successfully.";
+// --- Η ΑΛΛΑΓΗ ΕΙΝΑΙ ΕΔΩ ---
+
+// Μετατροπή του πίνακα σε JSON string με "όμορφη" μορφή (PRETTY_PRINT)
+$json_content = json_encode($data, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+
+// Όνομα του αρχείου που θα δημιουργηθεί
+$filename = 'data.json';
+
+// Εγγραφή στο αρχείο
+if (file_put_contents($filename, $json_content)) {
+    echo "Επιτυχία! Το αρχείο " . $filename . " δημιουργήθηκε/ενημερώθηκε.";
 } else {
-    echo "Error writing JSON file.";
-    error_log("Error writing JSON file.");
+    echo "Σφάλμα: Δεν ήταν δυνατή η εγγραφή στο αρχείο. Ελέγξτε τα δικαιώματα φακέλου (permissions).";
 }
 ?>
