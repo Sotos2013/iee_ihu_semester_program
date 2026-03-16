@@ -2,13 +2,20 @@
 // db_to_json.php
 require_once "db_upass.php"; // Βεβαιώσου ότι εδώ έχεις τα σωστά $DB_USER, $DB_PASS
 
-$host = 'sql7.freesqldatabase.com';
-$db   = 'sql7817711';
+$host = 'localhost';
+$db   = 'program_db';
 $user = $DB_USER;
 $pass = $DB_PASS;
 
-// Σύνδεση Cloud: Ποτέ μην βάζεις socket ή localhost για εξωτερική βάση
-$mysqli = new mysqli($host, $user, $pass, $db);
+if (gethostname() == 'users.iee.ihu.gr') {
+    $mysqli = new mysqli($host, $user, $pass, $db, null, '/home/student/iee/2019/iee2019187/mysql/run/mysql.sock');
+} else {
+    $mysqli = new mysqli($host, $user, $pass, $db);
+}
+
+if ($mysqli->connect_errno) {
+    echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;
+}
 
 // Πολύ σημαντικό για να μην είναι κενά τα ελληνικά ονόματα
 $mysqli->set_charset("utf8mb4");
